@@ -806,9 +806,8 @@ implementation are listed in Table~\ref{tab:rt_param}.
 \label{subsec:rt_lin}
 
 The spectrum is given by \eqref{eq:fourier_gamma} in terms of the virtual
-angles. Only the harmonics
-$n\in\mathcal{N}=\{1,5,7,11,13,\dots,49\}$ are retained, i.e., the odd,
-non-triplen orders below 50, so $N_h = 17$. They are gathered in
+angles. Only the harmonics $n\in\mathcal{N}$ of \eqref{eq:tdd} are
+retained, so $N_h = 17$. They are gathered in
 $\mathbf{x} = [\mathbf{x}_1^T,\mathbf{x}_5^T,\dots,\mathbf{x}_{49}^T]^T
 \in \mathbb{R}^{2N_h}$, with $\mathbf{x}_n = [a_n,\, b_n]^T$. For a small
 increment of the angles,
@@ -872,33 +871,30 @@ $\mathbf{Q}$.
 \subsection{Loss Terms}
 \label{subsec:rt_loss}
 
-The loss models of Section~\ref{sec:perdidas} are reused with two changes
-that make them suitable for a GN step: the Simpson rule is replaced by the
-exact integral, and the switched current is taken in magnitude. Both are
-evaluated at the rated current $I_{nom}$.
+The loss models of Section~\ref{sec:perdidas} are reused, evaluated at the
+rated current $I_{nom}$, with two changes that make them suitable for a GN
+step: the absolute values are removed from the conduction term, and the
+switched current is taken in magnitude in the switching term.
 
-\textit{Conduction:} since \eqref{eq:p_con} is proportional to
-$\sin^2(\gamma-\varphi)$, the integral over the interval of each pair has
-the closed form
+\textit{Conduction:} the integral over each pulse is taken with its sign,
 %
-\begin{align}
-  t_i(\gv) &= \int_{\gamma_i-\varphi}^{\gamma_{i+d}-\pi-\varphi}
-              \sin^2\theta\,\mathrm{d}\theta \nonumber\\
-           &= G(\gamma_{i+d}-\pi-\varphi) - G(\gamma_i-\varphi),
+\begin{equation}
+  t_i(\gv) = G(\gamma_{i+d}-\pi-\varphi) - G(\gamma_i-\varphi),
+  \qquad i = 1,\dots,d,
   \label{eq:rt_T}
-\end{align}
+\end{equation}
 %
-with $G(\theta) = \theta/2 - \sin(2\theta)/4$ and $i = 1,\dots,d$.
-Substituting \eqref{eq:rt_T} for the Simpson approximation
-\eqref{eq:simpson}, the conduction losses \eqref{eq:pcond_final} become
+with $G$ as in \eqref{eq:t_i}, so that \eqref{eq:pcond_final} reads
 %
 \begin{equation}
   P_{cond}(\gv) = r_{ds,on}\,I_{nom}^2
-  \Big(1 - \frac{1}{\pi}\sum_{i=1}^{d} t_i(\gv)\Big),
+  \Big(1 - \frac{1}{\pi}\sum_{i=1}^{d} |t_i(\gv)|\Big).
   \label{eq:rt_pcond}
 \end{equation}
 %
-so reducing them amounts to enlarging the $t_i$. With
+Reducing the conduction losses thus amounts to enlarging the $|t_i|$,
+which the squared residual of Section~\ref{subsec:rt_fo} achieves without
+the absolute value. With
 $\partial t_i/\partial\gamma_i = -\sin^2(\gamma_i-\varphi)$ and
 $\partial t_i/\partial\gamma_{i+d} = \sin^2(\gamma_{i+d}-\varphi)$, the
 vector $\mathbf{t} = [t_1,\dots,t_d]^T$ is linearized as

@@ -35,6 +35,7 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 
 ## Archivos
 
-- `main_conf_EN.tex`: paper completo. Incluye `\input{sec_rtopp}`.
-- `sec_rtopp.tex`: seccion "Real-Time Implementation". **Aun no esta en el
-  repo**: sin el, el paper no compila (faltan `sec:rt`, `tab:rt_param`).
+- `main_conf_EN.tex`: paper completo, en un solo archivo. La seccion
+  "Real-Time Implementation" (antes `sec_rtopp.tex`) esta pegada dentro,
+  despues de `sec:implementacion` y antes de Simulation Results.
+- Figuras (`Figures/`, `figuras/`) aun no estan en el repo.
