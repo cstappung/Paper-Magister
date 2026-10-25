@@ -8,16 +8,20 @@ solo queda el registro.
 
 Ya estaban en la version de conferencia; el autor debe conseguir el PDF:
 
-| Clave | Referencia |
-|---|---|
-| `edpuganti_survey` | Edpuganti, Rathore, survey low switching frequency, TIA 2015 |
-| `lee_npc_ttype` | Lee, Shin, Choi, NPC vs T-type modules, INTELEC 2015 |
-| `alemi_ttype` | Alemi, Lee, T-type vs NPC losses, Trans. KIPE 2014 |
-| `yang_sic_gan` | Yang et al., SiC/GaN in T-type, PEAC 2022 |
-| `narasimhan_sic` | Narasimhan et al., 3.3 kV SiC MOSFET, WiPDA 2021 |
-| `nielsen_10kv` | Nielsen et al., 10 kV SiC MOSFET, IPEMC-ECCE Asia 2024 |
-| `koukoula_junction` | Koukoula et al., junction temperature relaxed properties, ECCE 2024 |
-| `filho_ann` | Filho et al., ANN angle generation, TIA 2011 |
+| Clave | Referencia | Enlace (DOI / IEEE Xplore) |
+|---|---|---|
+| `edpuganti_survey` | Edpuganti, Rathore, survey low switching frequency, TIA 2015 | DOI 10.1109/TIA.2015.2437351 (segun ADS; verificar) |
+| `lee_npc_ttype` | Lee, Shin, Choi, NPC vs T-type modules, INTELEC 2015 | probable ieeexplore 7572357 (via infona; verificar) |
+| `alemi_ttype` | Alemi, Lee, T-type vs NPC losses, Trans. KIPE 2014 | no esta en IEEE Xplore: koreascience JAKO201416747604931 |
+| `yang_sic_gan` | Yang et al., SiC/GaN in T-type, PEAC 2022 | DOI 10.1109/PEAC56338.2022.9959358 |
+| `narasimhan_sic` | Narasimhan et al., 3.3 kV SiC MOSFET, WiPDA 2021 | DOI 10.1109/WiPDA49284.2021.9645089 |
+| `nielsen_10kv` | Nielsen et al., 10 kV SiC MOSFET, IPEMC-ECCE Asia 2024 | no encontrado |
+| `koukoula_junction` | Koukoula et al., junction temperature relaxed properties, ECCE 2024 | DOI 10.1109/ECCE55643.2024.10861166 (version revista: 10.1109/TPEL.2025.3626863) |
+| `filho_ann` | Filho et al., ANN angle generation, TIA 2011 | ieeexplore 5957275 |
+
+Nota: el abstract de `koukoula_junction` confirma que usa posiciones
+multipolares y "virtual switching angles", asi que la cita en la intro es
+correcta; Perez-Basante 2019 seria el origen del concepto.
 
 ## 2. Papers del zip (todos citados en la intro nueva)
 
