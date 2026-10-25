@@ -25,7 +25,8 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - Comentarios en `.tex` y codigo: espanol sin tildes.
 - Notas en el `.tex`: `\upd{}` rojo (que actualizar), `\sug{}` verde (texto
   sugerido), `\textcolor{blue}{Comentario: ...}` son comentarios del autor
-  para Claude. Al aplicar un comentario azul, borrar el comentario y las
+  para Claude. `\old{}` gris muestra el texto anterior bajo un parrafo
+  reescrito, para que el autor compare; se borra cuando lo decide. Al aplicar un comentario azul, borrar el comentario y las
   notas `\upd`/`\sug` asociadas; dejar los azules que dicen "pendiente".
 - Las sugerencias deben ser texto listo para pegar y decir exactamente donde
   va; el autor prefiere texto breve.

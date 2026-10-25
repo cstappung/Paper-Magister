@@ -77,6 +77,9 @@
 
 ### Pendientes
 
+- [ ] Intro: el autor compara cada parrafo con el texto anterior (`\old`
+      gris); borrar las notas `\old` cuando decida.
+
 - [ ] Unificar Ts y M_cyc: OPAL a 200 us y M_CYC = 5 en el codigo (1 ms por
       iteracion GN) vs. Ts = 100 us, M_cyc = 8 en `tab:rt_param`.
 - [ ] Actualizar la seccion RT al codigo `RTOPP_D19_simple_rip.m`: Algorithm 1

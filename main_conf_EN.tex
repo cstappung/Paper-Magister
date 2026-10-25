@@ -60,6 +60,9 @@
 \newcommand{\sug}[1]{\par\smallskip\noindent{\color{green!45!black}\footnotesize
     \textbf{[SUGERENCIA]} #1}\par\smallskip}
 %\renewcommand{\sug}[1]{}      % <- descomentar para ocultar las sugerencias
+\newcommand{\old}[1]{\par\smallskip\noindent{\color{gray}\footnotesize
+    \textbf{[ANTES]} #1}\par\smallskip}
+%\renewcommand{\old}[1]{}      % <- descomentar para ocultar el texto anterior
 
 \graphicspath{{Figures/}}
 
@@ -166,6 +169,11 @@ whose contributions are generally unknown \cite{david_mgmt,david_aggr}. Two
 fronts are available to reduce the losses: the topology and device
 selection, and the modulation technique. This work addresses both, in that
 order, and adds the online compensation of the grid distortion.
+\old{In high-power conversion systems, the high blocking voltages and switched
+currents make conduction and switching losses significant
+\cite{zhang_hpm,edpuganti_survey}. Two fronts are available to mitigate them:
+the topology and device selection, and the modulation technique. This work
+addresses both, in that order.}
 
 On the first front, the three-level T-Type with SiC devices is adopted. The
 neutral-point-clamped (NPC) converter is the reference topology for improving the
@@ -195,6 +203,7 @@ modulation index translates into lower total losses. With silicon devices,
 the break-even point between the two lies between 10 and 15~kHz
 \cite{alemi_ttype}, and it shifts upwards with SiC, whose switching energies
 are much lower than those of an equivalent IGBT \cite{yang_sic_gan}''.}
+\old{Sin cambios en el texto; solo la sugerencia verde de arriba.}
 
 Modulation techniques are grouped into carrier-based, space-vector and
 programmed schemes. The first two are well suited to medium-to-high switching
@@ -211,6 +220,12 @@ harmonic spectrum and are nowadays computed by nonlinear programming
 \cite{birth_genopp,geyer_bounded}. For grid-connected converters, the transfer
 function of the LCL filter can be embedded in the OPP problem, so that the
 distortion is minimized directly on the grid current \cite{rahmanpour_lcl}.
+\old{Modulation techniques are grouped into carrier-based, space-vector and
+programmed schemes. The first two are well suited to medium-to-high switching
+frequency range, but in high-power converters, which operate at low frequencies
+to limit their losses, they generate low-order harmonics and degrade the current
+quality. Given this limitation, programmed modulation, and in particular the
+optimal pulse pattern (OPP), becomes competitive \cite{zhang_hpm}.}
 
 The generalized OPP proposed in \cite{birth_genopp} removes the constraint that
 restricts switching to positive transitions during the positive half-cycle and
@@ -231,6 +246,24 @@ model expressed as a function of the angles and embedded in the optimization
 has been reported, and even less so with SiC devices, whose split between
 conduction and switching differs from that of the silicon devices
 considered there.
+\old{(Mezcla del fin del 4.o parrafo y el inicio del 5.o anteriores.) The
+generalized OPP proposed in \cite{birth_genopp} removes the constraint that
+restricts switching to positive transitions during the positive half-cycle and
+to negative ones during the negative half-cycle. This formulation, known as
+multipolar modulation, significantly enlarges the feasible space and enables TDD
+reductions of up to one third with respect to the traditional formulation for
+the same number of angles. That additional margin can be reinvested in
+minimizing losses while keeping the TDD within the regulatory limit. In
+addition, the virtual angle concept \cite{koukoula_junction} eliminates the
+integer variables associated with the switching positions, reducing the
+computational cost of the optimization. [\dots] The trade-off between distortion
+and losses is well documented for three-level converters: detailed NPC versus
+T-Type comparisons are available \cite{lee_npc_ttype,alemi_ttype} and, for the
+NPC, OPP formulations that model the losses as a function of the angles
+\cite{koukoula_junction}. No T-Type loss model expressed as a function of the
+angles and embedded in the optimization has been reported, however, and even
+less so with SiC devices, whose split between conduction and switching differs
+from that of an IGBT.}
 \sug{(Atribucion del angulo virtual.) \cite{koukoula_junction} lo toma de
 Perez-Basante et al.\ (TPEL 2019, su ref.~[15]). Texto para pegar en la frase
 anterior: ``using the virtual angle concept \texttt{\textbackslash cite\{perez\_basante\_hws\}} to
@@ -266,6 +299,20 @@ recover compliance with IEEE~519. This work follows the third path: the
 patterns are computed off-line with the complete nonlinear model and an
 extensive search over starting points, and an online optimizer with a bounded
 cost per sample refines them during operation.
+\old{(Resto del 4.o y fin del 5.o parrafos anteriores.) This cost is
+precisely the main barrier to the industrial adoption of the OPP
+\cite{zhang_hpm}. Two families of alternatives are under development:
+artificial neural networks \cite{filho_ann,ibanez_ann}, which generate the
+patterns online after a demanding off-line training, and online correction
+schemes that modify a precomputed pattern in closed loop, such as model
+predictive pulse pattern control \textbf{[REF MP3C]}. This work follows the
+second path: the patterns are computed off-line with the complete nonlinear
+model and an extensive search over starting points, and an online optimizer
+with a bounded cost per sample refines them during operation. [\dots] Moreover,
+an off-line pattern is optimal only at the operating point and grid conditions
+for which it was computed: between table entries, or under grid background
+harmonics, it may lose compliance with IEEE~519, and no loss-aware OPP has
+been refined online to recover it.}
 
 The contributions of this work are the following:
 \begin{itemize}
