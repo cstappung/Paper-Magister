@@ -14,6 +14,8 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - Si el autor pega un `.tex` nuevo, subirlo primero tal cual en un commit
   propio y luego aplicar los cambios en otro commit, para que el diff muestre
   solo lo modificado.
+- Despues de cada cambio al paper, enviar al autor el `main_conf_EN.tex`
+  actualizado como archivo adjunto (lo compila en su equipo).
 - Guardar en el repo todo lo que haga falta para retomar el trabajo entre
   sesiones (contexto, pendientes, decisiones) en `docs/`.
 
