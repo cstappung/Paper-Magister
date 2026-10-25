@@ -706,7 +706,320 @@ optimizer, with hysteresis at the cell boundaries.
 % La seccion de tiempo real va DESPUES de "Control and Pattern Generation":
 % si se incluye antes, esa subseccion queda numerada dentro de la seccion RT
 % (V-E) y las referencias a sec:implementacion salen cruzadas.
-\input{sec_rtopp}
+% =====================================================================
+%  sec_rtopp.tex -- Real-Time Implementation, parte 1: funcion objetivo
+%  Se incluye con \input{sec_rtopp} DESPUES de la subseccion
+%  "Control and Pattern Generation" (sec:implementacion) y ANTES de
+%  "Simulation Results"; si va antes, esa subseccion queda numerada como
+%  V-E dentro de esta seccion y las referencias salen cruzadas.
+%  Notacion alineada con el paper: n, g_n, I_nom, r_ds,on, f_1, E_on/E_off.
+%  Los residuos de perdidas se llaman t (conduccion) y e (conmutacion) para
+%  no chocar con los nombres de los interruptores S_1..S_4.
+%  Valores numericos tomados de RTOPP_D19.m.
+% =====================================================================
+
+\newcounter{algcount}
+
+\section{Real-Time Implementation}
+\label{sec:rt}
+
+The LUT of Section~\ref{sec:implementacion} stores solutions of
+\eqref{eq:opp_propuesto} on a discrete grid of operating points. Between
+grid points, and whenever the grid voltage carries background distortion
+that was not considered off-line, the stored pattern is no longer optimal
+and may even violate the harmonic limits. The angles are therefore refined
+online by a sequential quadratic program (SQP). In each iteration the
+harmonic spectrum and the loss model are linearized around the current
+angles $\gv$, a single Gauss--Newton (GN) step $\Delta\gv$ is computed and
+projected onto the constraints, and the result is kept as the warm start
+of the next iteration. Convergence is thus obtained over time rather than
+within one call, which bounds the computation per control period $T_s$. To
+further reduce the worst-case execution time, each iteration is split into
+$M_{cyc}$ phases of similar cost, one per sample, while the last valid
+pattern keeps being applied. The LUT, now addressed by both $M$ and
+$\varphi$, only provides the initial pattern. The procedure is summarized
+in Algorithm~\ref{alg:rtopp}.
+
+This section presents the objective function (OF) of the local problem;
+the constraint handling is described afterwards. The parameters of the
+implementation are listed in Table~\ref{tab:rt_param}.
+
+% Pseudocodigo: IEEEtran recomienda algorithmic dentro de un float, sin el
+% paquete algorithm.  El contador propio da "Algorithm 1" y \ref sin tocar la
+% numeracion de las figuras.
+\begin{figure}[!t]
+    \refstepcounter{algcount}\label{alg:rtopp}
+    \hrule\smallskip
+    \noindent\textbf{Algorithm~\thealgcount:} Real-time OPP refinement
+    \smallskip\hrule\smallskip
+    \footnotesize
+    \begin{algorithmic}[1]
+        \REQUIRE $M$, $\varphi$, $\mathbf{x}^\star$, LUT $\gv(M,\varphi)$
+        \ENSURE switching angles $\gv$ applied in each $T_s$
+        \IF{first call \OR enable rising edge}
+            \STATE $\gv \leftarrow \mathrm{LUT}(M,\varphi)$
+        \ENDIF
+        \LOOP
+            \STATE $\mathbf{x},\mathbf{J}$ from \eqref{eq:fourier_gamma},
+                   \eqref{eq:rt_jac}; \ $\mathbf{t}^0,\mathbf{B}_t,
+                   \mathbf{e}^0,\mathbf{B}_e$ from
+                   \eqref{eq:rt_T}--\eqref{eq:rt_BS}
+            \STATE $\mathbf{x}_e \leftarrow \mathbf{x}^\star - \mathbf{x}$
+            \STATE build $\mathbf{W}$, $\mathbf{r}$ from \eqref{eq:rt_W}
+            \STATE $\Delta\gv \leftarrow \mathbf{W}^{-1}\mathbf{r}$,
+                   limited to the trust region
+            \STATE $\gv \leftarrow$ projection of $\gv+\Delta\gv$ onto
+                   the constraints
+            \STATE apply $\gv$ \COMMENT{warm start of next iteration}
+        \ENDLOOP
+    \end{algorithmic}
+    \smallskip\hrule
+\end{figure}
+% TODO: \ref a la subseccion de restricciones cuando exista.
+
+\begin{table}[!t]
+    \centering
+    \caption{Parameters of the real-time optimizer.}
+    \bgroup
+    \def\arraystretch{1.0}
+    \setlength{\tabcolsep}{4pt}
+    \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcr@{}}
+        \toprule
+        \rowcolor{Gray}
+        Parameter & Symbol & Value \\ \midrule
+        Control period             & $T_s$                 & 100 $\mu$s \\
+        Phases per GN iteration    & $M_{cyc}$             & 8 \\
+        Pulses per half-cycle      & $d$                   & 19 \\
+        Controlled harmonics       & $N_h$                 & 17 \\
+        Loss weight                & $\lambda_{\ell}$      & 0.01 \\
+        Proximal weight            & $\lambda_u$           & 1 \\
+        TDD weight                 & $w_{\mathrm{TDD}}$    & 1 \\
+        Current in the loss model  & $I_{nom}$             & 20 A \\
+        Gate resistance            & $R_G$                 & 22 $\Omega$ \\
+        \bottomrule
+    \end{tabular*}
+    \egroup
+    \label{tab:rt_param}
+\end{table}
+
+\subsection{Linearized Harmonic Model}
+\label{subsec:rt_lin}
+
+The spectrum is given by \eqref{eq:fourier_gamma} in terms of the virtual
+angles. Only the harmonics
+$n\in\mathcal{N}=\{1,5,7,11,13,\dots,49\}$ are retained, i.e., the odd,
+non-triplen orders below 50, so $N_h = 17$. They are gathered in
+$\mathbf{x} = [\mathbf{x}_1^T,\mathbf{x}_5^T,\dots,\mathbf{x}_{49}^T]^T
+\in \mathbb{R}^{2N_h}$, with $\mathbf{x}_n = [a_n,\, b_n]^T$. For a small
+increment of the angles,
+%
+\begin{equation}
+  \mathbf{x}(\gv+\Delta\gv) \approx \mathbf{x}(\gv) + \mathbf{J}\,\Delta\gv,
+  \label{eq:rt_lin}
+\end{equation}
+%
+where the Jacobian $\mathbf{J}\in\mathbb{R}^{2N_h\times 2d}$ follows
+exactly from \eqref{eq:fourier_gamma}:
+%
+\begin{equation}
+  \frac{\partial a_n}{\partial \gamma_i} = -\frac{2}{\pi}\cos(n\gamma_i),
+  \qquad
+  \frac{\partial b_n}{\partial \gamma_i} = -\frac{2}{\pi}\sin(n\gamma_i).
+  \label{eq:rt_jac}
+\end{equation}
+%
+The factor $1/n$ cancels, so all harmonics are equally sensitive to the
+angles in the spectral domain; the distinction between them is introduced
+by the weighting matrix of the TDD term.
+
+\subsection{TDD Term}
+\label{subsec:rt_tdd}
+
+Let $\mathbf{x}^\star$ be the reference spectrum:
+$\mathbf{x}_1^\star = [0,\,M]^T$ for the fundamental and, for $n\geq 5$,
+the background harmonics of the grid voltage expressed in the same spectral
+units. The harmonic grid current is then proportional to the mismatch
+$\mathbf{x}_n - \mathbf{x}_n^\star$, and \eqref{eq:tdd} becomes
+%
+\begin{equation}
+  I_{TDD}(\gv) = \frac{100\pct}{I_{nom}}
+  \sqrt{\sum_{\substack{n\in\mathcal{N}\\ n\geq5}}
+  \Big(\frac{V_{dc}}{2}\,g_n\Big)^{\!2}
+  \big\|\mathbf{x}_n(\gv)-\mathbf{x}_n^\star\big\|^2},
+  \label{eq:rt_tdd}
+\end{equation}
+%
+which reduces to \eqref{eq:tdd} for a clean grid,
+$\mathbf{x}_n^\star = \mathbf{0}$. Squaring \eqref{eq:rt_tdd} yields the
+quadratic form $I_{TDD}^2 \propto \mathbf{x}_e^T\mathbf{Q}\,\mathbf{x}_e$,
+with $\mathbf{x}_e = \mathbf{x}^\star - \mathbf{x}$ and the diagonal
+weighting matrix
+%
+\begin{align}
+  \mathbf{Q} &= \mathrm{diag}\big(q_1\mathbf{I}_2,\ q_5\mathbf{I}_2,
+                \ \dots,\ q_{49}\mathbf{I}_2\big), \nonumber\\
+  q_n &= w_{\mathrm{TDD}}\left(\frac{V_{dc}\,g_n}{2\,I_{nom}}\right)^{\!2},
+  \qquad n\geq 5.
+  \label{eq:rt_Q}
+\end{align}
+%
+The weight $q_1 = 1$ only steers the GN step towards the desired
+fundamental, which is later imposed exactly as an equality constraint.
+Since the LCL resonance lies at the 21st harmonic \eqref{eq:fres}, $g_n$
+peaks at $n = 19$ and $n = 23$, and these two entries dominate
+$\mathbf{Q}$.
+
+\subsection{Loss Terms}
+\label{subsec:rt_loss}
+
+The loss models of Section~\ref{sec:perdidas} are reused with two changes
+that make them suitable for a GN step: the Simpson rule is replaced by the
+exact integral, and the switched current is taken in magnitude. Both are
+evaluated at the rated current $I_{nom}$.
+
+\textit{Conduction:} since \eqref{eq:p_con} is proportional to
+$\sin^2(\gamma-\varphi)$, the integral over the interval of each pair has
+the closed form
+%
+\begin{align}
+  t_i(\gv) &= \int_{\gamma_i-\varphi}^{\gamma_{i+d}-\pi-\varphi}
+              \sin^2\theta\,\mathrm{d}\theta \nonumber\\
+           &= G(\gamma_{i+d}-\pi-\varphi) - G(\gamma_i-\varphi),
+  \label{eq:rt_T}
+\end{align}
+%
+with $G(\theta) = \theta/2 - \sin(2\theta)/4$ and $i = 1,\dots,d$.
+Substituting \eqref{eq:rt_T} for the Simpson approximation
+\eqref{eq:simpson}, the conduction losses \eqref{eq:pcond_final} become
+%
+\begin{equation}
+  P_{cond}(\gv) = r_{ds,on}\,I_{nom}^2
+  \Big(1 - \frac{1}{\pi}\sum_{i=1}^{d} t_i(\gv)\Big),
+  \label{eq:rt_pcond}
+\end{equation}
+%
+so reducing them amounts to enlarging the $t_i$. With
+$\partial t_i/\partial\gamma_i = -\sin^2(\gamma_i-\varphi)$ and
+$\partial t_i/\partial\gamma_{i+d} = \sin^2(\gamma_{i+d}-\varphi)$, the
+vector $\mathbf{t} = [t_1,\dots,t_d]^T$ is linearized as
+$\mathbf{t}(\gv+\Delta\gv) \approx \mathbf{t}^0 - \mathbf{B}_t\Delta\gv$,
+with
+%
+\begin{align}
+  \mathbf{B}_t &= \big[\,\mathrm{diag}(\mathbf{p}),\
+                  -\mathrm{diag}(\mathbf{p}')\,\big], \nonumber\\
+  p_i &= \sin^2(\gamma_i-\varphi), \quad
+  p'_i = \sin^2(\gamma_{i+d}-\varphi).
+  \label{eq:rt_BP}
+\end{align}
+
+\textit{Switching:} in \eqref{eq:p_sw} the current enters with its sign, so
+an event that falls in the opposite half-cycle of the current subtracts
+energy. Taking the magnitude instead, the energy per ampere of the $i$-th
+pulse is
+%
+\begin{equation}
+  e_i(\gv) = E_{on}\big|\sin(\gamma_i-\varphi)\big|
+           + E_{off}\big|\sin(\gamma_{i+d}-\varphi)\big|,
+  \label{eq:rt_S}
+\end{equation}
+%
+where $E_{on}$ and $E_{off}$ are corrected for the gate resistance $R_G$.
+Both expressions coincide whenever each turn-on falls in the positive
+half-cycle of the current and each turn-off in the negative one. The
+switching losses are
+%
+\begin{equation}
+  P_{sw}(\gv) = P_{sw,0} + 2f_1 I_{nom}\sum_{i=1}^{d} e_i(\gv),
+  \label{eq:rt_psw}
+\end{equation}
+%
+where $P_{sw,0} = 2f_1d\,(E_{on,0}+E_{off,0})$ gathers the
+current-independent part of the switching energies and does not depend on
+$\gv$. The vector $\mathbf{e} = [e_1,\dots,e_d]^T$ is linearized as
+$\mathbf{e}(\gv+\Delta\gv) \approx \mathbf{e}^0 - \mathbf{B}_e\Delta\gv$,
+with
+%
+\begin{align}
+  \mathbf{B}_e &= \big[\,\mathrm{diag}(\mathbf{s}),\
+                  \mathrm{diag}(\mathbf{s}')\,\big], \nonumber\\
+  s_i  &= -E_{on}\cos(\gamma_i-\varphi)\,\sigma_i, \nonumber\\
+  s'_i &= -E_{off}\cos(\gamma_{i+d}-\varphi)\,\sigma_{i+d},
+  \label{eq:rt_BS}
+\end{align}
+%
+where $\sigma_i = \mathrm{sgn}\big(\sin(\gamma_i-\varphi)\big)$.
+
+\upd{Escala: con $\lambda_\ell$ comun, el termino de conmutacion aporta
+$\sim\!10^{-11}$ a $\mathbf{W}$ frente a $\sim\!10^{-3}$ de conduccion y
+$\sim\!10^{2}$ del TDD, porque $\mathbf{e}$ esta en J/A y no lleva el
+factor $2f_1I_{nom}$ de \eqref{eq:rt_psw}. En la practica el RT no
+minimiza conmutacion. Decidir si se reporta asi o se reescala.}
+\sug{(Parrafo para el final de la subseccion D, apoyado en la figura del
+barrido de $\lambda_\ell$:) The weight $\lambda_\ell$ sets the operating point
+along the distortion axis rather than the loss level. Fig.~\textbf{[X]} sweeps
+$\lambda_\ell$ at $M=0.87$ and $\varphi=-15^\circ$: the steady-state TDD
+varies from 0.04\pct{} to the 5\pct{} limit, whereas the estimated losses
+change by less than 0.3\pct{}, even when the quadratic residuals are replaced
+by the exact linear gradient of \eqref{eq:rt_pcond} and \eqref{eq:rt_psw}.
+Starting from the table, which already minimizes the losses for the given
+number of pulses, the losses are locally insensitive to the angles, and the
+online stage mainly redistributes the harmonic content. The value
+$\lambda_\ell=0.01$ keeps the TDD at about one third of the limit, which
+leaves margin for grid background distortion.}
+
+\textcolor{blue}{Comentario: aqui no estoy tan de acuerdo, porque el modelo esta ponderando las de conduccion y conmutacion denigual manera, fieles a la realidad. en cambio si podriamos decir que hay que ponderar vs la distorcion armonica, veamos que se puede hacer aqui, podrias revisar el codigo tal vez y explicarme}
+
+\subsection{Local Quadratic Problem}
+\label{subsec:rt_fo}
+
+The losses enter the OF as quadratic residuals, which keeps the local
+problem a linear least-squares one and removes the non-differentiable
+absolute values. The increment is obtained from
+%
+\begin{multline}
+  \min_{\Delta\gv}\ \
+  \frac{1}{2}\big\|\mathbf{x}_e - \mathbf{J}\Delta\gv\big\|_{\mathbf{Q}}^2
+  - \frac{\lambda_{\ell}\,c}{2}\big\|\mathbf{t}^0 - \mathbf{B}_t\Delta\gv\big\|^2
+  \\
+  + \frac{\lambda_{\ell}}{2}\big\|\mathbf{e}^0 - \mathbf{B}_e\Delta\gv\big\|^2
+  + \frac{\lambda_u}{2}\big\|\Delta\gv\big\|^2,
+  \label{eq:rt_fo}
+\end{multline}
+%
+where $c = r_{ds,on}I_{nom}^2$, $\lambda_{\ell}$ weights the losses
+against the TDD, and $\lambda_u$ is a proximal term that limits the step so
+that \eqref{eq:rt_lin} remains valid. The conduction term carries a
+negative sign because the losses decrease as $\mathbf{t}$ grows. Setting
+the gradient of \eqref{eq:rt_fo} to zero yields the normal equations
+$\mathbf{W}\Delta\gv = \mathbf{r}$, with
+%
+\begin{align}
+  \mathbf{W} &= \mathbf{J}^T\mathbf{Q}\mathbf{J}
+    - \lambda_{\ell}c\,\mathbf{B}_t^T\mathbf{B}_t
+    + \lambda_{\ell}\,\mathbf{B}_e^T\mathbf{B}_e + \lambda_u\mathbf{I},
+  \nonumber\\
+  \mathbf{r} &= \mathbf{J}^T\mathbf{Q}\,\mathbf{x}_e
+    - \lambda_{\ell}c\,\mathbf{B}_t^T\mathbf{t}^0
+    + \lambda_{\ell}\,\mathbf{B}_e^T\mathbf{e}^0.
+  \label{eq:rt_W}
+\end{align}
+
+The negative conduction term could make $\mathbf{W}$ indefinite. However,
+$\mathbf{B}_t^T\mathbf{B}_t$ consists of $2\times2$ blocks with eigenvalues
+$0$ and $p_i^2+p_i'^2\leq 2$, while the remaining terms are positive
+semidefinite. Hence $\mathbf{W}\succeq(\lambda_u-2\lambda_{\ell}c)\,\mathbf{I}$,
+and $\lambda_u > 2\lambda_{\ell}c$ guarantees a unique minimizer of
+\eqref{eq:rt_fo}; with the values of Table~\ref{tab:rt_param},
+$c = 4.4$~W and the margin is $0.91$.
+
+As for the computational cost, $\mathbf{Q}$ is diagonal and $\mathbf{B}_t$,
+$\mathbf{B}_e$ consist of two diagonal blocks. Therefore
+$\mathbf{B}_t^T\mathbf{B}_t$ and $\mathbf{B}_e^T\mathbf{B}_e$ only populate
+the main diagonal and the $\pm d$ off-diagonals of $\mathbf{W}$, and the
+loss terms require $\mathcal{O}(d)$ operations. The dominant cost of the OF
+is $\mathbf{J}^T\mathbf{Q}\mathbf{J}$, with $\mathcal{O}(N_h d^2)$
+operations.
 
 % ============================ S7 ========================================
 \section{Simulation Results}
