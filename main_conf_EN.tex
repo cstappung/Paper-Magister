@@ -185,6 +185,16 @@ and forces the use of devices in series: with 750~V DC and 1.2~kV SiC MOSFETs a 
 device blocks it with margin, and the growing availability of higher-voltage SiC
 devices \cite{narasimhan_sic,nielsen_10kv} extends the argument to higher
 voltages.
+\sug{(Precision de citas en este parrafo.) El rango de 10--15~kHz es de
+\cite{alemi_ttype} (punto de cruce con Si, segun el dispositivo), no de
+\cite{yang_sic_gan}; y \cite{alemi_ttype} muestra que el T-Type pierde menos
+a modulacion alta, mientras que a modulacion baja gana el NPC. Texto para
+reemplazar desde ``which at low switching frequency'' hasta ``an equivalent
+IGBT \cite{yang_sic_gan}'': ``which at low switching frequency and high
+modulation index translates into lower total losses. With silicon devices,
+the break-even point between the two lies between 10 and 15~kHz
+\cite{alemi_ttype}, and it shifts upwards with SiC, whose switching energies
+are much lower than those of an equivalent IGBT \cite{yang_sic_gan}''.}
 
 Modulation techniques are grouped into carrier-based, space-vector and
 programmed schemes. The first two are well suited to medium-to-high switching
@@ -214,11 +224,22 @@ recent works embed the conduction and switching losses
 \cite{dorfling_thermal,koukoula_junction} in the OPP problem, using the
 virtual angle concept to eliminate the integer variables associated with the
 switching positions \cite{koukoula_junction}. These formulations, however,
-target NPC converters with IGBTs. Although detailed NPC versus T-Type loss
+target medium-voltage NPC converters with integrated gate-commutated
+thyristors (IGCTs). Although detailed NPC versus T-Type loss
 comparisons are available \cite{lee_npc_ttype,alemi_ttype}, no T-Type loss
 model expressed as a function of the angles and embedded in the optimization
 has been reported, and even less so with SiC devices, whose split between
-conduction and switching differs from that of an IGBT.
+conduction and switching differs from that of the silicon devices
+considered there.
+\sug{(Atribucion del angulo virtual.) \cite{koukoula_junction} lo toma de
+Perez-Basante et al.\ (TPEL 2019, su ref.~[15]). Texto para pegar en la frase
+anterior: ``using the virtual angle concept \texttt{\textbackslash cite\{perez\_basante\_hws\}} to
+eliminate the integer variables associated with the switching positions
+\cite{koukoula_junction}.'' Bibitem: A.~Perez-Basante, S.~Ceballos,
+G.~Konstantinou, J.~Pou, I.~Kortabarria, and I.~M.~de~Alegria, ``A universal
+formulation for multilevel selective-harmonic-eliminated PWM with half-wave
+symmetry,'' \emph{IEEE Trans. Power Electron.}, vol.~34, no.~1,
+pp.~943--957, Jan.~2019.}
 
 OPPs are computed off-line under nominal conditions and stored in a lookup
 table, so they lose optimality between table entries and whenever the grid
