@@ -65,6 +65,16 @@
    la barrera usa pi - eps_sep/2; entre ambos la barrera trabaja con piso
    S_FLR. P_SW0 = 3.84 W es constante (casi 40 % de P_sw nominal).
 
+### Intro y bibliografia (2026-10-25)
+
+- Intro reescrita con la misma estructura (contexto, T-Type/SiC, modulacion
+  programada, multipolar + perdidas, tiempo real) y las referencias del zip.
+  Parrafo T-Type sin cambios. Se resolvio `[REF MP3C]` con `geyer_mp3c`.
+- Diferencia clave con Tsekouras TPEL 2026: usa secuencia alternada
+  Delta u_i = (-1)^(i+1) (no multipolar), NPC, sin perdidas.
+- Bibliografia: 38 entradas, reordenadas por primera cita. Detalle y
+  candidatas en `docs/REFERENCIAS.md`.
+
 ### Pendientes
 
 - [ ] Unificar Ts y M_cyc: OPAL a 200 us y M_CYC = 5 en el codigo (1 ms por
@@ -83,8 +93,10 @@
 - [ ] Como se impuso la continuidad en phi en Julia (comentario % en el
       problema off-line).
 - [ ] Cifra del 9 % de tolerancia a fondo armonico: definir el ensayo.
-- [ ] `[REF MP3C]` y demas referencias: completar al rehacer la intro.
-- [ ] Intro: actualizarla (proximo paso pedido por el autor).
+- [ ] Decidir candidatas de `docs/REFERENCIAS.md` (seccion 3), en especial
+      Rahmanpour TIA 2025 (multipolar + limites de red) y Perez-Basante 2019
+      (origen del angulo virtual).
+- [ ] Conseguir PDFs de las 8 referencias de la seccion 1 de REFERENCIAS.md.
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
   control y su caption, Tabla III (d = 17 vs 19), Fig. 4, conclusiones,
   bibliografia, resultados experimentales.
