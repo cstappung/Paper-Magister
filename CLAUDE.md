@@ -27,7 +27,8 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
   notas `\upd`/`\sug` asociadas; dejar los azules que dicen "pendiente".
 - Las sugerencias deben ser texto listo para pegar y decir exactamente donde
   va; el autor prefiere texto breve.
-- No modificar `RTOPP_D19.m`, los `.slx` ni los archivos Julia. La
+- No modificar el codigo del autor (`code/*.m`, `RTOPP_D19.m`), los `.slx`
+  ni los archivos Julia. La
   optimizacion (GN, FO) se deja como la tiene el autor: solo reportar
   diferencias que cambien el resultado.
 - No hay LaTeX en el entorno: no se compila aqui; revisar braces y labels a
@@ -38,4 +39,7 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - `main_conf_EN.tex`: paper completo, en un solo archivo. La seccion
   "Real-Time Implementation" (antes `sec_rtopp.tex`) esta pegada dentro,
   despues de `sec:implementacion` y antes de Simulation Results.
+- `code/RTOPP_D19_simple_rip.m`: optimizador RT vigente (referencia, solo
+  lectura). Difiere de lo descrito en `docs/CONTEXTO_PAPER_RT.md` (que es de
+  `RTOPP_D19.m`): ver diferencias en `docs/BITACORA.md`.
 - Figuras (`Figures/`, `figuras/`) aun no estan en el repo.

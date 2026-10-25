@@ -946,26 +946,6 @@ with
 %
 where $\sigma_i = \mathrm{sgn}\big(\sin(\gamma_i-\varphi)\big)$.
 
-\upd{Escala: con $\lambda_\ell$ comun, el termino de conmutacion aporta
-$\sim\!10^{-11}$ a $\mathbf{W}$ frente a $\sim\!10^{-3}$ de conduccion y
-$\sim\!10^{2}$ del TDD, porque $\mathbf{e}$ esta en J/A y no lleva el
-factor $2f_1I_{nom}$ de \eqref{eq:rt_psw}. En la practica el RT no
-minimiza conmutacion. Decidir si se reporta asi o se reescala.}
-\sug{(Parrafo para el final de la subseccion D, apoyado en la figura del
-barrido de $\lambda_\ell$:) The weight $\lambda_\ell$ sets the operating point
-along the distortion axis rather than the loss level. Fig.~\textbf{[X]} sweeps
-$\lambda_\ell$ at $M=0.87$ and $\varphi=-15^\circ$: the steady-state TDD
-varies from 0.04\pct{} to the 5\pct{} limit, whereas the estimated losses
-change by less than 0.3\pct{}, even when the quadratic residuals are replaced
-by the exact linear gradient of \eqref{eq:rt_pcond} and \eqref{eq:rt_psw}.
-Starting from the table, which already minimizes the losses for the given
-number of pulses, the losses are locally insensitive to the angles, and the
-online stage mainly redistributes the harmonic content. The value
-$\lambda_\ell=0.01$ keeps the TDD at about one third of the limit, which
-leaves margin for grid background distortion.}
-
-\textcolor{blue}{Comentario: aqui no estoy tan de acuerdo, porque el modelo esta ponderando las de conduccion y conmutacion denigual manera, fieles a la realidad. en cambio si podriamos decir que hay que ponderar vs la distorcion armonica, veamos que se puede hacer aqui, podrias revisar el codigo tal vez y explicarme}
-
 \subsection{Local Quadratic Problem}
 \label{subsec:rt_fo}
 
@@ -1008,6 +988,28 @@ semidefinite. Hence $\mathbf{W}\succeq(\lambda_u-2\lambda_{\ell}c)\,\mathbf{I}$,
 and $\lambda_u > 2\lambda_{\ell}c$ guarantees a unique minimizer of
 \eqref{eq:rt_fo}; with the values of Table~\ref{tab:rt_param},
 $c = 4.4$~W and the margin is $0.91$.
+
+The quadratic residuals of \eqref{eq:rt_fo} do not preserve the relative
+weight of the two loss mechanisms. The gradient of a squared residual is
+proportional to the residual itself: the conduction term enters the step
+with $c\,t_i^0$ instead of the factor $c/\pi$ of \eqref{eq:rt_pcond}, and the
+switching term with $e_i^0$, of the order of $E_{on}$, instead of the factor
+$2f_1I_{nom}$ of \eqref{eq:rt_psw}. Although both losses are comparable at
+the rated point (Table~\ref{tab:comparacion}), the switching term is thus
+weighted six to seven orders of magnitude below its actual share, and the
+loss terms act as a regularizer rather than as a loss minimizer. Starting
+from the table, which already minimizes \eqref{eq:rt_pcond} and
+\eqref{eq:rt_psw} for the given number of pulses, the losses are locally
+insensitive to the angles, and $\lambda_\ell$ mainly sets the operating point
+along the distortion axis. Fig.~\textbf{[X]} sweeps $\lambda_\ell$ at
+$M=0.87$ and $\varphi=-15^\circ$: the steady-state TDD varies from
+0.04\pct{} to the 5\pct{} limit, whereas the estimated losses change by less
+than 0.3\pct{}, even when the quadratic residuals are replaced by the exact
+gradient of \eqref{eq:rt_pcond} and \eqref{eq:rt_psw}. The value
+$\lambda_\ell=0.01$ keeps the TDD at about one third of the limit, which
+leaves margin for grid background distortion.
+% Cifras de la Fig. E obtenidas con RTOPP_D19 (version con proyecciones).
+% Regenerar con RTOPP_D19_simple_rip antes de enviar.
 
 As for the computational cost, $\mathbf{Q}$ is diagonal and $\mathbf{B}_t$,
 $\mathbf{B}_e$ consist of two diagonal blocks. Therefore
