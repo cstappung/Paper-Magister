@@ -27,24 +27,59 @@
   Simpson; `eq:rt_T` es t_i con signo (G de `eq:t_i`) y `eq:rt_pcond` usa
   |t_i|; el residuo cuadratico agranda |t_i| sin valor absoluto.
 
+### Opcion A en Loss Terms (comentario azul del autor)
+
+- Se mantiene la FO cuadratica. Parrafo nuevo al final de "Local Quadratic
+  Problem": el residuo cuadratico tiene gradiente proporcional al residuo,
+  asi que conduccion entra con c*t_i^0 (no c/pi) y conmutacion con e_i^0 ~
+  E_on (no 2 f1 I_nom). Con R_G = 22: E_on = 8.6e-5 J/A; gradiente real
+  conmutacion <= 0.17 W/rad vs conduccion <= 1.40 W/rad (cociente 0.12); en
+  la FO el cociente es 6e-9..8e-8. El modelo de perdidas esta bien; lo que
+  no es fiel es como entra al paso GN. lambda_l fija el nivel de TDD.
+
+### Codigo `RTOPP_D19_simple_rip.m` vs. paper (seccion RT)
+
+1. Restricciones IEEE y TDD como pesos adaptativos (integrador log por
+   restriccion, una vez por superciclo, con espectro exacto):
+   theta_k <- theta_k*|xh_k|/eps_k, theta_T <- theta_T*TDD/(0.95*5 %),
+   factor en [0.9, 4], theta en [0.05, 1e3]. Q_k = (W_TDD+theta_T+theta_k)w_k.
+   Interpretacion KKT: theta*w_k ~ multiplicador de Lagrange.
+2. Fundamental: igualdad exacta en el paso GN (KKT 2x2, complemento de
+   Schur) + trim de Newton exacto en cada muestra (FT_TOL 1e-5).
+3. Poliedro de angulos (orden con eps_sep, cruce por pi, niveles, caja
+   +-0.6 rad alrededor de la semilla): barrera log MU_B = 1e-6, recorte
+   fraction-to-boundary TAU_B = 0.9, clamp_angles de salvaguarda.
+4. Region de confianza: DG_MAX por resto de Taylor (LIN_FRAC 0.7) en norma,
+   DG_OUT = 0.05 rad fuera de norma.
+5. Estancamiento: N_STK = 100 superciclos sin mejorar 5 % -> rota la semilla
+   (+0, +1, +2 en phi) y reinicia multiplicadores.
+6. M_CYC = 5 (fases 0..4).
+7. Rizado lado convertidor: armonicos 53..97 (16) en la FO con peso fijo
+   LAMBDA_RIP*(g_c/I_L)^2, objetivo 0; J pasa a 66 filas, W cuesta ~2x.
+8. P_loss: PLp = (P_CD0 - C_CD*sum T0) + (P_SW0 + C_SW*sum S0) con T0 con
+   signo. Cada par (g_i, g_{i+D}) es un pulso (las restricciones de nivel
+   lo garantizan) y T0 < 0 <=> pulso negativo, donde S4 reemplaza a S2+S3:
+   la conduccion baja en |T0|, pero el codigo la sube. Solo afecta el valor
+   reportado, no la optimizacion.
+9. Detalle: clamp_angles detecta el cruce por pi con pi (eps_sep*0), pero
+   la barrera usa pi - eps_sep/2; entre ambos la barrera trabaja con piso
+   S_FLR. P_SW0 = 3.84 W es constante (casi 40 % de P_sw nominal).
+
 ### Pendientes
 
-- [ ] Comentario azul en Loss Terms (escala conduccion vs conmutacion): el
-      autor pidio explicacion. Resumen: en la FO cuadratica implementada el
-      termino de conduccion esta en W*rad^2 (c = 4.4 W) y el de conmutacion
-      en (J/A)^2 sin el factor 2 f1 I_nom, asi que su peso relativo es
-      ~1e-9 aunque en la realidad ambas perdidas son comparables (9.9 vs
-      9.7 W). La version fiel es el gradiente lineal de P_cond + P_sw (ya
-      probada en `RTOPP_D19N.m`, Fig. E): W = J'QJ + lam_u I, siempre DP.
-      Falta que el autor decida como presentarlo; revisar `RTOPP_D19.m`.
-
-- [ ] Unificar Ts: OPAL a 200 us vs. 100 us / 800 us por iteracion GN en
-      `sec_rtopp.tex` y `tab:rt_param`.
+- [ ] Unificar Ts y M_cyc: OPAL a 200 us y M_CYC = 5 en el codigo (1 ms por
+      iteracion GN) vs. Ts = 100 us, M_cyc = 8 en `tab:rt_param`.
+- [ ] Actualizar la seccion RT al codigo `RTOPP_D19_simple_rip.m`: Algorithm 1
+      dice "projection onto the constraints"; la FO no tiene el termino de
+      rizado; la subseccion de restricciones (por escribir) debe describir
+      pesos adaptativos + barrera, no proyecciones (ni Dykstra).
+- [ ] Regenerar Fig. D y Fig. E con `RTOPP_D19_simple_rip.m` (se hicieron con
+      `RTOPP_D19.m`); el parrafo de lambda_l usa cifras de la Fig. E.
 - [ ] Julia calculo los patrones con Simpson; el texto ahora describe la
       integral exacta (diferencia < 1.9 % de P_cond). Decidir si se menciona.
-- [ ] Verificar en `RTOPP_D19.m` si la perdida reportada usa sum(T0) con
-      signo: con pulsos negativos (T_i < 0) quedaria sobreestimada. No afecta
-      la optimizacion (el termino entra al cuadrado).
+- [ ] P_loss reportada sobreestima la conduccion con pulsos negativos
+      (confirmado en el codigo, ver abajo). Decidir si se corrige con
+      abs(T0i) en `PLp` antes de generar figuras de perdidas.
 - [ ] Como se impuso la continuidad en phi en Julia (comentario % en el
       problema off-line).
 - [ ] Cifra del 9 % de tolerancia a fondo armonico: definir el ensayo.
