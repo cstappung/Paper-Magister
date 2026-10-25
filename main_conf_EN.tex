@@ -198,28 +198,15 @@ minimizing losses while keeping the TDD within the regulatory limit. In
 addition, the virtual angle concept \cite{koukoula_junction} eliminates the
 integer variables associated with the switching positions, reducing the
 computational cost of the optimization. This cost is precisely the main barrier
-to the industrial adoption of the OPP \cite{zhang_hpm}; among the alternatives
-under development, artificial neural networks stand out
-\cite{filho_ann,ibanez_ann}, able to generate the patterns online after a
-demanding off-line training. This work, in contrast, seeks to simplify the
-model to keep the computational cost low.
-\upd{Este parrafo es el lugar natural para el estado del arte en linea:
-OPP con control predictivo (p.ej.\ MP3C de Geyer et al.), correccion en linea
-de OPP y calculo en tiempo real. La ultima frase debe pasar de ``simplificar
-el modelo'' a ``refinar el patron en linea con un SQP de costo acotado por
-muestra''.}
-\sug{(Reemplaza desde ``This cost is precisely\dots'') This cost is
-precisely the main barrier to the industrial adoption of the OPP
-\cite{zhang_hpm}. Two families of alternatives are under development:
-artificial neural networks \cite{filho_ann,ibanez_ann}, which generate the
-patterns online after a demanding off-line training, and online correction
-schemes that modify a precomputed pattern in closed loop, such as model
-predictive pulse pattern control \textbf{[REF MP3C]}. This work follows the
-second path: the patterns are computed off-line with a deliberately simple
-model, and an online optimizer with a bounded cost per sample refines them
-during operation.}
-
-\textcolor{blue}{Comentario: Me gusta pero el modelo que se resulve de manera offline no es simplificado, es exacto y con mas iteraciones  y exploracion para llegar a buenos puntos de parntida.}
+to the industrial adoption of the OPP \cite{zhang_hpm}. Two families of
+alternatives are under development: artificial neural networks
+\cite{filho_ann,ibanez_ann}, which generate the patterns online after a
+demanding off-line training, and online correction schemes that modify a
+precomputed pattern in closed loop, such as model predictive pulse pattern
+control \textbf{[REF MP3C]}. This work follows the second path: the patterns
+are computed off-line with the complete nonlinear model and an extensive
+search over starting points, and an online optimizer with a bounded cost per
+sample refines them during operation.
 
 The trade-off between distortion and losses is well documented for three-level
 converters: detailed NPC versus T-Type comparisons are available
@@ -227,25 +214,15 @@ converters: detailed NPC versus T-Type comparisons are available
 the losses as a function of the angles \cite{koukoula_junction}. No T-Type loss
 model expressed as a function of the angles and embedded in the optimization has
 been reported, however, and even less so with SiC devices, whose split between
-conduction and switching differs from that of an IGBT. Unity power factor at the point of common coupling is assumed over the whole
-operating range.
-\upd{Agregar el vacio de tiempo real: ninguna OPP con modelo de perdidas
-se ha ajustado en linea ni bajo distorsion de red. Revisar el supuesto de
-factor de potencia unitario: el RT usa $\varphi$ como entrada y la LUT esta
-indexada por $(M,\varphi)$.}
-\sug{(Reemplaza desde ``No T-Type loss model\dots'') No T-Type loss
-model expressed as a function of the angles and embedded in the optimization
-has been reported, however, and even less so with SiC devices, whose split
-between conduction and switching differs from that of an IGBT. Moreover,
-off-line patterns are only optimal at the operating points and grid
-conditions for which they were computed: between the entries of the table,
-and whenever the grid voltage carries background harmonics, a stored pattern
-may lose compliance with IEEE~519. To the authors' knowledge, no loss-aware
-OPP has been refined online to recover it. The patterns are therefore
-tabulated against both the modulation index $M$ and the load angle
-$\varphi$, and corrected in real time.}
-
-\textcolor{blue}{Comentario: Puedes aplicar esta sugenrencia por mi, creo que esta bien, pero intenta ser un poco mas breve.}
+conduction and switching differs from that of an IGBT. Moreover, an off-line
+pattern is optimal only at the operating point and grid conditions for which
+it was computed: between table entries, or under grid background harmonics,
+it may lose compliance with IEEE~519, and no loss-aware OPP has been refined
+online to recover it.
+% Se elimino la frase "Unity power factor at the point of common coupling is
+% assumed over the whole operating range": la LUT esta indexada por (M,phi) y
+% el RT recibe phi como entrada. Reponer si los resultados siguen siendo solo
+% con factor de potencia unitario.
 
 The contributions of this work are the following:
 \begin{itemize}
@@ -254,12 +231,14 @@ The contributions of this work are the following:
     \item A multipolar OPP formulation with half-wave symmetry in which the integer level constraint is replaced by two linear inequalities on the
     angles.
     \item A real-time refinement of the OPP based on a sequential quadratic program with one Gauss-Newton iteration per update, whose objective combines the current TDD and the losses and whose Hessian is positive definite by construction.
+    % Punto nuevo: depende de los resultados experimentales, que aun faltan.
+    \item The experimental validation of the complete scheme, off-line
+    patterns and online refinement, on a 10~kW, 750~V grid-connected SiC
+    T-Type converter in a laboratory environment.
     %\item The incorporation of the LCL filter through an explicit constraint on
     %the capacitor current, required for the loss model to be consistent with the
     %actual operation of the converter.
 \end{itemize}
-
-\textcolor{blue}{COmentario: Puse lo que me sugeriste menos el ultimo punto, ya que no es tanto el aporte, lo que si te pedire que me sugieras un nuevo pñunto que es la validacion de lo propuesto en un conversor real de 10kW 750V(entorno real de laboratorio)}
 
 % La figura de la topologia se cita en la introduccion y en la Seccion de
 % perdidas; se ancla aqui para que flote a la pagina siguiente al titulo.
@@ -312,20 +291,14 @@ $\hat{v}_n = \frac{V_{dc}}{2}\sqrt{a_n^2+b_n^2}$ and the current TDD, normalized
 with respect to $I_{nom}$, is
 \begin{equation}
     I_{TDD} = \frac{100\pct}{I_{nom}}
-              \sqrt{\sum_{n=5,7,\dots} \left(\hat{v}_n\,g_n\right)^2}
+              \sqrt{\sum_{n\in\mathcal{N},\,n\geq5} \left(\hat{v}_n\,g_n\right)^2}
     \label{eq:tdd}
 \end{equation}
-where $g_n$ is the transfer function of the LCL filter, from converter voltage to grid current, evaluated at harmonic $n$ (Section~\ref{sec:filtro}).
-\upd{Unificar el conjunto de armonicos: aqui $n=5,7,\dots$ (incluye
-triples); en RT se usa $\mathcal{N}=\{5,7,11,\dots,49\}$, sin triples ni
-$n>50$. Precisar el limite superior de la suma.}
-\sug{(Cambiar el indice de la suma de \eqref{eq:tdd} a
-$n\in\mathcal{N}$ y agregar:) where the sum runs over the odd, non-triplen
-harmonics below the 50th, $\mathcal{N}=\{5,7,11,13,\dots,49\}$: triplen
-harmonics are absent from the line currents of the three-wire connection,
-and IEEE~519 bounds the distortion up to the 50th order.}
-
-\textcolor{blue}{Comentario: aqui no me convence como quieres agregar lo que dices, creo que esta bien, pero lo dices en mucho texto y no me estas dando el texto para copiar y pegar directo, ni donde agregarlo exactamente}
+where $g_n$ is the transfer function of the LCL filter, from converter voltage
+to grid current, evaluated at harmonic $n$ (Section~\ref{sec:filtro}), and
+$\mathcal{N}=\{1,5,7,11,\dots,49\}$ is the set of odd, non-triplen orders
+below the 50th: triplen harmonics do not flow in the line currents of the
+three-wire connection, and IEEE~519 bounds the distortion up to the 50th order.
 
 \subsection{Linear Level Constraints}
 Even when the virtual angle is used, the model in \cite{koukoula_junction}
@@ -392,62 +365,39 @@ and it is provided to the modulator at each sample together with $M$
     \label{tab:estados_cond}
 \end{table}
 The proposed formulation groups the virtual angles into pairs
-$(\gamma_i,\gamma_{i+d})$. Between the two angles of a pair either $S_1$ or
-$S_4$ conducts, but it is not possible to determine a priori which of the two is
-larger, so the length of the interval must be taken in absolute value. For $S_2$
-and $S_3$ the difficulty is different: the integration limits are not defined
-beforehand. A decomposition strategy is therefore adopted: the losses are first
-computed as if $S_2$ and $S_3$ conducted over the whole period, and the
-contribution of the intervals in which they do not actually conduct is then
-subtracted; these are precisely the intervals bounded by each pair $(\gamma_i,\gamma_{i+d})$ in Fig.~\ref{fig:patron_opp}. This
-yields
+$(\gamma_i,\gamma_{i+d})$: each pair bounds a pulse that starts at $\gamma_i$
+and ends at $\gamma_{i+d}-\pi$ (Fig.~\ref{fig:patron_opp}), during which
+either $S_1$ or $S_4$ conducts. Since multipolar pulses may have either
+polarity, it is not possible to determine a priori which of the two limits is
+larger, so the integral over the pulse must be taken in absolute value. For
+$S_2$ and $S_3$ the difficulty is different: their conduction intervals are
+not defined beforehand. A decomposition strategy is therefore adopted: the
+losses are first computed as if $S_2$ and $S_3$ conducted over the whole
+period, and the contribution of the pulses, in which a single device replaces
+them, is then corrected. Since \eqref{eq:p_con} is proportional to
+$\sin^2(\gamma-\varphi)$, the integral over each pulse has the closed form
 \begin{equation}
-    P_{cond,S2+S3} = P_{cond,S2+S3}^{full}
-        - \sum_{i=1}^{d}\hat{p}_{S2+S3}(\gamma_i,\gamma_{i+d})
-    \label{eq:pcond_s2s3}
+    t_i(\gv) = \big|\,G(\gamma_{i+d}-\pi-\varphi) - G(\gamma_i-\varphi)\,\big|,
+    \quad G(\theta) = \frac{\theta}{2}-\frac{\sin 2\theta}{4},
+    \label{eq:t_i}
 \end{equation}
-where each term of the sum is evaluated by Simpson's rule over the interval of
-the pair,
-\begin{multline}
-    \hat{p}_{j}(\gamma_i,\gamma_{i+d}) =
-    \frac{|\gamma_{i+d}-\pi-\gamma_i|}{6}
-    \Bigg( p_{j,con}(\gamma_i)\\
-    + 4\,p_{j,con}\!\left(\frac{\gamma_i+\gamma_{i+d}-\pi}{2}\right)
-    + p_{j,con}(\gamma_{i+d}-\pi) \Bigg).
-    \label{eq:simpson}
-\end{multline}
-\upd{El RT usa la integral exacta $G(\theta)=\theta/2-\sin(2\theta)/4$ en vez
-de Simpson, y sin valor absoluto (el residuo entra al cuadrado). Considerar
-usar la integral exacta tambien aqui para tener un solo modelo; si se
-mantiene Simpson, justificar la diferencia.}
-\sug{(Agregar despues de \eqref{eq:simpson}:) Since \eqref{eq:p_con}
-is proportional to $\sin^2(\gamma-\varphi)$, the integral also admits a
-closed form, \eqref{eq:rt_T}, which is used in the real-time stage
-(Section~\ref{sec:rt}). Over the patterns of the lookup table, both
-expressions differ by less than 2\pct{} of $P_{cond}$ (0.06~W at the rated
-current).}
-
-\textcolor{blue}{Comentario: creo que tienes razon aqui pero quiero que me propongas todo el cambio, sacando la formula actual}
-
-The losses of $S_1$ and $S_4$ are integrated over those same intervals, but with
-half the conduction resistance, since a single semiconductor conducts within
-them. Adding both contributions, the total conduction losses become
-\begin{multline}
-    P_{cond} = P_{cond,S2+S3}^{full}
-        - \sum_{i=1}^{d}\hat{p}_{S2+S3}(\gamma_i,\gamma_{i+d})\\
-        + \sum_{i=1}^{d}\hat{p}_{S1\text{-}S4}(\gamma_i,\gamma_{i+d}).
-    \label{eq:pcond_total}
-\end{multline}
-Over a given interval $\hat{p}_{S2+S3}$ is exactly twice
-$\hat{p}_{S1\text{-}S4}$, so both sums are merged into one and the expression
-reduces to
+where $G$ is a primitive of $\sin^2\theta$. Within a pulse, $S_2+S_3$ would
+conduct with twice the resistance of the single device that actually
+conducts, so each pulse removes half of the loss assigned to it by the
+full-period term. Since both half-cycles contribute equally under HWS, the
+average over the period yields
 \begin{equation}
-    P_{cond} = P_{cond,S2+S3}^{full} - \sum_{i=1}^{d}
-        \hat{p}_{S1\text{-}S4}(\gamma_i,\gamma_{i+d}),
+    P_{cond} = r_{ds,on}\,I^2\Big(1-\frac{1}{\pi}\sum_{i=1}^{d}t_i(\gv)\Big),
     \label{eq:pcond_final}
 \end{equation}
-where the first term is constant for a given current and the whole dependence on
-$\gv$ is concentrated in the sum.
+where $r_{ds,on}I^2$ is the loss with $S_2$ and $S_3$ conducting over the
+whole period and the whole dependence on $\gv$ is concentrated in the sum.
+Since $G$ is monotonically increasing, $t_i$ is continuous in $\gv$ and
+differentiable wherever the pulse width is nonzero.
+% Se reemplazo la regla de Simpson (eq:simpson) y las ecuaciones
+% eq:pcond_s2s3 y eq:pcond_total por la integral exacta. Los patrones
+% off-line de Julia se calcularon con Simpson: la diferencia sobre la LUT es
+% menor a 1.9 % de P_cond (0.06 W).
 
 \begin{figure}[!t]
     \centering
@@ -560,8 +510,8 @@ described next.
 
 \subsection{Optimization Problem}
 
-Gathering the previous models, the problem to be solved for each modulation
-index $M$ is formulated as
+Gathering the previous models, the problem to be solved for each operating
+point $(M,\varphi)$ is formulated as
 \begin{subequations}
     %\setlength{\jot}{0pt}
     \begin{align}
@@ -588,22 +538,15 @@ transitions. IEEE~519 is imposed in its two forms: the global 5\pct{} limit on t
 the individual limits $I_{n}^{\text{lim}}$ up to $n=50$, both taken for a
 short-circuit ratio $I_{sc}/I_{L} < 20$. The last
 one enforces continuity with respect to $M$, required for Section~\ref{sec:implementacion}. The
-parameters are summarized in Table~\ref{tab:parametros}.
-\upd{Con la LUT indexada por $(M,\varphi)$, el problema se resuelve por par
-$(M,\varphi)$ y la restriccion de continuidad deberia extenderse a $\varphi$
-(o explicar por que el refinamiento en linea la hace innecesaria). Tambien
-diferenciar este problema off-line (minimiza perdidas s.a.\ TDD $\leq$ 5\pct)
-del RT (minimiza TDD con perdidas como regularizador).}
-\sug{(Agregar al final del parrafo:) The problem is solved for each
-pair $(M,\varphi)$ of the table, with the continuity constraint applied along
-$M$ \textbf{[verificar como se impuso en $\varphi$]}. Note that
-\eqref{eq:opp_propuesto} minimizes the losses with the distortion as a
-constraint, whereas the real-time stage of Section~\ref{sec:rt} minimizes the
-distortion with the losses as a secondary term: the off-line solution sets the
-loss level, and the online refinement preserves harmonic compliance around
-it.}
-
-\textcolor{blue}{Comentario: esta super lo que dices, pero te pedire que lo cambies tu por mi en este caso}
+parameters are summarized in Table~\ref{tab:parametros}. The problem is
+solved for each pair $(M,\varphi)$ of the table, with the continuity
+constraint applied along $M$. Note that \eqref{eq:opp_propuesto} minimizes
+the losses with the distortion as a constraint, whereas the real-time stage
+of Section~\ref{sec:rt} minimizes the distortion with the losses as a
+secondary term: the off-line solution sets the loss level, and the online
+refinement preserves harmonic compliance around it.
+% Pendiente: verificar como se impuso la continuidad a lo largo de phi en
+% Julia (o si no se impuso, porque la re-siembra con histeresis lo cubre).
 
 \begin{table}[!t]
     \centering
@@ -743,8 +686,7 @@ $\theta$ provided by the PLL.}
 \end{comment}
 
 
-The $dq$ power control provides the modulation index $M$ and the phase shift
-$\varphi$. The $dq$ current control provides the modulation
+The $dq$ current control provides the modulation
 index $M$ and the phase $\varphi$. The LUT is addressed with both and returns
 the initial angles, which the real-time optimizer of Section~\ref{sec:rt}
 refines; the pattern generator converts the current angles into firing
@@ -756,18 +698,11 @@ solutions of an OPP exhibit discontinuities with respect to $M$, and an abrupt
 jump in the angles translates into a current transient that the $dq$ controller
 cannot compensate. Continuity is therefore not imposed a posteriori but within
 the optimization itself, through the last constraint of
-\eqref{eq:opp_propuesto}.
-\upd{Con el RT, los angulos aplicados evolucionan con paso acotado por
-$\lambda_u$ desde la solucion anterior (warm start), lo que suaviza tambien
-los cambios de $M$ y $\varphi$. Mencionarlo aqui o en la Seccion RT.}
-\sug{(Agregar al final:) In operation, the real-time stage reinforces
-this property along $M$: each update starts from the previous angles and its
-step is bounded by the proximal term, so changes of $M$ are followed smoothly
-rather than by jumps between table entries. A change of $\varphi$ across a
-cell of the table re-seeds the optimizer, with hysteresis to prevent
-chattering at the cell boundaries.}
-
-\textcolor{blue}{Comentario: Aqui aplica lo que dices, porque me parece que esta bien, pero deberias decirlo de una manera mas breve o incluida al parrafo anterior}
+\eqref{eq:opp_propuesto}. In operation, the real-time stage reinforces it:
+each update starts from the previous angles with a step bounded by the
+proximal term, so changes of $M$ are followed without jumps between table
+entries, while a change of $\varphi$ across a table cell re-seeds the
+optimizer, with hysteresis at the cell boundaries.
 % La seccion de tiempo real va DESPUES de "Control and Pattern Generation":
 % si se incluye antes, esa subseccion queda numerada dentro de la seccion RT
 % (V-E) y las referencias a sec:implementacion salen cruzadas.
@@ -789,21 +724,18 @@ modulation indices, was then built on a single core at 0.1~s per point thanks to
 the warm start, so that the whole procedure completes in under 8~min. The
 waveforms and the losses were verified in PLECS with the thermal model of the
 CHB011M12GM4T SiC T-Type module and the parameters of Table~\ref{tab:parametros}.
-\upd{Actualizar a la LUT $(M,\varphi)$ (25 valores de $\varphi$ $\times$ 9 de
-$M$ en \texttt{gamma\_phi.mat}, no 1000 indices de $M$) y tiempos de calculo.
-Agregar la plataforma de tiempo real (OPAL-RT OP4510), el tiempo de ejecucion
-por muestra frente a los 100~$\mu$s y el esquema de validacion (HIL / PLECS RT).
+The real-time table was computed for 9 modulation indices between 0.835 and
+0.9 and 25 load angles between $-180^\circ$ and $180^\circ$
+\textbf{[tiempo de calculo]}. The real-time optimizer was implemented as a
+MATLAB Function block and executed on an OPAL-RT OP4510 with a sample time of
+200~$\mu$s, with a worst-case execution time of \textbf{[XX]}~$\mu$s per
+sample.
+\upd{El parrafo aun describe la LUT de conferencia (1000 indices de $M$,
+$d=17$, 8~min). Actualizar los tiempos de calculo de la LUT $(M,\varphi)$ y
+unificar el $T_s$: el OPAL corre a 200~$\mu$s, pero la seccion RT y la
+Tabla~\ref{tab:rt_param} usan $T_s=100~\mu$s y 800~$\mu$s por iteracion GN.
 Cambiar el titulo de seccion si hay resultados HIL (``Simulation and
 Real-Time Results'').}
-\sug{(Agregar al final del parrafo:) The table was computed for
-\textbf{[9]} modulation indices between 0.835 and 0.9 and \textbf{[25]} load
-angles between $-180^\circ$ and $180^\circ$, \textbf{[tiempo de calculo]}. The
-real-time optimizer was implemented as a MATLAB Function block, compiled with
-MATLAB Coder and executed on an OPAL-RT OP4510 with $T_s=100~\mu$s
-\textbf{[verificar]}, with a worst-case execution time of
-\textbf{[XX]}~$\mu$s per sample.}
-
-\textcolor{blue}{Comentario: aqui aplica lko que dices pero tambien di que el opal esta con Ts 200 us}
 
 %\subsection{Effect of the Capacitor Current Constraint}
 %\textcolor{green}{Considero capaz eliminar esta seccion del paper, dado que no se hace ningun analisis que lo justifique}
@@ -878,23 +810,18 @@ the proposed formulation converts into the loss reduction reported below. The
 spectra at the nominal point (Fig.~\ref{fig:fft_comparacion}(b)) confirm that
 every component of the OPP remains within its bound up to $n = 50$, several of
 them sitting on the limit, with the residual content displaced above that order.
-\upd{El RT minimiza el TDD (con perdidas como regularizador), por lo que en
-regimen opera bajo el 5\pct{} (aprox.\ 1--5\pct{} segun la version), no en el
-limite como el off-line. Discutir el efecto sobre las perdidas. Agregar el
-cumplimiento con fondo armonico de red: ambas versiones toleran al menos
-$\sim$9\pct{} de la fundamental en cualquier armonico individual.}
-\sug{(Agregar despues del parrafo:) In real time, the optimizer
-minimizes the distortion with the losses as a secondary term, so it settles
-below the limit: at $M=0.87$ and $\varphi=-15^\circ$, the TDD over the
-controlled harmonics converges to 1.7\pct{}, while the losses estimated by the
-model stay within 0.4\pct{} of those of the table pattern. When the grid
-voltage carries background harmonics, the table pattern alone violates the
-individual limits, by a factor of 5.7 for a fifth harmonic of 4\pct{} and a
-seventh of 3\pct{}, and the optimizer restores compliance within 13~ms
-(Fig.~\textbf{[X]}). Compliance is maintained for background harmonics of up
-to 9\pct{} of the fundamental in any individual order.}
 
-\textcolor{blue}{Comentario: Perfecto Agregalo, tiene sentido. pero eso del 9\% tenemos que verlo mas a detalle, porque de donde sale ese numero exactamnete.}
+In real time, the optimizer minimizes the distortion with the losses as a
+secondary term, so it settles below the limit: at $M=0.87$ and
+$\varphi=-15^\circ$, the TDD over the controlled harmonics converges to
+1.7\pct{}, while the losses estimated by the model stay within 0.4\pct{} of
+those of the table pattern. When the grid voltage carries background
+harmonics, the table pattern alone violates the individual limits, by a
+factor of 5.7 for a fifth harmonic of 4\pct{} and a seventh of 3\pct{}, and
+the optimizer restores compliance within 13~ms (Fig.~\textbf{[X]}).
+\upd{Tolerancia a fondo armonico de red ($\sim$9\pct{} de la fundamental por
+armonico individual): definir el ensayo (barrido por armonico, criterio de
+cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
 
 \subsection{Loss Comparison}
 
