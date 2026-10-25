@@ -96,7 +96,8 @@
 - [ ] Decidir candidatas de `docs/REFERENCIAS.md` (seccion 3), en especial
       Rahmanpour TIA 2025 (multipolar + limites de red) y Perez-Basante 2019
       (origen del angulo virtual).
-- [ ] Conseguir PDFs de las 8 referencias de la seccion 1 de REFERENCIAS.md.
+- [ ] Revisar las dos `\sug` nuevas de la intro (angulo virtual con
+      Perez-Basante; citas del parrafo T-Type).
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
   control y su caption, Tabla III (d = 17 vs 19), Fig. 4, conclusiones,
   bibliografia, resultados experimentales.

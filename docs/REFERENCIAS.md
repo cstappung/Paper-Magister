@@ -4,24 +4,30 @@ Estado de la bibliografia de `main_conf_EN.tex` (38 entradas, orden de cita).
 Los textos completos de los papers no se suben al repo (copyright IEEE); aqui
 solo queda el registro.
 
-## 1. Citadas que NO venian en el zip de markdowns (2026-10-25)
+## 1. Referencias de la version de conferencia (segundo zip, 2026-10-25)
 
-Ya estaban en la version de conferencia; el autor debe conseguir el PDF:
+El autor entrego los 8 que faltaban. Datos verificados contra cada paper:
 
-| Clave | Referencia | Enlace (DOI / IEEE Xplore) |
+| Clave | Referencia | DOI |
 |---|---|---|
-| `edpuganti_survey` | Edpuganti, Rathore, survey low switching frequency, TIA 2015 | DOI 10.1109/TIA.2015.2437351 (segun ADS; verificar) |
-| `lee_npc_ttype` | Lee, Shin, Choi, NPC vs T-type modules, INTELEC 2015 | probable ieeexplore 7572357 (via infona; verificar) |
-| `alemi_ttype` | Alemi, Lee, T-type vs NPC losses, Trans. KIPE 2014 | no esta en IEEE Xplore: koreascience JAKO201416747604931 |
-| `yang_sic_gan` | Yang et al., SiC/GaN in T-type, PEAC 2022 | DOI 10.1109/PEAC56338.2022.9959358 |
-| `narasimhan_sic` | Narasimhan et al., 3.3 kV SiC MOSFET, WiPDA 2021 | DOI 10.1109/WiPDA49284.2021.9645089 |
-| `nielsen_10kv` | Nielsen et al., 10 kV SiC MOSFET, IPEMC-ECCE Asia 2024 | no encontrado |
-| `koukoula_junction` | Koukoula et al., junction temperature relaxed properties, ECCE 2024 | DOI 10.1109/ECCE55643.2024.10861166 (version revista: 10.1109/TPEL.2025.3626863) |
-| `filho_ann` | Filho et al., ANN angle generation, TIA 2011 | ieeexplore 5957275 |
+| `edpuganti_survey` | Edpuganti, Rathore, TIA vol. 51, no. 5, pp. 4212-4228, Sep./Oct. 2015 | 10.1109/TIA.2015.2437351 |
+| `lee_npc_ttype` | Lee, Shin, Choi, conferencia (el PDF no imprime el venue; bib dice INTELEC 2015) | verificar |
+| `alemi_ttype` | Alemi, Lee, Trans. KIPE vol. 19, no. 2, pp. 173-183, Apr. 2014 (no IEEE) | 10.6113/TKPE.2014.19.2.173 |
+| `yang_sic_gan` | Yang, Zhang, Zhang, Yang, PEAC 2022, pp. 55-59 | 10.1109/PEAC56338.2022.9959358 |
+| `narasimhan_sic` | Narasimhan et al., WiPDA 2021, pp. 366-371 | 10.1109/WiPDA49284.2021.9645089 |
+| `nielsen_10kv` | Nielsen et al., IPEMC2024-ECCE Asia, pp. 1250-1255 | 10.1109/IPEMC-ECCEAsia60879.2024.10567349 |
+| `koukoula_junction` | Koukoula et al., ECCE 2024, pp. 3877-3884 | 10.1109/ECCE55643.2024.10861166 |
+| `filho_ann` | Filho et al., TIA vol. 47, no. 5, pp. 2117-2124, Sep./Oct. 2011 | 10.1109/TIA.2011.2161533 |
 
-Nota: el abstract de `koukoula_junction` confirma que usa posiciones
-multipolares y "virtual switching angles", asi que la cita en la intro es
-correcta; Perez-Basante 2019 seria el origen del concepto.
+Hallazgos al revisarlos:
+- `koukoula_junction`, `geyer_bounded`, `koukoula_ecce23` y `dorfling_thermal`
+  usan NPC de media tension con IGCT (no IGBT). Corregido en la intro.
+- `koukoula_junction` toma el angulo virtual de Perez-Basante et al. TPEL 2019
+  (su ref. [15]). Sugerencia `\sug` en la intro para citarlo.
+- El rango 10-15 kHz del punto de cruce NPC/T-Type es de `alemi_ttype`
+  (dispositivos Si), no de `yang_sic_gan`; y alemi muestra que el T-Type pierde
+  menos a modulacion alta (a modulacion baja gana el NPC). Sugerencia `\sug`
+  en el parrafo del T-Type.
 
 ## 2. Papers del zip (todos citados en la intro nueva)
 
