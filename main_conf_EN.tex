@@ -175,6 +175,8 @@ currents make conduction and switching losses significant
 the topology and device selection, and the modulation technique. This work
 addresses both, in that order.}
 
+\textcolor{blue}{Comentario: Mira me gusta mas como estaba antes, sientoue lo unico que aporta aqui es lo de l IEEE 519, pero siento que deberia estar mas adelante, no al inicio del paper.}
+
 On the first front, the three-level T-Type with SiC devices is adopted. The
 neutral-point-clamped (NPC) converter is the reference topology for improving the
 output waveform and limiting the filter size \cite{lee_npc_ttype}, but the T-Type
@@ -203,6 +205,10 @@ modulation index translates into lower total losses. With silicon devices,
 the break-even point between the two lies between 10 and 15~kHz
 \cite{alemi_ttype}, and it shifts upwards with SiC, whose switching energies
 are much lower than those of an equivalent IGBT \cite{yang_sic_gan}''.}
+
+\textcolor{blue}{Comentarios: Si estas seguro de esto (\cite{alemi_ttype} (punto de cruce con Si, segun el dispositivo), no de
+\cite{yang_sic_gan}) cambialo, pero confirmalo primero. lo de la modulacion alta y baja de \cite{alemi_ttype} no me interesa mencionarlo y haz el cambio del parrafo que sigieres al final}
+
 \old{Sin cambios en el texto; solo la sugerencia verde de arriba.}
 
 Modulation techniques are grouped into carrier-based, space-vector and
@@ -220,6 +226,8 @@ harmonic spectrum and are nowadays computed by nonlinear programming
 \cite{birth_genopp,geyer_bounded}. For grid-connected converters, the transfer
 function of the LCL filter can be embedded in the OPP problem, so that the
 distortion is minimized directly on the grid current \cite{rahmanpour_lcl}.
+
+\textcolor{blue}{Comentario: Creo que me gusta tu cambio, solo miraria las citas, seintoq eu tal vez son muchas, ve cuales son las importantes, que no sean tan viejas tampoco.}
 \old{Modulation techniques are grouped into carrier-based, space-vector and
 programmed schemes. The first two are well suited to medium-to-high switching
 frequency range, but in high-power converters, which operate at low frequencies
@@ -273,6 +281,7 @@ G.~Konstantinou, J.~Pou, I.~Kortabarria, and I.~M.~de~Alegria, ``A universal
 formulation for multilevel selective-harmonic-eliminated PWM with half-wave
 symmetry,'' \emph{IEEE Trans. Power Electron.}, vol.~34, no.~1,
 pp.~943--957, Jan.~2019.}
+\textcolor{blue}{Comentario: Me gusta el nuevo texto y tambien creo que deberias aplicar la sugerencia}
 
 OPPs are computed off-line under nominal conditions and stored in a lookup
 table, so they lose optimality between table entries and whenever the grid
@@ -299,6 +308,8 @@ recover compliance with IEEE~519. This work follows the third path: the
 patterns are computed off-line with the complete nonlinear model and an
 extensive search over starting points, and an online optimizer with a bounded
 cost per sample refines them during operation.
+
+\textcolor{blue}{Comebntario, creo que esta bien explicado, pero las citas son inicesariamenet muchas, solo pon las que son necesarias relamente, por ejempñlo para el opp que compenza en timepo real solo deberias citar el paper que lo ahce, no a otros 4 papers de kalman que es el objetivo de lo que estoy hablando ahi. creo que no es la unica parte que sucede.}
 \old{(Resto del 4.o y fin del 5.o parrafos anteriores.) This cost is
 precisely the main barrier to the industrial adoption of the OPP
 \cite{zhang_hpm}. Two families of alternatives are under development:
