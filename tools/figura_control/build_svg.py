@@ -2,17 +2,19 @@ import json, re, sys
 # uso: python3 build_svg.py orig.svg labels_out.json salida.svg
 s = open(sys.argv[1]).read()
 L = json.load(open(sys.argv[2]))
-DX = 188.9766
+DX = 120.0     # corrimiento del generador en adelante
+D1 = 60.0      # corrimiento de la columna RT-OPP / LUT
 
-def shift_id(eid):
+def shift_id(eid, dx=None):
     global s
+    if dx is None: dx = DX
     m = re.search(r'<(\w+)\s[^>]*?id="%s"[^>]*>' % re.escape(eid), s)
     assert m, eid
     tag = m.group(0)
     if ' transform="' in tag:
-        new = tag.replace(' transform="', ' transform="translate(%.4f,0) ' % DX, 1)
+        new = tag.replace(' transform="', ' transform="translate(%.4f,0) ' % dx, 1)
     else:
-        new = tag.replace(' id="%s"' % eid, ' id="%s" transform="translate(%.4f,0)"' % (eid, DX), 1)
+        new = tag.replace(' id="%s"' % eid, ' id="%s" transform="translate(%.4f,0)"' % (eid, dx), 1)
     s = s.replace(tag, new, 1)
 
 def remove_id(eid):
@@ -38,9 +40,9 @@ def set_attr(eid, attr, fn):
     new = re.sub(r' %s="[^"]*"' % attr, ' %s="%.4f"' % (attr, fn(v)), tag, count=1)
     s = s.replace(tag, new, 1)
 
-# --- lado derecho: corre un bloque a la derecha ---
+# --- lado derecho: generador en adelante corre DX ---
 right = ['et52epo1d', 'fx43hzp9i', 'eicd6nuv', 'ee9s0vdw', 'ey2aueux', 'e7nh910y',
-         'en42ks8z', 'eba4kt910', 'fxgycuu611', 'ecngpsd1b', 'fx8iy5bf1i',
+         'en42ks8z', 'eba4kt910', 'ecngpsd1b', 'fx8iy5bf1i',
          'e3na4ky3l', 'e6pitvn3m', 'e0ojw0u3n', 'e9q2bwo3p', 'egygjb63q',
          'e2qvhco3r', 'ej5kq0j3s', 'eu0ctu73t',
          # capa del convertidor y LCL
@@ -58,6 +60,13 @@ assert s.count(g) == 1
 s = s.replace(g, g.replace('translate(9.4488', 'translate(%.4f' % (9.4488 + DX)))
 set_attr('ejqy1y63u', 'x1', lambda v: v + DX)   # i_abc horizontal
 set_attr('en1h9yzb', 'x2', lambda v: v + DX)    # delta horizontal
+# la caja de la LUT original pasa a ser el RT-OPP (corre D1)
+shift_id('ecr6qwb8', D1)
+set_attr('e14yxjwr', 'x2', lambda v: v + D1)    # M: polar -> RT-OPP
+shift_id('e0po8ozt', D1)                        # gamma: RT-OPP -> generador
+set_attr('e0po8ozt', 'x2', lambda v: v + DX - D1)
+shift_id('fxgycuu611', (DX + D1) / 2)           # etiqueta gamma al centro del cable
+shift_id('fx3e1rzq12', 67.0)                    # etiqueta M a la derecha de la rama
 remove_id('fx8slo5pj')   # etiqueta vieja de la LUT
 remove_id('fxbctl76j')   # phi viejo -> delta
 # etiqueta P*,Q* bajo el cable de entrada (arriba sube la rama al estimador)
@@ -88,45 +97,48 @@ def dot(x, y):
             'stroke="#000000" stroke-width="2.2677"/>\n' % (x, y))
 
 YM = 113.386; YT = -15.0; YB = 75.5906; GAP = 7.5591
-xR = 816.379                    # RT-OPP (posicion vieja del generador)
-xE = 627.4024                   # estimador de phi (sobre la LUT)
-xO = 816.379 + DX               # observador (sobre el generador corrido)
+xP = 438.4258                   # columna del bloque polar
+xC = 627.4024 + D1              # columna RT-OPP (abajo) / LUT (arriba)
+xG = 816.379 + DX               # columna del generador / observador
 xPCC = 1388.9782 + DX           # nodo de medicion de v_abc
 n = ''
-n += blk(xR, YB) + lab('rtopp', xR + W/2, YM)
-n += blk(xE, YT - H/2) + lab('est', xE + W/2, YT)
-n += blk(xO, YT - H/2) + lab('obs', xO + W/2, YT)
-n += lab('lut', 627.4024 + W/2, YM)
-# RT-OPP -> generador
-n += wire('M %.4f %.4f L %.4f %.4f' % (xR + W, YM, xR + W + 52.9135 - GAP + 7.5591 - 0.0, YM))
-# etiqueta gamma^0 en el cable LUT -> RT-OPP
-n += lab('g0', 779.6609, 103.5245, center=False)
-# phi: estimador -> LUT y -> RT-OPP
-xEc = xE + W/2; yEb = YT + H/2; yBr = 49.0
-n += wire('M %.4f %.4f L %.4f %.4f' % (xEc, yEb, xEc, YB - GAP))
-n += dot(xEc, yBr)
-n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xEc, yBr, 860.0, yBr, 860.0, YB - GAP))
-n += lab('phi', 670.5, 44.0, center=False)
-# P*,Q* entra una vez y se divide: referencia de corriente y estimador de phi
+n += lab('rtopp', xC + W/2, YM)
+n += blk(xP, YT - H/2) + lab('est', xP + W/2, YT)
+n += blk(xC, YT - H/2) + lab('lut', xC + W/2, YT)
+n += blk(xG, YT - H/2) + lab('obs', xG + W/2, YT)
+# P*,Q* entra una vez y se divide: referencia de corriente y angulo de carga
 xPQ = 34.0
 n += dot(xPQ, YM)
-n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPQ, YM, xPQ, YT, xE - GAP, YT))
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPQ, YM, xPQ, YT, xP - GAP, YT))
+# phi: angulo de carga -> LUT, con rama al RT-OPP (salto sobre el cable de M)
+yF = YT - 18.0; xFd = 600.0; yFr = YM - 24.0
+xMd = 645.0; yMu = YT + 18.0; R = 5.0
+n += wire('M %.4f %.4f L %.4f %.4f' % (xP + W, yF, xC - GAP, yF))
+n += dot(xFd, yF)
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f A %.1f %.1f 0 0 1 %.4f %.4f L %.4f %.4f'
+          % (xFd, yF, xFd, yFr, xMd - R, yFr, R, R, xMd + R, yFr, xC - GAP, yFr))
+n += lab('phi', 608.0, yF - 6.0, center=False)
+# M: rama del cable polar -> RT-OPP hacia la LUT
+n += dot(xMd, YM)
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xMd, YM, xMd, yMu, xC - GAP, yMu))
+# gamma^0: LUT -> RT-OPP
+xCc = xC + W/2
+n += wire('M %.4f %.4f L %.4f %.4f' % (xCc, YT + H/2, xCc, YB - GAP))
+n += lab('g0', xCc + 6.0, 56.0, center=False)
 # observador: v_abc desde el PCC, salida x*_h al RT-OPP
-n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPCC, YM, xPCC, YT, xO + W + GAP, YT))
-n += lab('vabc2', 1528.0, YT - 6.0, center=False)
-n += wire('M %.4f %.4f L 920.0 %.4f L 920.0 %.4f' % (xO, YT, YT, YB - GAP))
-n += lab('xh', 926.5, 52.0, center=False)
-# M al RT-OPP (fundamental de referencia)
-xMb = 597.0; yM2 = 176.0
-n += dot(xMb, YM)
-n += wire('M %.4f %.4f L %.4f %.4f L 880.0 %.4f L 880.0 %.4f' % (xMb, YM, xMb, yM2, yM2, 151.1812 + GAP))
-n += lab('M2', 760.0, yM2 - 4.5, center=False)
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPCC, YM, xPCC, YT, xG + W + GAP, YT))
+n += lab('vabc2', 1339.02 + DX, YT - 6.0, center=False)
+xHo = xG + 20.0; yH = 45.0; xHi = xC + W - 22.0
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f L %.4f %.4f'
+          % (xHo, YT + H/2, xHo, yH, xHi, yH, xHi, YB - GAP))
+n += lab('xh', xHi + 22.0, yH - 6.0, center=False)
 # delta en el cable del bloque polar al generador
 n += lab('delta', 835.6735 + DX, 190.753, center=False)
 
 s = s.replace('</svg>', '<g id="nuevos_rtopp" transform="scale(0.264583)">\n' + n + '</g>\n</svg>')
 # lienzo: mas ancho y mas alto
+wmm = 405 + DX * 0.264583
 s = s.replace('width="405mm" height="85mm" viewBox="1 -1 405 85"',
-              'width="456mm" height="104mm" viewBox="1 -20 456 104"')
+              'width="%.0fmm" height="104mm" viewBox="1 -20 %.0f 104"' % (wmm, wmm))
 open(sys.argv[3], 'w').write(s)
-print('ok', len(s))
+print('ok', len(s), 'ancho mm', round(wmm))

@@ -96,6 +96,10 @@
 - Fuentes y scripts en `tools/figura_control/`.
 - P*,Q* entra una sola vez y se bifurca (punto) hacia la referencia de
   corriente y el bloque phi(P*,Q*); la etiqueta queda bajo el cable.
+- Reordenado (pedido del autor, se veia enredado): fila superior = angulo de
+  carga | LUT | observador; fila principal = polar -> RT-OPP -> generador.
+  La LUT queda sobre el RT-OPP (gamma^0 baja vertical), M y phi llegan a ambos
+  con un solo cruce (salto). Ancho 437 mm (antes 456).
 
 ### Pendientes
 
