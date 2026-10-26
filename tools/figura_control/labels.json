@@ -1,0 +1,12 @@
+{"rtopp": "\\text{RT-OPP}",
+ "obs": "\\begin{array}{c}\\text{Harmonic}\\\\ \\text{Observer}\\end{array}",
+ "est": "\\begin{array}{c}\\text{Load Angle}\\\\ \\varphi(P^{\\star}\\!,Q^{\\star})\\end{array}",
+ "lut": "\\begin{array}{c}\\text{OPP LUT}\\\\ \\gamma^{0}(M,\\varphi)\\end{array}",
+ "g0": "\\gamma^{0}",
+ "phi": "\\varphi",
+ "phi2": "\\varphi",
+ "delta": "\\delta",
+ "xh": "\\mathbf{x}^{\\star}_{h}",
+ "M2": "M",
+ "vabc2": "v_{abc}",
+ "pq": "P^{\\star} \\!, \\!Q^{\\star}"}

@@ -85,6 +85,16 @@
 - Menos citas en parrafos 3 y 5: 38 -> 28 referencias.
 - Notas `\old` y comentarios azules de la intro eliminados.
 
+### Esquema de control v4 (2026-10-26)
+
+- Nuevos bloques: RT-OPP (entre LUT y generador), observador de armonicos
+  (entrada v_abc, salida x*_h al RT-OPP) y angulo de carga phi(P*,Q*) sin
+  mediciones (a la LUT y al RT-OPP). M tambien entra al RT-OPP.
+- El angulo del bloque polar ahora se llama delta (antes phi, que chocaba
+  con el angulo de carga del modelo de perdidas). Texto, caption y la
+  definicion de phi en eq:p_con actualizados; x*_h se cita en el termino TDD.
+- Fuentes y scripts en `tools/figura_control/`.
+
 ### Pendientes
 
 
