@@ -60,6 +60,9 @@ set_attr('ejqy1y63u', 'x1', lambda v: v + DX)   # i_abc horizontal
 set_attr('en1h9yzb', 'x2', lambda v: v + DX)    # delta horizontal
 remove_id('fx8slo5pj')   # etiqueta vieja de la LUT
 remove_id('fxbctl76j')   # phi viejo -> delta
+# etiqueta P*,Q* bajo el cable de entrada (arriba sube la rama al estimador)
+s = s.replace('transform="matrix(0.017,0,0,0.017,6.9981,103.571)"',
+              'transform="matrix(0.017,0,0,0.017,6.9981,134.0)"', 1)
 
 # --- elementos nuevos ---
 SC = 0.018898
@@ -104,9 +107,10 @@ n += wire('M %.4f %.4f L %.4f %.4f' % (xEc, yEb, xEc, YB - GAP))
 n += dot(xEc, yBr)
 n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xEc, yBr, 860.0, yBr, 860.0, YB - GAP))
 n += lab('phi', 670.5, 44.0, center=False)
-# entrada P*,Q* al estimador
-n += wire('M 15.1181 %.4f L %.4f %.4f' % (YT, xE - GAP, YT))
-n += lab('pq', 6.9981, YT - 9.8, center=False).replace('matrix(0.018898,0,0,0.018898', 'matrix(0.017,0,0,0.017')
+# P*,Q* entra una vez y se divide: referencia de corriente y estimador de phi
+xPQ = 34.0
+n += dot(xPQ, YM)
+n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPQ, YM, xPQ, YT, xE - GAP, YT))
 # observador: v_abc desde el PCC, salida x*_h al RT-OPP
 n += wire('M %.4f %.4f L %.4f %.4f L %.4f %.4f' % (xPCC, YM, xPCC, YT, xO + W + GAP, YT))
 n += lab('vabc2', 1528.0, YT - 6.0, center=False)
