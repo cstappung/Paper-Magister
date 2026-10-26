@@ -370,8 +370,8 @@ expressed as
 where $\varphi$ is the displacement between the fundamental of the
 modulated voltage and the converter current. It does not vanish under unity
 power factor at the point of common coupling because of the LCL capacitor,
-and it is provided to the modulator at each sample together with $M$
-(Fig.~\ref{fig:control}).
+and it is computed from the power references through the LCL model,
+without measurements (Fig.~\ref{fig:control}).
 \begin{table}[!t]
     \centering
     \caption{Per-leg conduction states of the three-level T-Type.}
@@ -484,23 +484,14 @@ differentiable in $\gv$.
 
 \begin{figure*}[!t]
   \centering
-  \includegraphics[width=\textwidth]{figuras/esquema_control_OPP_v3/esquema_control_OPP_v3.png}
+  \includegraphics[width=\textwidth]{figuras/esquema_control_OPP_v4/esquema_control_OPP_v4.png}
   \caption{Implementation scheme: $dq$ current control, polar conversion of the
-  voltage reference into modulation index $M$ and phase $\varphi$, OPP angle LUT
-  and pattern generation synchronized with the grid angle $\theta$ of the PLL.}
+  voltage reference into modulation index $M$ and phase $\delta$, load angle
+  $\varphi$ computed from the power references, OPP lookup table addressed by
+  $(M,\varphi)$ that seeds the real-time optimizer (RT-OPP), harmonic observer
+  of the grid voltage, and pattern generation synchronized with the grid
+  angle $\theta$ of the PLL.}
   \label{fig:control}
-  \upd{Actualizar la figura: LUT $\gv(M,\varphi)$ $\rightarrow$ bloque RT-OPP
-  (una iteracion SQP por $T_s$, realimentacion $z^{-1}$ del warm start)
-  $\rightarrow$ generador de patron; entrada $\varphi$ tambien a la LUT;
-  entrada $\mathbf{x}^\star$ (fondo armonico de red) al RT-OPP si se estima.
-  Actualizar el caption.}
-\sug{Caption: Implementation scheme: $dq$ current control, polar
-conversion of the voltage reference into modulation index $M$ and phase
-$\varphi$, OPP lookup table addressed by $(M,\varphi)$ that seeds the
-real-time optimizer (RT-OPP), and pattern generation synchronized with the
-grid angle $\theta$ of the PLL.}
-
-\textcolor{blue}{Comentario: si esto lo tengo pendiente}
 \end{figure*}
 
 \subsection{LCL Filter}
@@ -710,11 +701,14 @@ $\theta$ provided by the PLL.}
 \end{comment}
 
 
-The $dq$ current control provides the modulation
-index $M$ and the phase $\varphi$. The LUT is addressed with both and returns
-the initial angles, which the real-time optimizer of Section~\ref{sec:rt}
-refines; the pattern generator converts the current angles into firing
-instants synchronized with the grid angle $\theta$ of the PLL.
+The $dq$ current control provides the modulation index $M$ and the phase
+$\delta$ of the voltage reference, while the load angle $\varphi$ is computed
+from the power references $P^\star$, $Q^\star$ through the LCL model, without
+measurements. The LUT is addressed with $(M,\varphi)$ and returns the initial
+angles $\gv^0$, which the real-time optimizer of Section~\ref{sec:rt} refines
+using the grid voltage harmonics estimated by the observer; the pattern
+generator converts the refined angles into firing instants shifted by
+$\delta$ and synchronized with the grid angle $\theta$ of the PLL.
 
 
 A critical point of the scheme is the continuity of the LUT: the sets of optimal
@@ -861,7 +855,8 @@ by the weighting matrix of the TDD term.
 Let $\mathbf{x}^\star$ be the reference spectrum:
 $\mathbf{x}_1^\star = [0,\,M]^T$ for the fundamental and, for $n\geq 5$,
 the background harmonics of the grid voltage expressed in the same spectral
-units. The harmonic grid current is then proportional to the mismatch
+units, $\mathbf{x}^\star_h$, estimated by the harmonic observer of
+Fig.~\ref{fig:control}. The harmonic grid current is then proportional to the mismatch
 $\mathbf{x}_n - \mathbf{x}_n^\star$, and \eqref{eq:tdd} becomes
 %
 \begin{equation}

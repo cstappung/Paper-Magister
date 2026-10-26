@@ -45,4 +45,6 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - `code/RTOPP_D19_simple_rip.m`: optimizador RT vigente (referencia, solo
   lectura). Difiere de lo descrito en `docs/CONTEXTO_PAPER_RT.md` (que es de
   `RTOPP_D19.m`): ver diferencias en `docs/BITACORA.md`.
-- Figuras (`Figures/`, `figuras/`) aun no estan en el repo.
+- Figuras: en el repo solo esta el esquema de control
+  (`figuras/esquema_control_OPP_v3/` original del autor y `_v4/` generado con
+  `tools/figura_control/`). El resto (`Figures/`, `figuras/`) lo tiene el autor.
