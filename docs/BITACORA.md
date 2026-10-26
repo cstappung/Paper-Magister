@@ -94,6 +94,8 @@
   con el angulo de carga del modelo de perdidas). Texto, caption y la
   definicion de phi en eq:p_con actualizados; x*_h se cita en el termino TDD.
 - Fuentes y scripts en `tools/figura_control/`.
+- P*,Q* entra una sola vez y se bifurca (punto) hacia la referencia de
+  corriente y el bloque phi(P*,Q*); la etiqueta queda bajo el cable.
 
 ### Pendientes
 
