@@ -159,30 +159,21 @@ quadratic programming, grid harmonic distortion.
 % ============================ S1 ========================================
 \section{Introduction}
 
-In high-power grid-connected conversion systems, the high blocking voltages
-and switched currents make conduction and switching losses significant
-\cite{zhang_hpm,edpuganti_survey}, while the injected current must comply
-with harmonic grid codes such as IEEE~519 \cite{ieee519}. Compliance is
-increasingly demanding because the voltage at the point of common coupling
-(PCC) is itself distorted by nonlinear loads and neighboring converters,
-whose contributions are generally unknown \cite{david_mgmt,david_aggr}. Two
-fronts are available to reduce the losses: the topology and device
-selection, and the modulation technique. This work addresses both, in that
-order, and adds the online compensation of the grid distortion.
-\old{In high-power conversion systems, the high blocking voltages and switched
+In high-power conversion systems, the high blocking voltages and switched
 currents make conduction and switching losses significant
 \cite{zhang_hpm,edpuganti_survey}. Two fronts are available to mitigate them:
 the topology and device selection, and the modulation technique. This work
-addresses both, in that order.}
+addresses both, in that order.
 
 On the first front, the three-level T-Type with SiC devices is adopted. The
 neutral-point-clamped (NPC) converter is the reference topology for improving the
 output waveform and limiting the filter size \cite{lee_npc_ttype}, but the T-Type
 achieves the same number of levels with fewer semiconductors in the conduction
-path, which at low switching frequency translates into lower total losses
-\cite{alemi_ttype}. The break-even point between the two lies between 10 and
-15~kHz and shifts upwards with SiC, whose switching energies are much lower than
-those of an equivalent IGBT \cite{yang_sic_gan}: the thermal balance tilts
+path, which at low switching frequency translates into lower total losses.
+With silicon devices, the break-even point between the two lies between 10
+and 15~kHz \cite{alemi_ttype}, and it shifts upwards with SiC, whose switching
+energies are much lower than those of an equivalent IGBT
+\cite{yang_sic_gan}: the thermal balance tilts
 towards conduction, which is where the T-Type outperforms the NPC. Restricting
 the modulation to single-level transitions, forbidding the direct step between
 $+1$ and $-1$, makes every transistor switch while blocking half of the DC link,
@@ -193,17 +184,6 @@ and forces the use of devices in series: with 750~V DC and 1.2~kV SiC MOSFETs a 
 device blocks it with margin, and the growing availability of higher-voltage SiC
 devices \cite{narasimhan_sic,nielsen_10kv} extends the argument to higher
 voltages.
-\sug{(Precision de citas en este parrafo.) El rango de 10--15~kHz es de
-\cite{alemi_ttype} (punto de cruce con Si, segun el dispositivo), no de
-\cite{yang_sic_gan}; y \cite{alemi_ttype} muestra que el T-Type pierde menos
-a modulacion alta, mientras que a modulacion baja gana el NPC. Texto para
-reemplazar desde ``which at low switching frequency'' hasta ``an equivalent
-IGBT \cite{yang_sic_gan}'': ``which at low switching frequency and high
-modulation index translates into lower total losses. With silicon devices,
-the break-even point between the two lies between 10 and 15~kHz
-\cite{alemi_ttype}, and it shifts upwards with SiC, whose switching energies
-are much lower than those of an equivalent IGBT \cite{yang_sic_gan}''.}
-\old{Sin cambios en el texto; solo la sugerencia verde de arriba.}
 
 Modulation techniques are grouped into carrier-based, space-vector and
 programmed schemes. The first two are well suited to medium-to-high switching
@@ -211,21 +191,14 @@ frequencies, but in high-power converters, which operate at low frequencies to
 limit their losses, they generate low-order harmonics and degrade the current
 quality; below about 1~kHz, programmed modulation offers a superior harmonic
 performance \cite{zhang_hpm,tsekouras_tpel}. Selective harmonic elimination
-(SHE) \cite{patel_she} cancels a set of low-order harmonics, and its variants
-mitigate \cite{franquelo_shm} or control \cite{zhou_shc} them to meet grid
-codes; the transcendental equations involved have motivated a large body of
-solving methods \cite{dahidah_review,wang_review,buccella_analytic}. Optimal
-pulse patterns (OPPs) \cite{buja_opp} instead minimize the whole weighted
-harmonic spectrum and are nowadays computed by nonlinear programming
-\cite{birth_genopp,geyer_bounded}. For grid-connected converters, the transfer
-function of the LCL filter can be embedded in the OPP problem, so that the
-distortion is minimized directly on the grid current \cite{rahmanpour_lcl}.
-\old{Modulation techniques are grouped into carrier-based, space-vector and
-programmed schemes. The first two are well suited to medium-to-high switching
-frequency range, but in high-power converters, which operate at low frequencies
-to limit their losses, they generate low-order harmonics and degrade the current
-quality. Given this limitation, programmed modulation, and in particular the
-optimal pulse pattern (OPP), becomes competitive \cite{zhang_hpm}.}
+(SHE) cancels a set of low-order harmonics, and its variants mitigate
+\cite{franquelo_shm} or control \cite{zhou_shc} them to meet grid codes, at
+the cost of solving transcendental equations \cite{wang_review}. Optimal pulse
+patterns (OPPs) instead minimize the whole weighted harmonic spectrum and are
+nowadays computed by nonlinear programming \cite{birth_genopp,geyer_bounded}.
+For grid-connected converters, the transfer function of the LCL filter can be
+embedded in the OPP problem, so that the distortion is minimized directly on
+the grid current \cite{rahmanpour_lcl}.
 
 The generalized OPP proposed in \cite{birth_genopp} removes the constraint that
 restricts switching to positive transitions during the positive half-cycle and
@@ -237,82 +210,43 @@ the losses while keeping the TDD within the regulatory limit. Along this line,
 recent works embed the conduction and switching losses
 \cite{koukoula_ecce23,geyer_bounded} or the junction temperatures
 \cite{dorfling_thermal,koukoula_junction} in the OPP problem, using the
-virtual angle concept to eliminate the integer variables associated with the
-switching positions \cite{koukoula_junction}. These formulations, however,
-target medium-voltage NPC converters with integrated gate-commutated
-thyristors (IGCTs). Although detailed NPC versus T-Type loss
-comparisons are available \cite{lee_npc_ttype,alemi_ttype}, no T-Type loss
-model expressed as a function of the angles and embedded in the optimization
-has been reported, and even less so with SiC devices, whose split between
-conduction and switching differs from that of the silicon devices
-considered there.
-\old{(Mezcla del fin del 4.o parrafo y el inicio del 5.o anteriores.) The
-generalized OPP proposed in \cite{birth_genopp} removes the constraint that
-restricts switching to positive transitions during the positive half-cycle and
-to negative ones during the negative half-cycle. This formulation, known as
-multipolar modulation, significantly enlarges the feasible space and enables TDD
-reductions of up to one third with respect to the traditional formulation for
-the same number of angles. That additional margin can be reinvested in
-minimizing losses while keeping the TDD within the regulatory limit. In
-addition, the virtual angle concept \cite{koukoula_junction} eliminates the
-integer variables associated with the switching positions, reducing the
-computational cost of the optimization. [\dots] The trade-off between distortion
-and losses is well documented for three-level converters: detailed NPC versus
-T-Type comparisons are available \cite{lee_npc_ttype,alemi_ttype} and, for the
-NPC, OPP formulations that model the losses as a function of the angles
-\cite{koukoula_junction}. No T-Type loss model expressed as a function of the
-angles and embedded in the optimization has been reported, however, and even
-less so with SiC devices, whose split between conduction and switching differs
-from that of an IGBT.}
-\sug{(Atribucion del angulo virtual.) \cite{koukoula_junction} lo toma de
-Perez-Basante et al.\ (TPEL 2019, su ref.~[15]). Texto para pegar en la frase
-anterior: ``using the virtual angle concept \texttt{\textbackslash cite\{perez\_basante\_hws\}} to
-eliminate the integer variables associated with the switching positions
-\cite{koukoula_junction}.'' Bibitem: A.~Perez-Basante, S.~Ceballos,
-G.~Konstantinou, J.~Pou, I.~Kortabarria, and I.~M.~de~Alegria, ``A universal
-formulation for multilevel selective-harmonic-eliminated PWM with half-wave
-symmetry,'' \emph{IEEE Trans. Power Electron.}, vol.~34, no.~1,
-pp.~943--957, Jan.~2019.}
+virtual angle concept \cite{perez_basante_hws} to eliminate the integer
+variables associated with the switching positions \cite{koukoula_junction}.
+These formulations, however, target medium-voltage NPC converters with
+integrated gate-commutated thyristors (IGCTs). Although detailed NPC versus
+T-Type loss comparisons are available \cite{lee_npc_ttype,alemi_ttype}, no
+T-Type loss model expressed as a function of the angles and embedded in the
+optimization has been reported, and even less so with SiC devices, whose
+split between conduction and switching differs from that of the silicon
+devices considered there.
 
 OPPs are computed off-line under nominal conditions and stored in a lookup
-table, so they lose optimality between table entries and whenever the grid
-voltage is distorted. Precomputing the patterns for a known distortion
-\cite{rahmanpour_distorted} is of limited use, since the background harmonics
-are unknown and vary with time \cite{david_aggr,zhou_shc}, and the
+table, so they lose optimality between table entries and whenever the
+voltage at the point of common coupling is distorted by nonlinear loads and
+neighboring converters. In grid-connected converters, this distortion can
+compromise compliance with harmonic grid codes such as IEEE~519
+\cite{ieee519}. Precomputing the patterns for a known distortion
+\cite{rahmanpour_distorted} is of limited use, since the background
+harmonics are unknown and vary with time \cite{david_aggr}, and the
 computational cost of the OPP remains the main barrier to its online use
-\cite{zhang_hpm}. Three families of alternatives have been explored. The first
-solves simplified SHE or SHC equations in real time
-\cite{zhao_rt,ahmed_rt,yang_rt,buccella_recursive}, mostly under quarter-wave
-symmetry, which fixes the phase of each harmonic and therefore cannot
-compensate grid harmonics of arbitrary phase \cite{tsekouras_tpel}. The second
-replaces the solver with artificial neural networks trained off-line
-\cite{filho_ann,ibanez_ann,ibanez_ojies}. The third modifies a precomputed
-pattern in closed loop, as in model predictive pulse pattern control
+\cite{zhang_hpm}. Three families of alternatives have been explored. The
+first solves simplified SHE or SHC equations in real time
+\cite{yang_rt,buccella_recursive}, mostly under quarter-wave symmetry, which
+fixes the phase of each harmonic and therefore cannot compensate grid
+harmonics of arbitrary phase \cite{tsekouras_tpel}. The second replaces the
+solver with artificial neural networks trained off-line
+\cite{filho_ann,ibanez_ann}. The third modifies a precomputed pattern in
+closed loop, as in model predictive pulse pattern control
 \cite{geyer_mp3c,dorfling_gp3c}. For distorted grids, the OPP has been
-recomputed online from grid harmonics estimated with a Kalman filter
-\cite{tsekouras_ecce,kennedy_kf,cardoso_kf,kanieski_kf}, and its angles have
-been adjusted at every sample through a quadratic program with an analytic
-update \cite{tsekouras_tpel}. None of these online schemes accounts for the
-converter losses, and the latter applies to patterns with a fixed alternating
-switching sequence: no loss-aware multipolar OPP has been refined online to
-recover compliance with IEEE~519. This work follows the third path: the
-patterns are computed off-line with the complete nonlinear model and an
-extensive search over starting points, and an online optimizer with a bounded
-cost per sample refines them during operation.
-\old{(Resto del 4.o y fin del 5.o parrafos anteriores.) This cost is
-precisely the main barrier to the industrial adoption of the OPP
-\cite{zhang_hpm}. Two families of alternatives are under development:
-artificial neural networks \cite{filho_ann,ibanez_ann}, which generate the
-patterns online after a demanding off-line training, and online correction
-schemes that modify a precomputed pattern in closed loop, such as model
-predictive pulse pattern control \textbf{[REF MP3C]}. This work follows the
-second path: the patterns are computed off-line with the complete nonlinear
+recomputed online from estimated grid harmonics \cite{tsekouras_ecce}, and
+its angles have been adjusted at every sample through a quadratic program
+with an analytic update \cite{tsekouras_tpel}. None of these online schemes
+accounts for the converter losses, and the latter applies to patterns with a
+fixed alternating switching sequence: no loss-aware multipolar OPP has been
+refined online to recover compliance with IEEE~519. This work follows the
+third path: the patterns are computed off-line with the complete nonlinear
 model and an extensive search over starting points, and an online optimizer
-with a bounded cost per sample refines them during operation. [\dots] Moreover,
-an off-line pattern is optimal only at the operating point and grid conditions
-for which it was computed: between table entries, or under grid background
-harmonics, it may lose compliance with IEEE~519, and no loss-aware OPP has
-been refined online to recover it.}
+with a bounded cost per sample refines them during operation.
 
 The contributions of this work are the following:
 \begin{itemize}
@@ -1357,9 +1291,9 @@ prototype is the immediate future work.'']}}
 
 % ----------------------------- Bibliografia -----------------------------
 \upd{Bibliografia: referencias candidatas aun no incluidas (Rahmanpour TIA
-2025, Koukoula TIA 2025, Perez-Basante TPEL 2019, Begh TPEL 2022, entre otras):
+2025, Koukoula TIA 2025, Begh TPEL 2022, entre otras):
 ver \texttt{docs/REFERENCIAS.md}.}
-\begin{thebibliography}{38}
+\begin{thebibliography}{28}
 
 \bibitem{zhang_hpm}
 Z. Zhang, G. Chen, and D. Xu, ``Harmonic programmed modulation for high-power
@@ -1371,20 +1305,6 @@ implementation,'' \emph{IEEE Trans. Power Electron.}, vol. 40, no. 6, pp.
 A. Edpuganti and A. K. Rathore, ``A survey of low switching frequency modulation
 techniques for medium-voltage multilevel converters,'' \emph{IEEE Trans. Ind.
 Appl.}, vol. 51, no. 5, pp. 4212--4228, Sep. 2015.
-
-\bibitem{ieee519}
-\emph{IEEE Standard for Harmonic Control in Electric Power Systems}, IEEE Std
-519-2022 (Revision of IEEE Std 519-2014), pp. 1--31, 2022.
-
-\bibitem{david_mgmt}
-J. David, S. Elphick, and D. Robinson, ``Management of harmonic distortion for
-large renewable energy generation,'' in \emph{Proc. 32nd Australas.
-Universities Power Eng. Conf. (AUPEC)}, Sep. 2022, pp. 1--6.
-
-\bibitem{david_aggr}
-J. David, D. Robinson, and S. Elphick, ``Aggregation of multiple inverter-based
-harmonic sources within a renewable energy generation plant,'' in \emph{Proc.
-20th Int. Conf. Harmon. Qual. Power (ICHQP)}, May 2022, pp. 1--6.
 
 \bibitem{lee_npc_ttype}
 K. Lee, H. Shin, and J. Choi, ``Comparative analysis of power losses for 3-level
@@ -1418,11 +1338,6 @@ E. Tsekouras, R. P. Aguilera, and T. Geyer, ``Real-time optimized pulse
 patterns to compensate for distorted grid voltages,'' \emph{IEEE Trans. Power
 Electron.}, vol. 41, no. 3, pp. 4288--4299, Mar. 2026.
 
-\bibitem{patel_she}
-H. S. Patel and R. G. Hoft, ``Generalized techniques of harmonic elimination
-and voltage control in thyristor inverters: Part I---Harmonic elimination,''
-\emph{IEEE Trans. Ind. Appl.}, vol. IA-9, no. 3, pp. 310--317, May 1973.
-
 \bibitem{franquelo_shm}
 L. G. Franquelo, J. Napoles, R. C. P. Guisado, J. I. Leon, and M. A. Aguirre,
 ``A flexible selective harmonic mitigation technique to meet grid codes in
@@ -1434,26 +1349,10 @@ H. Zhou, Y. W. Li, N. R. Zargari, Z. Cheng, R. Ni, and Y. Zhang, ``Selective
 harmonic compensation (SHC) PWM for grid-interfacing high-power converters,''
 \emph{IEEE Trans. Power Electron.}, vol. 29, no. 3, pp. 1118--1127, Mar. 2014.
 
-\bibitem{dahidah_review}
-M. S. A. Dahidah, G. Konstantinou, and V. G. Agelidis, ``A review of multilevel
-selective harmonic elimination PWM: Formulations, solving algorithms,
-implementation and applications,'' \emph{IEEE Trans. Power Electron.}, vol. 30,
-no. 8, pp. 4091--4106, Aug. 2015.
-
 \bibitem{wang_review}
 C. Wang, Q. Zhang, W. Yu, and K. Yang, ``A comprehensive review of solving
 selective harmonic elimination problem with algebraic algorithms,'' \emph{IEEE
 Trans. Power Electron.}, vol. 39, no. 1, pp. 850--868, Jan. 2024.
-
-\bibitem{buccella_analytic}
-C. Buccella, C. Cecati, M. G. Cimoroni, and K. Razi, ``Analytical method for
-pattern generation in five-level cascaded H-bridge inverter using selective
-harmonic elimination,'' \emph{IEEE Trans. Ind. Electron.}, vol. 61, no. 11,
-pp. 5811--5819, Nov. 2014.
-
-\bibitem{buja_opp}
-G. S. Buja, ``Optimum output waveforms in PWM inverters,'' \emph{IEEE Trans.
-Ind. Appl.}, vol. IA-16, no. 6, pp. 830--836, Nov. 1980.
 
 \bibitem{birth_genopp}
 A. Birth, T. Geyer, H. du T. Mouton, and M. Dorfling, ``Generalized three-level
@@ -1486,22 +1385,25 @@ I. Koukoula, P. Karamanakos, and T. Geyer, ``On bounding the junction temperatur
 by means of optimal modulation with relaxed properties,'' in \emph{Proc. IEEE
 Energy Convers. Congr. Expo. (ECCE)}, Oct. 2024, pp. 3877--3884.
 
+\bibitem{perez_basante_hws}
+A. P\'{e}rez-Basante, S. Ceballos, G. Konstantinou, J. Pou, I. Kortabarria,
+and I. M. de Alegr\'{i}a, ``A universal formulation for multilevel
+selective-harmonic-eliminated PWM with half-wave symmetry,'' \emph{IEEE Trans.
+Power Electron.}, vol. 34, no. 1, pp. 943--957, Jan. 2019.
+
+\bibitem{ieee519}
+\emph{IEEE Standard for Harmonic Control in Electric Power Systems}, IEEE Std
+519-2022 (Revision of IEEE Std 519-2014), pp. 1--31, 2022.
+
 \bibitem{rahmanpour_distorted}
 S. Rahmanpour, P. Karamanakos, and T. Geyer, ``Optimized pulse patterns for
 converters connected to a distorted grid via LCL filters,'' in \emph{Proc.
 Energy Convers. Congr. Expo. Europe (ECCE Europe)}, 2024, pp. 1--8.
 
-\bibitem{zhao_rt}
-H. Zhao, T. Jin, S. Wang, and L. Sun, ``A real-time selective harmonic
-elimination based on a transient-free inner closed-loop control for cascaded
-multilevel inverters,'' \emph{IEEE Trans. Power Electron.}, vol. 31, no. 2,
-pp. 1000--1014, Feb. 2016.
-
-\bibitem{ahmed_rt}
-M. Ahmed, A. Sheir, and M. Orabi, ``Real-time solution and implementation of
-selective harmonic elimination of seven-level multilevel inverter,'' \emph{IEEE
-J. Emerg. Sel. Topics Power Electron.}, vol. 5, no. 4, pp. 1700--1709, Dec.
-2017.
+\bibitem{david_aggr}
+J. David, D. Robinson, and S. Elphick, ``Aggregation of multiple inverter-based
+harmonic sources within a renewable energy generation plant,'' in \emph{Proc.
+20th Int. Conf. Harmon. Qual. Power (ICHQP)}, May 2022, pp. 1--6.
 
 \bibitem{yang_rt}
 K. Yang \emph{et al.}, ``Real-time switching angle computation for selective
@@ -1525,11 +1427,6 @@ I. Ibanez-Hidalgo \emph{et al.}, ``Real time selective harmonic control-PWM base
 on artificial neural networks,'' \emph{IEEE Trans. Power Electron.}, vol. 39, no.
 1, pp. 768--783, Jan. 2024.
 
-\bibitem{ibanez_ojies}
-I. Ibanez-Hidalgo \emph{et al.}, ``Enhanced PI control based SHC-PWM strategy
-for active power filters,'' \emph{IEEE Open J. Ind. Electron. Soc.}, vol. 5,
-pp. 1174--1189, 2024.
-
 \bibitem{geyer_mp3c}
 T. Geyer, N. Oikonomou, G. Papafotiou, and F. D. Kieferndorf, ``Model
 predictive pulse pattern control,'' \emph{IEEE Trans. Ind. Appl.}, vol. 48,
@@ -1546,21 +1443,6 @@ E. Tsekouras, R. P. Aguilera, and T. Geyer, ``Real-time computation of
 optimized pulse patterns for compensation of estimated grid voltage
 harmonics,'' in \emph{Proc. IEEE Energy Convers. Congr. Expo. (ECCE)}, Oct.
 2024, pp. 4590--4597.
-
-\bibitem{kennedy_kf}
-K. Kennedy, G. Lightbody, and R. Yacamini, ``Power system harmonic analysis
-using the Kalman filter,'' in \emph{Proc. IEEE Power Eng. Soc. Gen. Meeting},
-2003, vol. 2, pp. 752--757.
-
-\bibitem{cardoso_kf}
-R. Cardoso, R. F. de Camargo, H. Pinheiro, and H. A. Gr\"{u}ndling, ``Kalman
-filter based synchronization methods,'' in \emph{Proc. 37th IEEE Power
-Electron. Spec. Conf. (PESC)}, Jun. 2006, pp. 1--7.
-
-\bibitem{kanieski_kf}
-J. M. Kanieski, R. Cardoso, H. Pinheiro, and H. A. Gr\"{u}ndling, ``Kalman
-filter-based control system for power quality conditioning devices,''
-\emph{IEEE Trans. Ind. Electron.}, vol. 60, no. 11, pp. 5214--5227, Nov. 2013.
 
 \end{thebibliography}
 

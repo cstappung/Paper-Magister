@@ -1,6 +1,6 @@
 # Referencias
 
-Estado de la bibliografia de `main_conf_EN.tex` (38 entradas, orden de cita).
+Estado de la bibliografia de `main_conf_EN.tex` (28 entradas, orden de cita).
 Los textos completos de los papers no se suben al repo (copyright IEEE); aqui
 solo queda el registro.
 
@@ -58,6 +58,17 @@ TPEL 2022 (FCS-MPC con armonicos de carga).
 
 `geyer_mp3c` no venia en el zip; datos verificados en la web (TIA vol. 48,
 no. 2, pp. 663-676, 2012, DOI 10.1109/TIA.2011.2181289).
+
+## 2b. Quitadas de la intro por pedido del autor (2026-10-26)
+
+El autor pidio menos citas y no tan antiguas. Se quitaron: `david_mgmt`,
+`patel_she`, `buja_opp`, `dahidah_review`, `buccella_analytic`, `zhao_rt`,
+`ahmed_rt`, `ibanez_ojies`, `kennedy_kf`, `cardoso_kf`, `kanieski_kf`. Los
+datos completos siguen en la lista de referencias de Tsekouras TPEL 2026.
+Los de Kalman (`kennedy_kf`, `cardoso_kf`, `kanieski_kf`) pueden servir en la
+seccion RT si se describe la estimacion de x*.
+
+Agregada: `perez_basante_hws` (origen del angulo virtual).
 
 ## 3. Candidatas encontradas (para que el autor decida)
 
