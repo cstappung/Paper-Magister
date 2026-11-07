@@ -748,19 +748,22 @@ that was not considered off-line, the stored pattern is no longer optimal
 and may even violate the harmonic limits. The angles are therefore refined
 online by a sequential quadratic program (SQP). In each iteration the
 harmonic spectrum and the loss model are linearized around the current
-angles $\gv$, a single Gauss--Newton (GN) step $\Delta\gv$ is computed and
-projected onto the constraints, and the result is kept as the warm start
-of the next iteration. Convergence is thus obtained over time rather than
+angles $\gv$, a single Gauss--Newton (GN) step $\Delta\gv$ is computed,
+and the result is kept as the warm start of the next iteration. Convergence is thus obtained over time rather than
 within one call, which bounds the computation per control period $T_s$. To
 further reduce the worst-case execution time, each iteration is split into
 $M_{cyc}$ phases of similar cost, one per sample, while the last valid
-pattern keeps being applied. The LUT, now addressed by both $M$ and
-$\varphi$, only provides the initial pattern. The procedure is summarized
-in Algorithm~\ref{alg:rtopp}.
+pattern keeps being applied. The harmonic limits are not projected onto
+the linearized model; they enter the OF as weights that adapt to the exact
+spectrum of the applied pattern. The LUT, now addressed by both $M$ and
+$\varphi$, only provides the initial pattern and the re-seeding points.
+The procedure is summarized in Algorithm~\ref{alg:rtopp}.
 
-This section presents the objective function (OF) of the local problem;
-the constraint handling is described afterwards. The parameters of the
-implementation are listed in Table~\ref{tab:rt_param}.
+This section first presents the objective function (OF) of the local
+problem, then the constraint handling
+(Section~\ref{subsec:rt_con}) and the execution schedule
+(Section~\ref{subsec:rt_sched}). The parameters of the implementation are
+listed in Table~\ref{tab:rt_param}.
 
 % Pseudocodigo: IEEEtran recomienda algorithmic dentro de un float, sin el
 % paquete algorithm.  El contador propio da "Algorithm 1" y \ref sin tocar la
@@ -772,28 +775,30 @@ implementation are listed in Table~\ref{tab:rt_param}.
     \smallskip\hrule\smallskip
     \footnotesize
     \begin{algorithmic}[1]
-        \REQUIRE $M$, $\varphi$, $\mathbf{x}^\star$, LUT $\gv(M,\varphi)$
+        \REQUIRE $M$, $\varphi$, $\mathbf{x}^\star$, LUT $\gv^0(M,\varphi)$
         \ENSURE switching angles $\gv$ applied in each $T_s$
-        \IF{first call \OR enable rising edge}
-            \STATE $\gv \leftarrow \mathrm{LUT}(M,\varphi)$
-        \ENDIF
         \LOOP
-            \STATE $\mathbf{x},\mathbf{J}$ from \eqref{eq:fourier_gamma},
-                   \eqref{eq:rt_jac}; \ $\mathbf{t}^0,\mathbf{B}_t,
-                   \mathbf{e}^0,\mathbf{B}_e$ from
-                   \eqref{eq:rt_T}--\eqref{eq:rt_BS}
-            \STATE $\mathbf{x}_e \leftarrow \mathbf{x}^\star - \mathbf{x}$
+            \IF{start \OR new $\varphi$ cell \OR re-seeding request}
+                \STATE $\gv \leftarrow \gv^0(M,\varphi)$; reset the weights
+                       $\theta_n,\theta_T$
+            \ENDIF
+            \STATE exact spectrum $\mathbf{x}(\gv)$; update
+                   $\theta_n,\theta_T$ with \eqref{eq:rt_theta}
+            \STATE $\mathbf{J}$, $\mathbf{t}^0,\mathbf{B}_t,\mathbf{e}^0,
+                   \mathbf{B}_e$ from \eqref{eq:rt_jac}--\eqref{eq:rt_BS}
             \STATE build $\mathbf{W}$, $\mathbf{r}$ from \eqref{eq:rt_W}
-            \STATE $\Delta\gv \leftarrow \mathbf{W}^{-1}\mathbf{r}$,
-                   limited to the trust region
-            \STATE $\gv \leftarrow$ projection of $\gv+\Delta\gv$ onto
-                   the constraints
-            \STATE apply $\gv$ \COMMENT{warm start of next iteration}
+                   plus the barrier terms
+            \STATE solve for $\Delta\gv$ with the fundamental as an equality
+            \STATE limit $\Delta\gv$ to the trust region and to the
+                   fraction to the boundary
+            \STATE $\gv \leftarrow \gv+\Delta\gv$
+                   \COMMENT{warm start of next iteration}
+            \STATE \textit{every sample:} Newton trim of the fundamental,
+                   apply $\gv$
         \ENDLOOP
     \end{algorithmic}
     \smallskip\hrule
 \end{figure}
-% TODO: \ref a la subseccion de restricciones cuando exista.
 
 \begin{table}[!t]
     \centering
@@ -805,13 +810,20 @@ implementation are listed in Table~\ref{tab:rt_param}.
         \toprule
         \rowcolor{Gray}
         Parameter & Symbol & Value \\ \midrule
-        Control period             & $T_s$                 & 100 $\mu$s \\
-        Phases per GN iteration    & $M_{cyc}$             & 8 \\
+        Control period             & $T_s$                 & 200 $\mu$s \\
+        Phases per GN iteration    & $M_{cyc}$             & 5 \\
         Pulses per half-cycle      & $d$                   & 19 \\
         Controlled harmonics       & $N_h$                 & 17 \\
         Loss weight                & $\lambda_{\ell}$      & 0.01 \\
         Proximal weight            & $\lambda_u$           & 1 \\
         TDD weight                 & $w_{\mathrm{TDD}}$    & 1 \\
+        Ripple weight              & $\lambda_r$           & 0.1 \\
+        Harmonic-limit margin      & $\rho$                & 0.9 \\
+        TDD margin                 & $\rho_T$              & 0.95 \\
+        Weight bounds              & $[\theta_{\min},\theta_{\max}]$
+                                   & $[0.05,\,10^3]$ \\
+        Barrier weight             & $\mu_B$               & $10^{-6}$ \\
+        Fraction to the boundary   & $\tau_B$              & 0.9 \\
         Current in the loss model  & $I_{nom}$             & 20 A \\
         Gate resistance            & $R_G$                 & 22 $\Omega$ \\
         \bottomrule
@@ -876,16 +888,30 @@ weighting matrix
 \begin{align}
   \mathbf{Q} &= \mathrm{diag}\big(q_1\mathbf{I}_2,\ q_5\mathbf{I}_2,
                 \ \dots,\ q_{49}\mathbf{I}_2\big), \nonumber\\
-  q_n &= w_{\mathrm{TDD}}\left(\frac{V_{dc}\,g_n}{2\,I_{nom}}\right)^{\!2},
-  \qquad n\geq 5.
+  q_n &= \big(w_{\mathrm{TDD}}+\theta_T+\theta_n\big)
+         \left(\frac{V_{dc}\,g_n}{2\,I_{nom}}\right)^{\!2},
+  \qquad n\geq 5,
   \label{eq:rt_Q}
 \end{align}
 %
+where $\theta_T$ and $\theta_n$ are the adaptive weights of the TDD and
+harmonic limits of Section~\ref{subsec:rt_con}; with
+$\theta_T=\theta_n=0$ the quadratic form is the squared TDD.
 The weight $q_1 = 1$ only steers the GN step towards the desired
 fundamental, which is later imposed exactly as an equality constraint.
 Since the LCL resonance lies at the 21st harmonic \eqref{eq:fres}, $g_n$
 peaks at $n = 19$ and $n = 23$, and these two entries dominate
 $\mathbf{Q}$.
+
+The harmonics above the 49th have no limit in \eqref{eq:tdd}, so the
+optimizer tends to move energy towards them. This is hardly visible in the
+grid current, attenuated by the LCL filter roughly as $1/n^3$, but it
+increases the converter-side ripple, attenuated only as $1/n$. Therefore,
+$\mathbf{x}$ and $\mathbf{J}$ are extended with the harmonics 53 to 97 (odd
+and non-triplen), with zero reference and fixed weight
+$\lambda_r(g_{c,n}/I_{nom})^2$ in $\mathbf{Q}$, where $g_{c,n}$ is the
+converter-side gain of the filter. This ripple term carries no limit and
+does not compete with the TDD or IEEE~519 terms.
 
 \subsection{Loss Terms}
 \label{subsec:rt_loss}
@@ -1038,6 +1064,78 @@ loss terms require $\mathcal{O}(d)$ operations. The dominant cost of the OF
 is $\mathbf{J}^T\mathbf{Q}\mathbf{J}$, with $\mathcal{O}(N_h d^2)$
 operations.
 
+\subsection{Constraint Handling}
+\label{subsec:rt_con}
+
+The step of \eqref{eq:rt_fo} relies on the linearized model
+\eqref{eq:rt_lin}, so a pattern that meets the harmonic limits in that
+model may violate them in the exact spectrum. Each constraint is therefore
+handled according to its nature, without projections.
+
+\textit{Harmonic limits and TDD:} the IEEE~519 limit of each harmonic and
+the TDD limit enter the OF through the weights $\theta_n$ and $\theta_T$
+of \eqref{eq:rt_Q}. Once per iteration, they are updated from the exact
+spectrum of the applied pattern as
+%
+\begin{equation}
+  \theta_n \leftarrow \theta_n\,
+    \frac{\|\mathbf{x}_n-\mathbf{x}_n^\star\|}{\rho\,\varepsilon_n},
+  \qquad
+  \theta_T \leftarrow \theta_T\,
+    \frac{I_{TDD}}{\rho_T\,I_{TDD}^{\max}},
+  \label{eq:rt_theta}
+\end{equation}
+%
+where $\varepsilon_n$ is the IEEE~519 limit of the $n$-th harmonic in
+spectral units, $I_{TDD}^{\max}=5\pct$, and $\rho$, $\rho_T$ are safety
+margins. The factor of each update is bounded and the weights are kept
+within $[\theta_{\min},\theta_{\max}]$. Each weight is a discrete
+integrator in logarithmic scale: it grows while its harmonic exceeds the
+limit and decays while there is slack. In steady state, a weight either
+holds its harmonic at the limit (active constraint) or rests at
+$\theta_{\min}$ (inactive constraint), which reproduces the KKT conditions
+of the constrained problem, with the weight acting as the Lagrange
+multiplier. Since the loop is closed with the exact spectrum, the
+linearization error does not affect compliance.
+
+\textit{Fundamental:} being an equality, it is imposed exactly in the GN
+step, $\mathbf{J}_1\Delta\gv = \mathbf{x}_1^\star-\mathbf{x}_1$, where
+$\mathbf{J}_1$ gathers the two rows of $\mathbf{J}$ for $n=1$; this only
+adds a $2\times2$ Schur complement to the solution of \eqref{eq:rt_W}. In
+addition, a few Newton corrections on the exact fundamental are applied
+at every sample, so the pattern always delivers the requested voltage.
+
+\textit{Angles:} the ordering of the angles, the crossing at $\pi$ and the
+level constraints \eqref{eq:niveles} define a polyhedron, to which a box
+around the LUT seed is added. These constraints enter the OF as a
+logarithmic barrier with weight $\mu_B$, whose gradient is added to
+$\mathbf{r}$ and its Hessian to $\mathbf{W}$. The step is then shortened so
+that it consumes at most a fraction $\tau_B$ of the slack of each
+constraint, so the pulses never collapse or overlap. A trust region
+bounds the norm of $\Delta\gv$ to keep \eqref{eq:rt_lin} accurate.
+
+\textit{Re-seeding:} problem \eqref{eq:opp_propuesto} is non-convex, and
+the iteration may settle in a local minimum. The pattern is re-seeded from
+the LUT when $\varphi$ moves to another cell of the table (with
+hysteresis), when the fundamental error persists for several samples, and
+when the pattern remains out of compliance for many iterations without
+improving. In the last case the seed alternates between the own cell and
+the two adjacent cells in $\varphi$. The weights are reset to
+$\theta_{\min}$ at each re-seeding.
+
+\subsection{Execution Schedule}
+\label{subsec:rt_sched}
+
+Each GN iteration is split into $M_{cyc}=5$ phases executed in consecutive
+samples. The first phase applies the previous step, evaluates the exact
+spectrum and updates the weights, $\mathbf{r}$ and the barrier; the next
+three build $\mathbf{W}$; the factorization of $\mathbf{W}$ is shared
+between the fourth and fifth phases, and the last one also computes the
+step. The fundamental trim and the output of the pattern run at every
+sample. There are no inner iterations, neither a QP solver nor projection
+rounds, so the cost per sample is fixed and independent of the operating
+point, and one GN iteration takes $M_{cyc}T_s = 1$~ms.
+
 % ============================ S7 ========================================
 \section{Simulation Results}
 
@@ -1061,9 +1159,7 @@ MATLAB Function block and executed on an OPAL-RT OP4510 with a sample time of
 200~$\mu$s, with a worst-case execution time of \textbf{[XX]}~$\mu$s per
 sample.
 \upd{El parrafo aun describe la LUT de conferencia (1000 indices de $M$,
-$d=17$, 8~min). Actualizar los tiempos de calculo de la LUT $(M,\varphi)$ y
-unificar el $T_s$: el OPAL corre a 200~$\mu$s, pero la seccion RT y la
-Tabla~\ref{tab:rt_param} usan $T_s=100~\mu$s y 800~$\mu$s por iteracion GN.
+$d=17$, 8~min). Actualizar los tiempos de calculo de la LUT $(M,\varphi)$.
 Cambiar el titulo de seccion si hay resultados HIL (``Simulation and
 Real-Time Results'').}
 

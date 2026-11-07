@@ -101,15 +101,35 @@
   La LUT queda sobre el RT-OPP (gamma^0 baja vertical), M y phi llegan a ambos
   con un solo cruce (salto). Ancho 437 mm (antes 456).
 
+## 2026-11-07
+
+### Seccion RT alineada con `RTOPP_D19_simple_rip.m` (vista general)
+
+Pedido del autor: que se entiendan las estrategias del codigo sin entrar en
+detalles.
+- Parrafo inicial: sin "projected onto the constraints"; las restricciones
+  armonicas entran como pesos adaptativos; la LUT da semilla y re-siembras.
+- Algorithm 1 reescrito: re-siembra, actualizacion de pesos con espectro
+  exacto, W y r con barrera, paso con igualdad de fundamental, region de
+  confianza y fraction-to-boundary, trim de Newton por muestra.
+- TDD Term: q_n = (w_TDD + theta_T + theta_n)(...)^2; parrafo del termino de
+  rizado (armonicos 53..97, peso fijo lambda_r, ganancia lado convertidor).
+- Nueva `subsec:rt_con` (Constraint Handling): pesos adaptativos
+  (`eq:rt_theta`, lectura KKT), fundamental como igualdad (Schur 2x2 + trim),
+  barrera del poliedro de angulos + caja + region de confianza, re-siembras.
+- Nueva `subsec:rt_sched` (Execution Schedule): 5 fases, costo fijo por
+  muestra, 1 ms por iteracion GN.
+- `tab:rt_param`: Ts = 200 us, M_cyc = 5; agregados lambda_r, rho, rho_T,
+  [theta_min, theta_max], mu_B, tau_B. Nota \upd de resultados sin lo de Ts.
+- No se describen (detalle): histeresis de celdas, DG_OUT, N_STK, N_FBAD,
+  clamp_angles, recurrencia de Chebyshev.
+
 ### Pendientes
 
 
-- [ ] Unificar Ts y M_cyc: OPAL a 200 us y M_CYC = 5 en el codigo (1 ms por
-      iteracion GN) vs. Ts = 100 us, M_cyc = 8 en `tab:rt_param`.
-- [ ] Actualizar la seccion RT al codigo `RTOPP_D19_simple_rip.m`: Algorithm 1
-      dice "projection onto the constraints"; la FO no tiene el termino de
-      rizado; la subseccion de restricciones (por escribir) debe describir
-      pesos adaptativos + barrera, no proyecciones (ni Dykstra).
+- [x] Unificar Ts y M_cyc (200 us, 5 fases; 2026-11-07).
+- [x] Seccion RT alineada con `RTOPP_D19_simple_rip.m` (2026-11-07). Falta
+      que el autor la revise; el costo O(N_h d^2) no cuenta el rizado.
 - [ ] Regenerar Fig. D y Fig. E con `RTOPP_D19_simple_rip.m` (se hicieron con
       `RTOPP_D19.m`); el parrafo de lambda_l usa cifras de la Fig. E.
 - [ ] Julia calculo los patrones con Simpson; el texto ahora describe la
