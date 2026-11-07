@@ -116,7 +116,7 @@ point of 56\pct{} with respect to DPWM1 at 6450~Hz and 40\pct{} with respect to
 PWM at 2850~Hz, with comparable conduction losses and compliance with the
 standard over the entire power range.
 \upd{Agregar el refinamiento en linea (SQP de una iteracion GN por
-$T_s = 100~\mu$s con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
+actualizacion con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
 IEEE~519 con fondo armonico de red y la validacion en tiempo real (plataforma,
 tiempo de ejecucion). Los numeros 56/40\pct{} son con $d=17$ off-line:
 verificar si siguen valiendo con $d=19$ y con el RT-OPP.}
@@ -131,8 +131,7 @@ constraint is replaced by linear inequalities, which turns the off-line design
 into a continuous nonlinear program. The resulting patterns are stored in a
 lookup table indexed by the modulation index and the load angle, and are
 refined online by a sequential quadratic program that performs one
-Gauss--Newton iteration every 800~$\mu$s, with its cost split over eight
-control periods. Simulation results show reductions of the total losses at the
+Gauss--Newton iteration per update. Simulation results show reductions of the total losses at the
 nominal operating point of 56\pct{} with respect to DPWM1 at 6450~Hz and
 40\pct{} with respect to PWM at 2850~Hz. The online stage restores compliance
 with the individual harmonic limits within one fundamental period and
@@ -750,19 +749,16 @@ online by a sequential quadratic program (SQP). In each iteration the
 harmonic spectrum and the loss model are linearized around the current
 angles $\gv$, a single Gauss--Newton (GN) step $\Delta\gv$ is computed,
 and the result is kept as the warm start of the next iteration. Convergence is thus obtained over time rather than
-within one call, which bounds the computation per control period $T_s$. To
-further reduce the worst-case execution time, each iteration is split into
-$M_{cyc}$ phases of similar cost, one per sample, while the last valid
-pattern keeps being applied. The harmonic limits are not projected onto
+within one call, which bounds the computation per control period $T_s$.
+The harmonic limits are not projected onto
 the linearized model; they enter the OF as weights that adapt to the exact
 spectrum of the applied pattern. The LUT, now addressed by both $M$ and
 $\varphi$, only provides the initial pattern and the re-seeding points.
 The procedure is summarized in Algorithm~\ref{alg:rtopp}.
 
 This section first presents the objective function (OF) of the local
-problem, then the constraint handling
-(Section~\ref{subsec:rt_con}) and the execution schedule
-(Section~\ref{subsec:rt_sched}). The parameters of the implementation are
+problem and then the constraint handling
+(Section~\ref{subsec:rt_con}). The parameters of the implementation are
 listed in Table~\ref{tab:rt_param}.
 
 % Pseudocodigo: IEEEtran recomienda algorithmic dentro de un float, sin el
@@ -811,7 +807,6 @@ listed in Table~\ref{tab:rt_param}.
         \rowcolor{Gray}
         Parameter & Symbol & Value \\ \midrule
         Control period             & $T_s$                 & 200 $\mu$s \\
-        Phases per GN iteration    & $M_{cyc}$             & 5 \\
         Pulses per half-cycle      & $d$                   & 19 \\
         Controlled harmonics       & $N_h$                 & 17 \\
         Loss weight                & $\lambda_{\ell}$      & 0.01 \\
@@ -1123,19 +1118,6 @@ improving. In the last case the seed alternates between the own cell and
 the two adjacent cells in $\varphi$. The weights are reset to
 $\theta_{\min}$ at each re-seeding.
 
-\subsection{Execution Schedule}
-\label{subsec:rt_sched}
-
-Each GN iteration is split into $M_{cyc}=5$ phases executed in consecutive
-samples. The first phase applies the previous step, evaluates the exact
-spectrum and updates the weights, $\mathbf{r}$ and the barrier; the next
-three build $\mathbf{W}$; the factorization of $\mathbf{W}$ is shared
-between the fourth and fifth phases, and the last one also computes the
-step. The fundamental trim and the output of the pattern run at every
-sample. There are no inner iterations, neither a QP solver nor projection
-rounds, so the cost per sample is fixed and independent of the operating
-point, and one GN iteration takes $M_{cyc}T_s = 1$~ms.
-
 % ============================ S7 ========================================
 \section{Simulation Results}
 
@@ -1355,8 +1337,7 @@ that the optimizer requires.
 \upd{Agregar un parrafo de conclusiones del RT: refinamiento por muestra,
 cumplimiento con red distorsionada, costo por muestra.}
 \sug{The off-line patterns were complemented with a real-time optimizer
-that performs one Gauss--Newton iteration every 800~$\mu$s, with its cost
-split over eight control periods. Starting from the table, it restores
+that performs one Gauss--Newton iteration per update. Starting from the table, it restores
 compliance with the individual IEEE~519 limits within one fundamental period,
 both between table entries and under grid background distortion of up to
 9\pct{} of the fundamental per harmonic, while the losses estimated by the

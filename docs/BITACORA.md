@@ -135,10 +135,19 @@ actual (no se subio tal cual porque habria revertido PR #9 y #12):
   (`figuras/experimental_1x4/experimental_1x4.png`, caption por escribir,
   label `fig:resumen_3x4`).
 
+### Sin reparto en M_cyc fases (2026-11-07)
+
+Pedido del autor: el reparto de cada iteracion en M_cyc fases es detalle de
+implementacion; el paper se enfoca en la estructura funcional. Se quito la
+frase del parrafo inicial RT, la subseccion Execution Schedule
+(`subsec:rt_sched`), la fila M_cyc de `tab:rt_param` y "every 800 us / eight
+control periods" de los \sug del abstract y conclusiones. En el codigo sigue
+M_CYC = 5 (no mencionarlo salvo que el autor lo pida).
+
 ### Pendientes
 
 
-- [x] Unificar Ts y M_cyc (200 us, 5 fases; 2026-11-07).
+- [x] Unificar Ts (200 us; M_cyc ya no se menciona en el paper).
 - [x] Seccion RT alineada con `RTOPP_D19_simple_rip.m` (2026-11-07). Falta
       que el autor la revise; el costo O(N_h d^2) no cuenta el rizado.
 - [ ] Regenerar Fig. D y Fig. E con `RTOPP_D19_simple_rip.m` (se hicieron con
