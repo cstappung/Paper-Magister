@@ -124,6 +124,17 @@ detalles.
 - No se describen (detalle): histeresis de celdas, DG_OUT, N_STK, N_FBAD,
   clamp_angles, recurrencia de Chebyshev.
 
+### Cambios del autor incorporados (2026-11-07)
+
+El autor pego su `.tex` local: era la version previa a la figura v4
+(`bff7560`) mas cambios propios de figuras, que se portaron a la version
+actual (no se subio tal cual porque habria revertido PR #9 y #12):
+- Fig. del patron: `figuras/Vis_lut/G_raster_sw.png`.
+- Fig. de perdidas: `figure*` con `figuras/resumen_3x4/resumen_3x4.png`.
+- Figura experimental nueva antes de la bibliografia
+  (`figuras/experimental_1x4/experimental_1x4.png`, caption por escribir,
+  label `fig:resumen_3x4`).
+
 ### Pendientes
 
 
