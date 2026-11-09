@@ -1,5 +1,8 @@
 # Contexto: paper de revista RT-OPP (T-Type multipolar) — traspaso de chat
 
+> Nota (2026-11-09): el paper ahora se llama `MAIN_FINAL.tex` en el repo y en Overleaf; donde abajo dice `main_conf_EN.tex` se refiere a ese archivo.
+
+
 Documento de traspaso para seguir escribiendo el paper en otro chat. Resume
 todo lo decidido y medido hasta el 25-10-2026. Respuestas al usuario en
 **espanol**; el paper en **ingles**.

@@ -144,6 +144,22 @@ frase del parrafo inicial RT, la subseccion Execution Schedule
 control periods" de los \sug del abstract y conclusiones. En el codigo sigue
 M_CYC = 5 (no mencionarlo salvo que el autor lo pida).
 
+## 2026-11-09
+
+### Repo alineado con el Overleaf
+
+El autor subio el zip del Overleaf. El paper que compila es `MAIN_FINAL.tex`:
+igual al del repo salvo la Tabla III (d = 19, 950 Hz; se quitaron la nota
+\upd, la \sug y el comentario azul). Se subio tal cual en commit propio,
+renombrando `main_conf_EN.tex` -> `MAIN_FINAL.tex`.
+- Agregados `IEEEtran.cls`, `Figures/Topologia_T_Type.{pdf,svg}` y en
+  `figuras/` las 6 figuras usadas con su `-export.svg`.
+- El esquema de control v4 lo rediseno el autor (phi entra arriba al
+  RT-OPP, M a la LUT por la izquierda): se reemplazo el PNG y se borraron mi
+  SVG generado, el v3 original y `tools/figura_control/` (en el historial).
+- Siguen con d = 17 / 850 Hz: texto de "Optimized Angles" (Fig. 4),
+  conclusiones y la nota del abstract.
+
 ### Pendientes
 
 
@@ -164,5 +180,5 @@ M_CYC = 5 (no mencionarlo salvo que el autor lo pida).
       Rahmanpour TIA 2025 (multipolar + limites de red) y Perez-Basante 2019
       (origen del angulo virtual).
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
-  control y su caption, Tabla III (d = 17 vs 19), Fig. 4, conclusiones,
+  control y su caption, d = 17 en texto de Fig. 4 y conclusiones, Fig. 4, conclusiones,
   bibliografia, resultados experimentales.
