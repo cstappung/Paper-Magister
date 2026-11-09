@@ -188,6 +188,23 @@ ya no usaba `experimental_1x4`).
   armonicos aun con DPWM1 6450 Hz y d = 17; frase de PLECS ("sinplecs").
 - Se borraron del repo `figuras/resumen_3x4` y `figuras/experimental_1x4`.
 
+### Argumento de la brecha modelo-medicion (2026-11-09)
+
+Analisis punto a punto (8 puntos, valores de las figuras):
+- Offset medicion - modelo: PD-PWM 4.3..6.5 W (media 5.5), OPP 6.4..9.4
+  (7.4), SV-GDPWM 9.9..12.8 (11.0).
+- Con el offset de PD-PWM sumado a ambos, la reduccion del modelo baja de
+  ~34 % a ~20 %; el resto (20 -> 8.4 %) es el offset extra del OPP (+1.9 W),
+  atribuido al rizado (modelo con corriente sinusoidal).
+- Carga ligera: en (0,-10) y (7,-7) el offset supera a la perdida modelada
+  (162 % y 108 %); reduccion 40.0 -> 4.8 % y 37.6 -> 4.1 %, diferencia
+  medida 0.4-0.5 W.
+- Texto: tres efectos (offset comun, carga ligera, rizado) + cierre "up to
+  14.4 % vs PD-PWM, 37.7 % vs SV-GDPWM". Abstract y conclusiones con "up to
+  14 %".
+- Abierto (\upd): explicar el offset mayor de SV-GDPWM; listar efectos no
+  modelados; confirmar que se midio con el RT-OPP activo.
+
 ### Pendientes
 
 

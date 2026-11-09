@@ -114,7 +114,7 @@ is replaced by linear inequalities, yielding a continuous nonlinear problem.
 Over the operating range, the loss model predicts mean reductions of the
 total losses of 36\pct{} with respect to SV-GDPWM at 4050~Hz and 34\pct{} with
 respect to PD-PWM at 2850~Hz, and measurements on a 10~kW prototype yield
-33\pct{} and 8\pct{}, respectively.
+33\pct{} and 8\pct{} (up to 14\pct{}), respectively.
 \upd{Agregar el refinamiento en linea (SQP de una iteracion GN por
 actualizacion con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
 IEEE~519 con fondo armonico de red y la validacion en tiempo real (plataforma,
@@ -133,7 +133,7 @@ refined online by a sequential quadratic program that performs one
 Gauss--Newton iteration per update. Over the operating range, the loss model
 predicts mean reductions of the total losses of 36\pct{} with respect to
 SV-GDPWM at 4050~Hz and 34\pct{} with respect to PD-PWM at 2850~Hz, and
-measurements on a 10~kW prototype yield 33\pct{} and 8\pct{}, respectively.
+measurements on a 10~kW prototype yield 33\pct{} and 8\pct{} (up to 14\pct{}), respectively.
 The online stage restores compliance
 with the individual harmonic limits within one fundamental period and
 tolerates grid background harmonics of up to 9\pct{} of the fundamental in any
@@ -1258,25 +1258,45 @@ longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PD-PWM is
 never the lowest-loss strategy.
 
 Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
-measurements on the 10~kW prototype at eight operating points
-\textbf{[describir el montaje y la medicion de perdidas]}. Against SV-GDPWM,
-the model predicts a mean reduction of 36.0\pct{}, between 27.7 and
-47.7\pct{} at the measured points, and the measurements confirm it: the OPP
-reduces the losses by 33.4\pct{} on average, from 29.3 to 37.7\pct{}, that
-is, 7.1~W. Against PD-PWM, the model predicts a mean reduction of
-33.9\pct{}, whereas the measured one is 8.4\pct{}, from 4.1 to 14.4\pct{},
-that is, 1.4~W. The measured losses exceed the model in every case, 14.2~W
-against 6.8~W on average for the OPP, since the measurement includes losses
-that the model does not consider \textbf{[XX]}. Even so, the OPP remains the
-lowest-loss strategy at every measured point. Table~\ref{tab:comparacion}
-summarizes the nominal point.
-\upd{Explicar por que la reduccion medida frente a PD-PWM (8.4\pct{}) es mucho
-menor que la del modelo (33.9\pct{}), mientras que frente a SV-GDPWM coincide
-(33.4 vs.\ 36.0\pct{}). La medicion supera al modelo en 5.5~W en PD-PWM,
-7.4~W en el OPP y 11.0~W en SV-GDPWM (medias). Confirmar que los marcadores
-con borde segmentado son el espejo de los medidos respecto de $I_d=0$, que
-$\mu$ es la media de cada panel, y que el triangulo y el circulo de
-Fig.~\ref{fig:perdidas} marcan el maximo y el minimo de cada mapa.}
+measurements on the 10~kW prototype at eight operating points, with the OPP
+refined online by the real-time optimizer
+\textbf{[describir el montaje y la medicion de perdidas]}. The OPP yields the
+lowest measured losses at every point. Against SV-GDPWM, the measured
+reduction, 33.4\pct{} on average and between 29.3 and 37.7\pct{}, agrees
+with the 36.0\pct{} predicted by the model. Against PD-PWM, it is
+8.4\pct{} on average and reaches 14.4\pct{} at $I_d = 15$~A, below the
+33.9\pct{} predicted.
+
+Three effects explain this gap. First, the measured losses exceed the model
+by an offset due to effects that the model does not include
+\textbf{[XX]}, which for PD-PWM is nearly constant, between 4.3 and 6.5~W.
+An offset common to two strategies keeps their absolute difference but
+enlarges the reference, and therefore lowers the relative reduction: with
+the offset of PD-PWM added to both, the model would predict 20\pct{}
+instead of 34\pct{}. Second, this effect is strongest at light load, where
+the offset is comparable to or larger than the modeled losses: at
+$I_q = -10$~A, PD-PWM dissipates 3.9~W in the model and 10.2~W in the
+measurement, and the reduction falls from 40.0 to 4.8\pct{}, with a
+measured difference of only 0.5~W. Third, the model assumes a sinusoidal
+current, whereas the OPP, switching at 950~Hz per device, carries a larger
+current ripple, which adds losses that the model does not capture.
+Accordingly, the offset of the OPP exceeds that of PD-PWM by 1.9~W on
+average, which reduces the mean measured difference from 3.3 to 1.4~W.
+Including the current ripple in the loss model is left for future work.
+
+Even so, the improvement is consistent: at the same harmonic compliance,
+the OPP refined in real time reduces the losses at every measured point, by
+up to 14.4\pct{} with respect to PD-PWM and up to 37.7\pct{} with respect to
+SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
+\upd{(1) Listar en [XX] los efectos no modelados (p.ej.\ drivers, tiempo
+muerto, perdidas del filtro, precision de la medicion). (2) El offset de
+SV-GDPWM es el mayor, 9.9--12.8~W (media 11.0~W, 5.5~W sobre PD-PWM): si se
+atribuye al rizado, decirlo; si no, explicar a que se debe, porque un
+revisor lo va a preguntar. Ese offset mayor es lo que hace que la reduccion
+medida frente a SV-GDPWM coincida con el modelo. (3) Confirmar que las
+mediciones del OPP se hicieron con el RT-OPP activo y no con la LUT sola.
+(4) Confirmar marcadores segmentados (espejo en $I_d$), $\mu$ y
+triangulo/circulo de Fig.~\ref{fig:perdidas}.}
 \upd{Agregar el RT-OPP a la comparacion.}
 
 \begin{figure*}[!t]
@@ -1388,7 +1408,9 @@ meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
 model. The gain comes mainly from switching, and the OPP also conducts less
 over most of the range. Measurements on a 10~kW grid-connected T-Type
 prototype confirm the reduction with respect to SV-GDPWM, 33\pct{} on average,
-whereas with respect to PD-PWM it is smaller, 8\pct{}. The optimizer drives the current distortion to the regulatory
+whereas with respect to PD-PWM it is smaller, 8\pct{} on average and up to
+14\pct{}, since the measured losses include effects that the model neglects,
+such as the current ripple, and these weigh most at light load. The optimizer drives the current distortion to the regulatory
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification.
