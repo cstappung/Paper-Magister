@@ -43,6 +43,10 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
   Overleaf (antes `main_conf_EN.tex` en el repo). La seccion
   "Real-Time Implementation" (antes `sec_rtopp.tex`) esta pegada dentro,
   despues de `sec:implementacion` y antes de Simulation Results.
+- `main_plan.tex`: esqueleto del paper (no es el manuscrito). IDs de bloque
+  S1..S7, figuras F1..F8, tablas T1..T5, algoritmo A1; mantenerlo al dia
+  cuando cambie la estructura de `MAIN_FINAL.tex`. Revision del hilo
+  conductor en `docs/REVISION_HILO.md`.
 - `code/RTOPP_D19_simple_rip.m`: optimizador RT vigente (referencia, solo
   lectura). Difiere de lo descrito en `docs/CONTEXTO_PAPER_RT.md` (que es de
   `RTOPP_D19.m`): ver diferencias en `docs/BITACORA.md`.
