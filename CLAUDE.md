@@ -30,6 +30,10 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
   notas `\upd`/`\sug` asociadas; dejar los azules que dicen "pendiente".
 - Las sugerencias deben ser texto listo para pegar y decir exactamente donde
   va; el autor prefiere texto breve.
+- Desde 2026-11-09 (pedido del autor): en `MAIN_FINAL.tex` NO editar texto
+  del paper directamente. Solo agregar `\upd{}` con el comentario y `\sug{}`
+  con el texto propuesto; el autor aplica o responde. Se pueden borrar notas
+  `\upd`/`\sug` ya resueltas.
 - No modificar el codigo del autor (`code/*.m`, `RTOPP_D19.m`), los `.slx`
   ni los archivos Julia. La
   optimizacion (GN, FO) se deja como la tiene el autor: solo reportar

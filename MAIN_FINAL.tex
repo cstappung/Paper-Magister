@@ -560,6 +560,17 @@ the losses with the distortion as a constraint, whereas the real-time stage
 of Section~\ref{sec:rt} minimizes the distortion with the losses as a
 secondary term: the off-line solution sets the loss level, and the online
 refinement preserves harmonic compliance around it.
+\upd{Revisor: si el RT baja la TDD a 1.7\pct{} sin costo en perdidas, parece
+que el limite de TDD no costaba perdidas. Decision del autor: explicar que el
+off-line impone TDD y limites individuales como restricciones duras, mientras
+el RT los lleva en la FO.}
+\sug{Reemplazar la frase ``Note that \dots\ around it.'' por: Note that
+\eqref{eq:opp_propuesto} minimizes the losses with the TDD and the individual
+limits as hard constraints, whereas the real-time stage of
+Section~\ref{sec:rt} includes both the distortion and the losses in its
+objective and enforces the limits through adaptive weights only when they are
+exceeded: the off-line solution sets the loss level, and the online
+refinement restores harmonic compliance around it.}
 % Pendiente: verificar como se impuso la continuidad a lo largo de phi en
 % Julia (o si no se impuso, porque la re-siembra con histeresis lo cubre).
 
@@ -699,6 +710,19 @@ angles $\gv^0$, which the real-time optimizer of Section~\ref{sec:rt} refines
 using the grid voltage harmonics estimated by the observer; the pattern
 generator converts the refined angles into firing instants shifted by
 $\delta$ and synchronized with the grid angle $\theta$ of the PLL.
+\upd{Revisor: el observador de armonicos solo aparece en la figura y como
+fuente de $\mathbf{x}^\star_h$; no se dice que metodo usa ni como se pasa a
+unidades espectrales. Decision del autor: agregarlo. Completar los
+corchetes.}
+\sug{(Parrafo nuevo, aqui) The harmonic observer estimates the background
+harmonics of the grid voltage from the measured $v_{abc}$ by
+\textbf{[metodo: p.ej.\ filtro de Kalman, SOGI multiple o DFT recursiva]}
+\textbf{[cita]}, for every order $n\in\mathcal{N}$, $n\geq5$, with a settling time
+of \textbf{[XX]}~ms. Each estimated component is converted into the converter
+voltage that cancels the corresponding harmonic grid current
+\textbf{[relacion usada, p.ej.\ a traves del modelo del LCL]} and divided by
+$V_{dc}/2$, so that $\mathbf{x}^\star_h$ is expressed in the same spectral
+units as the pattern.}
 
 
 A critical point of the scheme is the continuity of the LUT: the sets of optimal
@@ -1039,6 +1063,17 @@ than 0.3\pct{}, even when the quadratic residuals are replaced by the exact
 gradient of \eqref{eq:rt_pcond} and \eqref{eq:rt_psw}. The value
 $\lambda_\ell=0.01$ keeps the TDD at about one third of the limit, which
 leaves margin for grid background distortion.
+\upd{Decision del autor: el RT si minimiza perdidas en linea; no decir que
+los terminos de perdidas solo actuan como regularizador.}
+\sug{Reemplazar desde ``Although switching accounts'' hasta ``along the
+distortion axis.'' por: Although switching accounts for a significant share of
+the losses (Fig.~\ref{fig:perdidas}), the switching term is thus weighted
+several orders of magnitude below its actual share, so the online stage
+minimizes mainly the conduction losses, whereas the switching losses, with a
+number of events fixed by $d$, remain close to those of the table. Since the
+table already minimizes \eqref{eq:rt_pcond} and \eqref{eq:rt_psw} at its
+nodes, the losses change little around them, and $\lambda_\ell$ mainly sets
+the trade-off between distortion and losses.}
 % Cifras de la Fig. E obtenidas con RTOPP_D19 (version con proyecciones).
 % Regenerar con RTOPP_D19_simple_rip antes de enviar.
 
@@ -1222,6 +1257,14 @@ those of the table pattern. When the grid voltage carries background
 harmonics, the table pattern alone violates the individual limits, by a
 factor of 5.7 for a fifth harmonic of 4\pct{} and a seventh of 3\pct{}, and
 the optimizer restores compliance within 13~ms (Fig.~\textbf{[X]}).
+\upd{Punto 2 del revisor (TDD 1.7\pct{} en RT frente a 5\pct{} off-line).}
+\sug{Reemplazar ``In real time, the optimizer minimizes the distortion with the
+losses as a secondary term, so it settles below the limit:'' por: Unlike the
+off-line problem, where the TDD and the individual limits are hard
+constraints, the real-time stage includes them in the OF, and the adaptive
+weights of Section~\ref{subsec:rt_con} grow only when a limit is exceeded.
+The pattern therefore settles where the distortion and loss terms balance,
+below the limit for the chosen $\lambda_\ell$:}
 \upd{Tolerancia a fondo armonico de red ($\sim$9\pct{} de la fundamental por
 armonico individual): definir el ensayo (barrido por armonico, criterio de
 cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
@@ -1293,8 +1336,7 @@ muerto, perdidas del filtro, precision de la medicion). (2) El offset de
 SV-GDPWM es el mayor, 9.9--12.8~W (media 11.0~W, 5.5~W sobre PD-PWM): si se
 atribuye al rizado, decirlo; si no, explicar a que se debe, porque un
 revisor lo va a preguntar. Ese offset mayor es lo que hace que la reduccion
-medida frente a SV-GDPWM coincida con el modelo. (3) Confirmar que las
-mediciones del OPP se hicieron con el RT-OPP activo y no con la LUT sola.}
+medida frente a SV-GDPWM coincida con el modelo.}
 \upd{Agregar el RT-OPP a la comparacion.}
 
 \begin{figure*}[!t]
@@ -1402,11 +1444,8 @@ such as the current ripple, and these weigh most at light load. The optimizer dr
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification.
-\upd{Se quito ``Experimental validation \dots\ is the immediate future work'',
-ya que hay mediciones de perdidas. Si el RT-OPP aun no se valida en el
-prototipo, agregar la frase sugerida.}
-\sug{(Ultima frase:) The experimental validation of the real-time optimizer
-is the immediate future work.}
+\upd{Revisor: esta frase choca con el RT, que queda bajo el limite. Punto 2.}
+\sug{Cambiar ``The optimizer drives'' por ``The off-line optimizer drives''.}
 
 
 % ----------------------------- Bibliografia -----------------------------
