@@ -1163,7 +1163,7 @@ Real-Time Results'').}
 \subsection{Optimized Angles and Pulse Pattern}
 
 Fig.~\ref{fig:patron_pulsos}(b) shows the pattern obtained for $M = 0.8660$ with
-$d = 17$ pulses per half-cycle. Its multipolar nature is evident: level $-1$
+$d = 19$ pulses per half-cycle. Its multipolar nature is evident: level $-1$
 pulses appear in the positive half-cycle and level $+1$ pulses in the negative
 one. The effect of minimizing \eqref{eq:p_sw} is also apparent: the switching
 events cluster near the zero crossings of the current and spread out around its
@@ -1171,7 +1171,7 @@ peaks, which is where each event costs more energy.
 Fig.~\ref{fig:patron_pulsos}(a) traces the angles across the modulation index.
 Every trajectory is continuous, so the LUT can be swept without introducing a
 current transient.
-\upd{Fig.~4 es $d=17$ y solo en $M$. Si el RT usa $d=19$, regenerar.
+\upd{Verificar que la Fig.~4 sea con $d=19$ (es solo en $M$).
 Considerar agregar los angulos de la LUT vs.\ los refinados por el RT en el
 mismo punto, y la dependencia en $\varphi$.}
 \textcolor{blue}{Comentario: Si aqui tengo pendiente mejroar esa foto.}
@@ -1333,19 +1333,18 @@ both between table entries and under grid background distortion of up to
 9\pct{} of the fundamental per harmonic, while the losses estimated by the
 model remain within 1\pct{} of those of the off-line pattern.}
 
-With $d = 17$ pulses per half-cycle, that is 850~Hz per device, the resulting
+With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern reduces the total losses at the nominal point by 56\pct{} with respect
 to DPWM1 at 6450~Hz and by 40\pct{} with respect to PWM at 2850~Hz, while
 meeting IEEE~519 over the whole power range. The decomposition shows that the
 gain comes entirely from switching, 9.7~W against 22.3 and 36.0~W, and that the
-conduction penalty remains marginal even though the OPP switches three to eight
+conduction penalty remains marginal even though the OPP switches three to seven
 times more slowly. The optimizer drives the current distortion to the regulatory
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification. Experimental validation on a 10 kW grid-connected T-Type prototype is the
 immediate future work.
-\upd{Revisar $d=17$/850~Hz frente a $d=19$. ``Experimental validation \dots\
-future work'': actualizar si la validacion en tiempo real ya forma parte del
+\upd{``Experimental validation \dots\ future work'': actualizar si la validacion en tiempo real ya forma parte del
 paper.}
 \sug{(Ultima frase:) Experimental validation on a 10~kW
 grid-connected T-Type prototype is the immediate future work
