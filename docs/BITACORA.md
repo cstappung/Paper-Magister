@@ -205,6 +205,9 @@ Analisis punto a punto (8 puntos, valores de las figuras):
 - Abierto (\upd): explicar el offset mayor de SV-GDPWM; listar efectos no
   modelados; confirmar que se midio con el RT-OPP activo.
 
+- Captions de las tres figuras de perdidas acortados a lo esencial (pedido
+  del autor, 2026-11-09).
+
 ### Pendientes
 
 

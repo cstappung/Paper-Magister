@@ -1294,41 +1294,29 @@ SV-GDPWM es el mayor, 9.9--12.8~W (media 11.0~W, 5.5~W sobre PD-PWM): si se
 atribuye al rizado, decirlo; si no, explicar a que se debe, porque un
 revisor lo va a preguntar. Ese offset mayor es lo que hace que la reduccion
 medida frente a SV-GDPWM coincida con el modelo. (3) Confirmar que las
-mediciones del OPP se hicieron con el RT-OPP activo y no con la LUT sola.
-(4) Confirmar marcadores segmentados (espejo en $I_d$), $\mu$ y
-triangulo/circulo de Fig.~\ref{fig:perdidas}.}
+mediciones del OPP se hicieron con el RT-OPP activo y no con la LUT sola.}
 \upd{Agregar el RT-OPP a la comparacion.}
 
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
-    \caption{Losses given by the model over the operating range in the
-    $(I_d,I_q)$ plane, with current amplitudes between 10 and 20~A, for the
-    proposed OPP ($d=19$), PD-PWM at 2850~Hz and SV-GDPWM at 4050~Hz:
-    (a)--(c) conduction, (e)--(g) switching and (i)--(k) total losses;
-    (d), (h), (l) strategy with the lowest loss at each operating point.
-    Triangles and circles mark the maximum and the minimum of each map.}
+    \caption{Modeled losses in the $(I_d,I_q)$ plane: conduction (a)--(c),
+    switching (e)--(g) and total (i)--(k); lowest-loss strategy (d), (h), (l).}
     \label{fig:perdidas}
     \upd{Agregar curva RT-OPP.}
 \end{figure*}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
-    \caption{Total losses of SV-GDPWM at 4050~Hz and of the proposed OPP
-    ($d=19$): (a)--(d) loss model and (e)--(h) measurements on the 10~kW
-    prototype. (a), (e) SV-GDPWM; (b), (f) OPP; (c), (g) absolute and (d), (h)
-    relative reduction achieved by the OPP. Dashed markers mirror the measured
-    points about $I_d = 0$, and $\mu$ is the mean value of each panel.}
+    \caption{Total losses of the OPP and SV-GDPWM: model (a)--(d) and
+    measurements (e)--(h).}
     \label{fig:comp_gdpwm}
 \end{figure*}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
-    \caption{Total losses of PD-PWM at 2850~Hz and of the proposed OPP
-    ($d=19$): (a)--(d) loss model and (e)--(h) measurements on the 10~kW
-    prototype. (a), (e) PD-PWM; (b), (f) OPP; (c), (g) absolute and (d), (h)
-    relative reduction achieved by the OPP. Dashed markers mirror the measured
-    points about $I_d = 0$, and $\mu$ is the mean value of each panel.}
+    \caption{Total losses of the OPP and PD-PWM: model (a)--(d) and
+    measurements (e)--(h).}
     \label{fig:comp_pwm}
 \end{figure*}
 \begin{table}[!t]
