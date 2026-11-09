@@ -1,6 +1,6 @@
 # Referencias
 
-Estado de la bibliografia de `main_conf_EN.tex` (28 entradas, orden de cita).
+Estado de la bibliografia de `MAIN_FINAL.tex` (antes `main_conf_EN.tex`) (28 entradas, orden de cita).
 Los textos completos de los papers no se suben al repo (copyright IEEE); aqui
 solo queda el registro.
 

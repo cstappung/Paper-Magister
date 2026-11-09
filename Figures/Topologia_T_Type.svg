@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1170 330"
+   width="1170"
+   height="330"
+   font-family="Georgia, 'Times New Roman', serif"
+   version="1.1"
+   id="svg62"
+   sodipodi:docname="inversor_t_type (1).svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview62"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.0660995"
+     inkscape:cx="502.29835"
+     inkscape:cy="364.41253"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg62" />
+  <!--
+    ============================================================
+    INVERSOR T-TYPE (T-NPC) DE 3 NIVELES - ESTADOS P / O / N
+    ============================================================
+    ESTRUCTURA:
+      <defs>  : simbolos reutilizables (#mosfet, #cap, #flecha)
+      <g id="panel-P|O|N"> : cada estado de conmutacion
+
+    COLOR:
+      - El color de cada simbolo se controla con el atributo
+        color="..." del <use> (el simbolo usa currentColor).
+      - Rojo #ED1C24 = MOSFET en conduccion / camino de corriente
+      - Negro #1A1A1A = resto del circuito
+      - EL DIODO DE CUERPO ESTA FIJADO EN NEGRO dentro del simbolo
+        (grupo "diodo-cuerpo"): nunca cambia de color.
+
+    RAMA CENTRAL:
+      - Posicion izquierda (x=150) -> S3
+      - Posicion derecha   (x=240) -> S2
+    ============================================================
+  -->
+  <defs
+     id="defs15">
+    <!-- MOSFET canal N con diodo de cuerpo.
+         Terminales: drenador (0,-30) arriba | fuente (0,30) abajo
+         Puerta hacia la izquierda en (-42,0) -->
+    <g
+       id="mosfet"
+       stroke="currentColor"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       fill="none">
+      <!-- diodo de cuerpo: SIEMPRE NEGRO -->
+      <g
+         id="diodo-cuerpo"
+         stroke="#1A1A1A">
+        <path
+           d="M 0,-24 L 0,-10"
+           id="path1" />
+        <path
+           d="M -9,-10 L 9,-10"
+           id="path2" />
+        <polygon
+           points="0,-9 -8,1 8,1"
+           fill="#1A1A1A"
+           stroke="none"
+           id="polygon2" />
+        <path
+           d="M 0,1 L 0,24"
+           id="path3" />
+      </g>
+      <!-- terminales externos -->
+      <path
+         d="M 0,-30 L 0,-24"
+         id="path4" />
+      <path
+         d="M 0,24 L 0,30"
+         id="path5" />
+      <!-- MOSFET (toma el color del <use>) -->
+      <path
+         d="M -24,-12 L -12,-12 L -12,-24 L 0,-24"
+         id="path6" />
+      <!-- drenador -->
+      <path
+         d="M -24,12 L -12,12 L -12,24 L 0,24"
+         id="path7" />
+      <!-- fuente -->
+      <path
+         d="M -24,0 L -12,0 L -12,12"
+         id="path8" />
+      <!-- sustrato -->
+      <polygon
+         points="-24,0 -15,-5 -15,5"
+         fill="currentColor"
+         stroke="none"
+         id="polygon8" />
+      <path
+         d="M -24,-16 L -24,-7"
+         id="path9" />
+      <!-- canal -->
+      <path
+         d="M -24,-4.5 L -24,4.5"
+         id="path10" />
+      <path
+         d="M -24,7 L -24,16"
+         id="path11" />
+      <path
+         d="M -32,-16 L -32,16"
+         id="path12" />
+      <!-- puerta -->
+      <path
+         d="M -42,0 L -32,0"
+         id="path13" />
+      <circle
+         cx="0"
+         cy="-24"
+         r="2.6"
+         fill="currentColor"
+         stroke="none"
+         id="circle13" />
+      <circle
+         cx="0"
+         cy="24"
+         r="2.6"
+         fill="currentColor"
+         stroke="none"
+         id="circle14" />
+    </g>
+    <!-- Condensador del bus DC (terminales en 0,-8 y 0,8) -->
+    <g
+       id="cap"
+       stroke="currentColor"
+       stroke-width="2.4"
+       stroke-linecap="round"
+       fill="none">
+      <path
+         d="M -17,-8 L 17,-8"
+         id="path14" />
+      <path
+         d="M -17,8 L 17,8"
+         id="path15" />
+    </g>
+    <!-- Flecha de sentido de corriente (apunta a la derecha, vertice en 0,0) -->
+    <polygon
+       id="flecha"
+       points="0,0 -14,-6.5 -14,6.5"
+       fill="currentColor" />
+  </defs>
+  <!-- ==================== ESTADO P ==================== -->
+  <g
+     id="panel-P"
+     transform="translate(0,0)">
+    <text
+       x="172.7551"
+       y="29.979591"
+       font-size="20px"
+       font-weight="bold"
+       text-anchor="middle"
+       fill="#1a1a1a"
+       id="text15">P</text>
+    <!-- circuito base -->
+    <g
+       stroke="#1A1A1A"
+       stroke-width="2"
+       fill="none"
+       stroke-linecap="round"
+       id="g26">
+      <path
+         d="M 30,45 L 310,45"
+         id="path16" />
+      <!-- riel positivo -->
+      <path
+         d="M 30,300 L 310,300"
+         id="path17" />
+      <!-- riel negativo -->
+      <path
+         d="M 30,45 L 30,100"
+         id="path18" />
+      <path
+         d="M 30,116 L 30,234"
+         id="path19" />
+      <path
+         d="M 30,250 L 30,300"
+         id="path20" />
+      <path
+         d="M 310,45 L 310,75"
+         id="path21" />
+      <path
+         d="M 310,135 L 310,215"
+         id="path22" />
+      <path
+         d="M 310,275 L 310,300"
+         id="path23" />
+      <path
+         d="M 30,175 L 120,175"
+         id="path24" />
+      <path
+         d="M 180,175 L 210,175"
+         id="path25" />
+      <path
+         d="M 270,175 L 372,175"
+         id="path26" />
+    </g>
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,108)"
+       color="#1A1A1A"
+       id="use26" />
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,242)"
+       color="#1A1A1A"
+       id="use27" />
+    <circle
+       cx="30"
+       cy="175"
+       r="3"
+       fill="#1A1A1A"
+       id="circle27" />
+    <circle
+       cx="310"
+       cy="175"
+       r="3"
+       fill="#1A1A1A"
+       id="circle28"
+       style="fill:#ed1c24;fill-opacity:1" />
+    <!-- camino de corriente -->
+    <g
+       stroke="#ED1C24"
+       stroke-width="2.6"
+       fill="none"
+       stroke-linecap="round"
+       id="g29">
+      <path
+         d="M 30,45 L 310,45 L 310,75"
+         id="path28" />
+      <path
+         d="M 310,135 L 310,175 L 372,175"
+         id="path29" />
+    </g>
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(180,45)"
+       color="#ED1C24"
+       id="use29" />
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(348.92388,174.81093)"
+       color="#ed1c24"
+       id="use29-6" />
+    <!-- interruptores -->
+    <use
+       id="P-S1"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(310,105)"
+       color="#ED1C24" />
+    <use
+       id="P-S4"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(310,245)"
+       color="#1A1A1A" />
+    <use
+       id="P-S3"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(150,175) rotate(-90) scale(1,-1)"
+       color="#1A1A1A" />
+    <use
+       id="P-S2"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(240,175) rotate(-90)"
+       color="#1A1A1A" />
+    <!-- etiquetas (rojo = interruptor en ON) -->
+    <g
+       font-size="17"
+       font-weight="bold"
+       id="g32">
+      <text
+         x="262.22101"
+         y="110.062"
+         text-anchor="end"
+         fill="#ed1c24"
+         id="text29"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#ed1c24">S1</text>
+      <text
+         x="264.09698"
+         y="247.248"
+         text-anchor="end"
+         fill="#1a1a1a"
+         id="text30"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#1a1a1a">S4</text>
+      <text
+         x="149.14549"
+         y="159.1105"
+         text-anchor="middle"
+         fill="#1a1a1a"
+         id="text31"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#1a1a1a">S3</text>
+      <text
+         x="239.37999"
+         y="158.64149"
+         text-anchor="middle"
+         fill="#ed1c24"
+         id="text32"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#ed1c24">S2</text>
+    </g>
+  </g>
+  <!-- ==================== ESTADO O ==================== -->
+  <g
+     id="panel-O"
+     transform="translate(390,0)">
+    <text
+       x="164.79591"
+       y="33.959183"
+       font-size="20px"
+       font-weight="bold"
+       text-anchor="middle"
+       fill="#1a1a1a"
+       id="text33">O</text>
+    <g
+       stroke="#1A1A1A"
+       stroke-width="2"
+       fill="none"
+       stroke-linecap="round"
+       id="g40">
+      <path
+         d="M 30,45 L 310,45"
+         id="path33" />
+      <path
+         d="M 30,300 L 310,300"
+         id="path34" />
+      <path
+         d="M 30,45 L 30,100"
+         id="path35" />
+      <path
+         d="M 30,116 L 30,234"
+         id="path36" />
+      <path
+         d="M 30,250 L 30,300"
+         id="path37" />
+      <path
+         d="M 310,45 L 310,75"
+         id="path38" />
+      <path
+         d="M 310,135 L 310,215"
+         id="path39" />
+      <path
+         d="M 310,275 L 310,300"
+         id="path40" />
+    </g>
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,108)"
+       color="#1A1A1A"
+       id="use40" />
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,242)"
+       color="#1A1A1A"
+       id="use41" />
+    <circle
+       cx="30"
+       cy="175"
+       r="3"
+       fill="#ED1C24"
+       id="circle41" />
+    <circle
+       cx="310"
+       cy="175"
+       r="3"
+       fill="#ED1C24"
+       id="circle42" />
+    <g
+       stroke="#ED1C24"
+       stroke-width="2.6"
+       fill="none"
+       stroke-linecap="round"
+       id="g44">
+      <path
+         d="M 30,175 L 120,175"
+         id="path42" />
+      <path
+         d="M 180,175 L 210,175"
+         id="path43" />
+      <path
+         d="M 270,175 L 372,175"
+         id="path44" />
+    </g>
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(202,175)"
+       color="#ED1C24"
+       id="use44" />
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(349.51382,175.05402)"
+       color="#ed1c24"
+       id="use44-2" />
+    <g
+       id="O-S1"
+       stroke="currentColor"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       fill="none"
+       style="color:#1a1a1a"
+       transform="translate(310,105)">
+      <!-- diodo de cuerpo: SIEMPRE NEGRO -->
+      <g
+         id="g64"
+         stroke="#1a1a1a">
+        <path
+           d="m 0,-24 v 14"
+           id="path62" />
+        <path
+           d="M -9,-10 H 9"
+           id="path63" />
+        <polygon
+           points="8,1 0,-9 -8,1 "
+           fill="#1a1a1a"
+           stroke="none"
+           id="polygon63" />
+        <path
+           d="M 0,1 V 24"
+           id="path64" />
+      </g>
+      <!-- terminales externos -->
+      <path
+         d="m 0,-30 v 6"
+         id="path65" />
+      <path
+         d="m 0,24 v 6"
+         id="path66" />
+      <!-- MOSFET (toma el color del <use>) -->
+      <path
+         d="m -24,-12 h 12 V -24 H 0"
+         id="path67" />
+      <!-- drenador -->
+      <path
+         d="m -24,12 h 12 V 24 H 0"
+         id="path68" />
+      <!-- fuente -->
+      <path
+         d="m -24,0 h 12 v 12"
+         id="path69" />
+      <!-- sustrato -->
+      <polygon
+         points="-15,5 -24,0 -15,-5 "
+         fill="currentColor"
+         stroke="none"
+         id="polygon69" />
+      <path
+         d="m -24,-16 v 9"
+         id="path70" />
+      <!-- canal -->
+      <path
+         d="m -24,-4.5 v 9"
+         id="path71" />
+      <path
+         d="m -24,7 v 9"
+         id="path72" />
+      <path
+         d="M -32,-16 V 16"
+         id="path73" />
+      <!-- puerta -->
+      <path
+         d="m -42,0 h 10"
+         id="path74" />
+      <circle
+         cx="0"
+         cy="-24"
+         r="2.5999999"
+         fill="currentColor"
+         stroke="none"
+         id="circle74" />
+      <circle
+         cx="0"
+         cy="24"
+         r="2.5999999"
+         fill="currentColor"
+         stroke="none"
+         id="circle75" />
+    </g>
+    <use
+       id="O-S4"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(310,245)"
+       color="#1A1A1A" />
+    <use
+       id="O-S3"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(150,175) rotate(-90) scale(1,-1)"
+       color="#ED1C24" />
+    <use
+       id="O-S2"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(240,175) rotate(-90)"
+       color="#ED1C24" />
+    <g
+       font-size="17"
+       font-weight="bold"
+       id="g47">
+      <text
+         x="263.159"
+         y="109.593"
+         text-anchor="end"
+         fill="#1a1a1a"
+         id="text44"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#1a1a1a">S1</text>
+      <text
+         x="264.09698"
+         y="250.062"
+         text-anchor="end"
+         fill="#1a1a1a"
+         id="text45"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#1a1a1a">S4</text>
+      <text
+         x="151.60774"
+         y="159.1105"
+         text-anchor="middle"
+         fill="#ed1c24"
+         id="text46"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#ed1c24">S3</text>
+      <text
+         x="237.504"
+         y="157.938"
+         text-anchor="middle"
+         fill="#ed1c24"
+         id="text47"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#ed1c24">S2</text>
+    </g>
+  </g>
+  <!-- ==================== ESTADO N ==================== -->
+  <g
+     id="panel-N"
+     transform="translate(780,0)">
+    <text
+       x="177.39796"
+       y="33.959183"
+       font-size="20px"
+       font-weight="bold"
+       text-anchor="middle"
+       fill="#1a1a1a"
+       id="text48">N</text>
+    <g
+       stroke="#1A1A1A"
+       stroke-width="2"
+       fill="none"
+       stroke-linecap="round"
+       id="g56">
+      <path
+         d="M 30,45 L 310,45"
+         id="path48" />
+      <path
+         d="M 30,45 L 30,100"
+         id="path49" />
+      <path
+         d="M 30,116 L 30,234"
+         id="path50" />
+      <path
+         d="M 30,250 L 30,300"
+         id="path51" />
+      <path
+         d="M 310,45 L 310,75"
+         id="path52" />
+      <path
+         d="M 310,135 L 310,175"
+         id="path53" />
+      <path
+         d="M 30,175 L 120,175"
+         id="path54" />
+      <path
+         d="M 180,175 L 210,175"
+         id="path55" />
+      <path
+         d="M 270,175 L 310,175"
+         id="path56" />
+    </g>
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,108)"
+       color="#1A1A1A"
+       id="use56" />
+    <use
+       xlink:href="#cap"
+       href="#cap"
+       transform="translate(30,242)"
+       color="#1A1A1A"
+       id="use57" />
+    <circle
+       cx="30"
+       cy="175"
+       r="3"
+       fill="#1A1A1A"
+       id="circle57" />
+    <circle
+       cx="310"
+       cy="175"
+       r="3"
+       fill="#ED1C24"
+       id="circle58" />
+    <g
+       stroke="#ED1C24"
+       stroke-width="2.6"
+       fill="none"
+       stroke-linecap="round"
+       id="g59">
+      <path
+         d="M 372,175 L 310,175 L 310,215"
+         id="path58" />
+      <path
+         d="M 310,275 L 310,300 L 30,300"
+         id="path59" />
+    </g>
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(182.79804,300)"
+       color="#ed1c24"
+       id="use59" />
+    <use
+       xlink:href="#flecha"
+       href="#flecha"
+       transform="translate(348.72683,175.08717)"
+       color="#ed1c24"
+       id="use59-2" />
+    <use
+       id="N-S1"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(310,105)"
+       color="#1A1A1A" />
+    <use
+       id="N-S4"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(310,245)"
+       color="#ED1C24" />
+    <use
+       id="N-S3"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(150,175) rotate(-90) scale(1,-1)"
+       color="#1A1A1A" />
+    <use
+       id="N-S2"
+       xlink:href="#mosfet"
+       href="#mosfet"
+       transform="translate(240,175) rotate(-90)"
+       color="#1A1A1A" />
+    <g
+       font-size="17"
+       font-weight="bold"
+       id="g62">
+      <text
+         x="263.62799"
+         y="110.531"
+         text-anchor="end"
+         fill="#1a1a1a"
+         id="text59"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#1a1a1a">S1</text>
+      <text
+         x="264.09698"
+         y="250.062"
+         text-anchor="end"
+         fill="#ed1c24"
+         id="text60"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:end;fill:#ed1c24">S4</text>
+      <text
+         x="150.31799"
+         y="158.87599"
+         text-anchor="middle"
+         fill="#ed1c24"
+         id="text61"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#ed1c24">S3</text>
+      <text
+         x="238.442"
+         y="159.345"
+         text-anchor="middle"
+         fill="#1a1a1a"
+         id="text62"
+         style="-inkscape-font-specification:'Calibri, Bold';font-family:Calibri;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;font-size:17px;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-anchor:middle;fill:#1a1a1a">S2</text>
+    </g>
+  </g>
+</svg>

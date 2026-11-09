@@ -575,8 +575,8 @@ refinement preserves harmonic compliance around it.
         Parameter & Symbol & Value \\ \midrule
         Rated power & $P_{nom}$ & 10 kW \\
         DC-link voltage & $V_{dc}$ & 750 V \\
-        Pulses per half-cycle & $d$ & 17 \\
-        Switching frequency per device & $f_{sw}$ & 850 Hz \\
+        Pulses per half-cycle & $d$ & 19 \\
+        Switching frequency per device & $f_{sw}$ & 950 Hz \\
         Filter inductances & $L_1 = L_2$ & 1 mH \\
         Filter capacitor & $C$ & 46 $\mu$F \\
         Resonance frequency & $f_{res}$ & 1050 Hz \\
@@ -590,17 +590,7 @@ refinement preserves harmonic compliance around it.
     \egroup
     \label{tab:parametros}
 \end{table}
-\upd{Tabla III: $d=17$ / 850~Hz aqui, pero el RT usa $d=19$ (950~Hz).
-Unificar o explicar. Los parametros propios del RT estan en
-Tabla~\ref{tab:rt_param}.}
-\sug{Si se unifica en $d=19$: cambiar las filas a
-\texttt{Pulses per half-cycle \& \$d\$ \& 19} y
-\texttt{Switching frequency per device \& \$f\_\{sw\}\$ \& 950 Hz}. Si se
-mantiene $d=17$ en el off-line, agregar al texto: ``The real-time
-implementation uses $d=19$ pulses per half-cycle (950~Hz per device); its
-parameters are listed in Table~\ref{tab:rt_param}.''}
 
-\textcolor{blue}{Toda la razon, tengo pendiente hacer este cambio en la figura.}
 
 \subsection{Control and Pattern Generation}
 \label{sec:implementacion}

@@ -14,7 +14,7 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - Si el autor pega un `.tex` nuevo, subirlo primero tal cual en un commit
   propio y luego aplicar los cambios en otro commit, para que el diff muestre
   solo lo modificado.
-- Despues de cada cambio al paper, enviar al autor el `main_conf_EN.tex`
+- Despues de cada cambio al paper, enviar al autor el `MAIN_FINAL.tex`
   actualizado como archivo adjunto (lo compila en su equipo).
 - Guardar en el repo todo lo que haga falta para retomar el trabajo entre
   sesiones (contexto, pendientes, decisiones) en `docs/`.
@@ -39,12 +39,16 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 
 ## Archivos
 
-- `main_conf_EN.tex`: paper completo, en un solo archivo. La seccion
+- `MAIN_FINAL.tex`: paper completo, en un solo archivo, mismo nombre que en
+  Overleaf (antes `main_conf_EN.tex` en el repo). La seccion
   "Real-Time Implementation" (antes `sec_rtopp.tex`) esta pegada dentro,
   despues de `sec:implementacion` y antes de Simulation Results.
 - `code/RTOPP_D19_simple_rip.m`: optimizador RT vigente (referencia, solo
   lectura). Difiere de lo descrito en `docs/CONTEXTO_PAPER_RT.md` (que es de
   `RTOPP_D19.m`): ver diferencias en `docs/BITACORA.md`.
-- Figuras: en el repo solo esta el esquema de control
-  (`figuras/esquema_control_OPP_v3/` original del autor y `_v4/` generado con
-  `tools/figura_control/`). El resto (`Figures/`, `figuras/`) lo tiene el autor.
+- `IEEEtran.cls`, `Figures/` y `figuras/`: solo lo que compila
+  `MAIN_FINAL.tex` (espejo del Overleaf). Cada figura va con su PNG/PDF y su
+  fuente `-export.svg`. El esquema de control v4 lo rediseno el autor; el
+  generador anterior (`tools/figura_control/`) se borro y queda en el historial.
+- Si el autor sube un proyecto nuevo, comparar con `MAIN_FINAL.tex` y no
+  subir figuras que el `.tex` no use.
