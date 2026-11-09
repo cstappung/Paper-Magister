@@ -157,8 +157,11 @@ renombrando `main_conf_EN.tex` -> `MAIN_FINAL.tex`.
 - El esquema de control v4 lo rediseno el autor (phi entra arriba al
   RT-OPP, M a la LUT por la izquierda): se reemplazo el PNG y se borraron mi
   SVG generado, el v3 original y `tools/figura_control/` (en el historial).
-- Siguen con d = 17 / 850 Hz: texto de "Optimized Angles" (Fig. 4),
-  conclusiones y la nota del abstract.
+- d = 19 / 950 Hz aplicado tambien en "Optimized Angles" y conclusiones
+  ("three to seven times", 2850/950 = 3.0 y 6450/950 = 6.8). Quedan con
+  d = 17 solo las notas \upd del abstract y de resultados, que avisan que
+  las cifras (56/40 %, 9.7 W, LUT de 1000 puntos en 8 min) se calcularon con
+  d = 17 y hay que verificarlas.
 
 ### Pendientes
 
@@ -180,5 +183,5 @@ renombrando `main_conf_EN.tex` -> `MAIN_FINAL.tex`.
       Rahmanpour TIA 2025 (multipolar + limites de red) y Perez-Basante 2019
       (origen del angulo virtual).
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
-  control y su caption, d = 17 en texto de Fig. 4 y conclusiones, Fig. 4, conclusiones,
+  control y su caption, cifras de perdidas con d = 19, Fig. 4, conclusiones,
   bibliografia, resultados experimentales.
