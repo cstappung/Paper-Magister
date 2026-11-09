@@ -366,8 +366,79 @@ trabajo futuro.}
 %=========================================================================
 \section*{6. Retroalimentación del hilo conductor}
 
-\noindent Se completa con la revisión del hilo conductor (ver
-\texttt{docs/REVISION\_HILO.md}).
+\noindent Resumen de la revisión (detalle con líneas en
+\texttt{docs/REVISION\_HILO.md}). \textbf{Nada de esto está aplicado aún.}
+
+\subsection*{6.1 Problemas de fondo (severidad alta)}
+\begin{enumerate}[leftmargin=6mm]
+\item \textbf{El RT se vende como ``loss-minimizing'' y no lo es.} Título,
+      brecha 2 (S1) y contribución 3 frente a S5.4, que dice que las
+      pérdidas actúan como regularizador. Propuesta: el RT \emph{recupera el
+      cumplimiento preservando las pérdidas del patrón off-line}.
+\item \textbf{Tesis ``margen de TDD $\rightarrow$ pérdidas'' frente al RT,
+      que baja la TDD a 1.7\pct{} sin costo en pérdidas} (S6.2, S7). Hay que
+      decir qué restricción está activa off-line (¿límites individuales del
+      19 y 23?).
+\item \textbf{Validación experimental del RT}: la contribución 4 y S6.3 la
+      afirman; la \texttt{\textbackslash sug} de S7 dice que es trabajo
+      futuro.
+\item \textbf{El observador de armónicos no se describe} (solo en F3 y como
+      fuente de $\mathbf{x}^\star_h$).
+\end{enumerate}
+
+\subsection*{6.2 Costuras y desorden (severidad media)}
+\begin{itemize}
+\item LCL (S3.3) dentro de ``Loss Estimation''; F3 flota en S3.2 y se cita
+      desde S3.1.
+\item $\delta$ con dos significados (cota de continuidad en S4.1 y fase en
+      S4.2); tres corrientes ($I$, $I_{cond}$, $I_{nom}$).
+\item Método dentro de Resultados (multi-start, grilla $9\times25$, OPAL) y
+      resultado dentro del método (barrido de $\lambda_\ell$ en S5.4).
+\item S4.2 adelanta el RT; la re-siembra se explica 3 veces y la motivación
+      del RT 4 veces.
+\item Continuidad solo en $M$; la re-siembra en $\varphi$ salta.
+\item Restos de la versión de conferencia: ``now addressed by both'' y
+      ``1000-point LUT'' en S7.
+\item El rizado aparece en piezas sueltas: restricción off-line comentada,
+      término $\lambda_r$ del RT, brecha medida.
+\item La contribución 2 no tiene su brecha en S1; el orden de las
+      contribuciones es inverso al del cuerpo.
+\item S6 no separa simulación, HIL y medición; falta el montaje.
+\end{itemize}
+
+\subsection*{6.3 Esqueleto propuesto por la revisión}
+\noindent\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Nuevo} & \textbf{Contenido (IDs actuales)}\\
+\midrule
+S1 & Introduction; contribuciones en el orden del cuerpo \\
+S2 & \emph{System Description} (nueva): topología + F1 + T1, LCL (S3.3),
+     T3, F3 con la cadena de control y el observador \\
+S3 & Formulación (S2 actual), sin $\epsilon_{sep}$ \\
+S4 & Pérdidas (S3.1--S3.2 actual) \\
+S5 & \emph{Off-Line Pattern Design}: S4.1 + multi-start + LUT
+     $(M,\varphi)$ $9\times25$ + continuidad en $M$ y $\varphi$ \\
+S6 & RT-OPP (S5 actual), con la cadena LUT$\rightarrow$semilla, observador,
+     plataforma y $T_s$; re-siembra solo en S5.5; sin barrido de
+     $\lambda_\ell$ \\
+S7 & Results: 7.1 montaje; 7.2 ángulos (S6.1); 7.3 cumplimiento off-line;
+     7.4 resultados RT (cumplimiento RT, barrido de $\lambda_\ell$,
+     convergencia, transitorios, costo); 7.5 pérdidas (S6.3) \\
+S8 & Conclusions: off-line $\rightarrow$ RT $\rightarrow$ medición \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{6.4 Preguntas probables del revisor}
+\begin{enumerate}[leftmargin=6mm]
+\item Si el RT baja la TDD a 1.7\pct{} sin cambiar pérdidas, ¿qué restricción
+      está activa off-line?
+\item ¿Se midió con el RT activo? ¿Dónde está la validación experimental del
+      RT?
+\item ¿Cómo funciona el observador y qué parte de los 13~ms le corresponde?
+\item ¿Cómo se evitan los transitorios al re-sembrar en $\varphi$?
+\item ¿Es justo comparar 950~Hz por dispositivo con portadoras de 2850 y
+      4050~Hz?
+\end{enumerate}
 
 %=========================================================================
 \section*{7. Espacio para tus comentarios}

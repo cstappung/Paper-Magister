@@ -208,6 +208,14 @@ Analisis punto a punto (8 puntos, valores de las figuras):
 - Captions de las tres figuras de perdidas acortados a lo esencial (pedido
   del autor, 2026-11-09).
 
+### Esqueleto y revision del hilo (2026-11-09)
+
+- Nuevo `main_plan.tex` (esqueleto de la version de revista, IDs S1..S7,
+  F1..F8, T1..T5, A1).
+- Revision del hilo conductor por un agente revisor: `docs/REVISION_HILO.md`;
+  resumen y esqueleto propuesto en la seccion 6 de `main_plan.tex`. No
+  aplicado al paper: el autor decide.
+
 ### Pendientes
 
 
