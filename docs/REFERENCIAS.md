@@ -1,6 +1,6 @@
 # Referencias
 
-Estado de la bibliografia de `MAIN_FINAL.tex` (antes `main_conf_EN.tex`) (28 entradas, orden de cita).
+Estado de la bibliografia de `MAIN_FINAL.tex` (antes `main_conf_EN.tex`) (29 entradas, orden de cita).
 Los textos completos de los papers no se suben al repo (copyright IEEE); aqui
 solo queda el registro.
 
@@ -87,3 +87,9 @@ Agregada: `perez_basante_hws` (origen del angulo virtual).
 Fuentes de la busqueda: trepo.tuni.fi, researchportal.tuni.fi,
 tobiasgeyer.org, research.tue.nl, ekoizpen-zientifikoa.ehu.eus, dblp,
 orbit.dtu.dk. Verificar volumen y paginas en IEEE Xplore antes de citar.
+
+## 4. Agregadas en resultados (2026-11-09)
+
+| Clave | Referencia | Nota |
+|---|---|---|
+| `hava_gdpwm` | A. M. Hava, R. J. Kerkman, T. A. Lipo, "A high-performance generalized discontinuous PWM algorithm," IEEE TIA, vol. 34, no. 5, pp. 1059-1071, 1998 | Origen de GDPWM (benchmark SV-GDPWM). Verificar en IEEE Xplore; si el autor usa otra referencia para la version SV de tres niveles, reemplazar |

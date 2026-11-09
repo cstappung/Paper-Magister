@@ -163,6 +163,31 @@ renombrando `main_conf_EN.tex` -> `MAIN_FINAL.tex`.
   las cifras (56/40 %, 9.7 W, LUT de 1000 puntos en 8 min) se calcularon con
   d = 17 y hay que verificarlas.
 
+### Resultados de perdidas con las figuras nuevas (2026-11-09)
+
+El autor subio `resumen_3x4_gdpwm` (mapas de perdidas del modelo en el plano
+(I_d, I_q), |I| = 10..20 A: OPP d = 19, PD-PWM 2850 Hz, SV-GDPWM 4050 Hz) y
+`comparacion_opp_{gdpwm,pwm}_sinplecs` (modelo vs. medicion en 8 puntos).
+`.tex` del autor subido tal cual primero (traia la figura gdpwm dos veces y
+ya no usaba `experimental_1x4`).
+- Seccion renombrada "Simulation and Experimental Results".
+- Loss Comparison reescrita: benchmarks PD-PWM (m_f = 57) y SV-GDPWM
+  (m_f = 81, cita nueva `hava_gdpwm`); medias del modelo OPP 6.8 W, PD-PWM
+  10.1 W, SV-GDPWM 10.3 W; reduccion modelo 33.9 % / 36.0 %, medida 8.4 % /
+  33.4 %.
+- `tab:comparacion` nueva: perdidas totales en el punto nominal (I_d = 20 A,
+  I_q = 0), modelo y medicion (12.7/19.6, 17.4/21.7, 17.6/28.8 W).
+- Figuras `fig:comp_gdpwm` y `fig:comp_pwm` con caption, dentro de Loss
+  Comparison; se quitaron las dos copias con "Descripcion de la figura".
+- Abstract (texto y \sug) y conclusiones con las cifras nuevas; se quito
+  "Experimental validation ... future work". Seccion RT: la frase "comparable
+  at the rated point (Table)" ahora cita Fig. perdidas.
+- Pendiente del autor (\upd): por que la reduccion medida vs. PD-PWM (8.4 %)
+  es mucho menor que la del modelo; describir montaje y medicion; confirmar
+  marcadores segmentados (espejo en I_d), mu y triangulo/circulo; Fig. 5 de
+  armonicos aun con DPWM1 6450 Hz y d = 17; frase de PLECS ("sinplecs").
+- Se borraron del repo `figuras/resumen_3x4` y `figuras/experimental_1x4`.
+
 ### Pendientes
 
 
@@ -183,5 +208,5 @@ renombrando `main_conf_EN.tex` -> `MAIN_FINAL.tex`.
       Rahmanpour TIA 2025 (multipolar + limites de red) y Perez-Basante 2019
       (origen del angulo virtual).
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
-  control y su caption, cifras de perdidas con d = 19, Fig. 4, conclusiones,
+  control y su caption, Fig. 5 de armonicos con GDPWM y d = 19, Fig. 4, conclusiones,
   bibliografia, resultados experimentales.
