@@ -111,15 +111,14 @@ subject to the total demand distortion (TDD) limit of the IEEE~519 standard.
 Conduction and switching loss models are derived as a function of the virtual
 angles, so far unavailable for this topology, and the integer level constraint
 is replaced by linear inequalities, yielding a continuous nonlinear problem.
-Simulation results show reductions of the total losses at the nominal operating
-point of 56\pct{} with respect to DPWM1 at 6450~Hz and 40\pct{} with respect to
-PWM at 2850~Hz, with comparable conduction losses and compliance with the
-standard over the entire power range.
+Over the operating range, the loss model predicts mean reductions of the
+total losses of 36\pct{} with respect to SV-GDPWM at 4050~Hz and 34\pct{} with
+respect to PD-PWM at 2850~Hz, and measurements on a 10~kW prototype yield
+33\pct{} and 8\pct{}, respectively.
 \upd{Agregar el refinamiento en linea (SQP de una iteracion GN por
 actualizacion con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
 IEEE~519 con fondo armonico de red y la validacion en tiempo real (plataforma,
-tiempo de ejecucion). Los numeros 56/40\pct{} son con $d=17$ off-line:
-verificar si siguen valiendo con $d=19$ y con el RT-OPP.}
+tiempo de ejecucion).}
 \sug{In grid-connected converters operating at low switching frequency,
 carrier-based modulation degrades the quality of the injected current. This
 paper presents a multipolar optimal pulse pattern (OPP) for a three-level SiC
@@ -131,9 +130,11 @@ constraint is replaced by linear inequalities, which turns the off-line design
 into a continuous nonlinear program. The resulting patterns are stored in a
 lookup table indexed by the modulation index and the load angle, and are
 refined online by a sequential quadratic program that performs one
-Gauss--Newton iteration per update. Simulation results show reductions of the total losses at the
-nominal operating point of 56\pct{} with respect to DPWM1 at 6450~Hz and
-40\pct{} with respect to PWM at 2850~Hz. The online stage restores compliance
+Gauss--Newton iteration per update. Over the operating range, the loss model
+predicts mean reductions of the total losses of 36\pct{} with respect to
+SV-GDPWM at 4050~Hz and 34\pct{} with respect to PD-PWM at 2850~Hz, and
+measurements on a 10~kW prototype yield 33\pct{} and 8\pct{}, respectively.
+The online stage restores compliance
 with the individual harmonic limits within one fundamental period and
 tolerates grid background harmonics of up to 9\pct{} of the fundamental in any
 individual order, \textbf{[executing within XX~$\mu$s per sample on the
@@ -1024,8 +1025,8 @@ weight of the two loss mechanisms. The gradient of a squared residual is
 proportional to the residual itself: the conduction term enters the step
 with $c\,t_i^0$ instead of the factor $c/\pi$ of \eqref{eq:rt_pcond}, and the
 switching term with $e_i^0$, of the order of $E_{on}$, instead of the factor
-$2f_1I_{nom}$ of \eqref{eq:rt_psw}. Although both losses are comparable at
-the rated point (Table~\ref{tab:comparacion}), the switching term is thus
+$2f_1I_{nom}$ of \eqref{eq:rt_psw}. Although switching accounts for a
+significant share of the losses (Fig.~\ref{fig:perdidas}), the switching term is thus
 weighted six to seven orders of magnitude below its actual share, and the
 loss terms act as a regularizer rather than as a loss minimizer. Starting
 from the table, which already minimizes \eqref{eq:rt_pcond} and
@@ -1109,7 +1110,7 @@ the two adjacent cells in $\varphi$. The weights are reset to
 $\theta_{\min}$ at each re-seeding.
 
 % ============================ S7 ========================================
-\section{Simulation Results}
+\section{Simulation and Experimental Results}
 
 Problem \eqref{eq:opp_propuesto} was solved in Julia with the interior-point
 solver Ipopt, in three stages: 1000 randomly generated angle sets were optimized
@@ -1132,8 +1133,9 @@ MATLAB Function block and executed on an OPAL-RT OP4510 with a sample time of
 sample.
 \upd{El parrafo aun describe la LUT de conferencia (1000 indices de $M$,
 $d=17$, 8~min). Actualizar los tiempos de calculo de la LUT $(M,\varphi)$.
-Cambiar el titulo de seccion si hay resultados HIL (``Simulation and
-Real-Time Results'').}
+Las figuras de perdidas nuevas son ``sinplecs'': si el modelo de las
+Figs.~\ref{fig:perdidas}--\ref{fig:comp_pwm} es el analitico de la
+Seccion~\ref{sec:perdidas} y no PLECS, ajustar la frase de PLECS.}
 
 %\subsection{Effect of the Capacitor Current Constraint}
 %\textcolor{green}{Considero capaz eliminar esta seccion del paper, dado que no se hace ningun analisis que lo justifique}
@@ -1208,6 +1210,9 @@ the proposed formulation converts into the loss reduction reported below. The
 spectra at the nominal point (Fig.~\ref{fig:fft_comparacion}(b)) confirm that
 every component of the OPP remains within its bound up to $n = 50$, several of
 them sitting on the limit, with the residual content displaced above that order.
+\upd{Fig.~\ref{fig:fft_comparacion} y este parrafo aun comparan con DPWM1 a
+6450~Hz y $d=17$. Actualizar a SV-GDPWM a 4050~Hz, PD-PWM y $d=19$, como en
+la comparacion de perdidas.}
 
 In real time, the optimizer minimizes the distortion with the losses as a
 secondary term, so it settles below the limit: at $M=0.87$ and
@@ -1223,64 +1228,106 @@ cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
 
 \subsection{Loss Comparison}
 
-Two carrier-based strategies are used as benchmarks: PWM at 2850~Hz and DPWM1 at
-6450~Hz. In both cases $m_f$ was restricted to odd multiples of three, so that
-neither even nor triplen harmonics are generated, and set to the lowest such
-value meeting IEEE~519. The binding requirement for the carriers is not the TDD
-but the individual limits: compliance is reached only once the sideband cluster
-around the carrier is pushed beyond $n = 50$, which requires $m_f = 57$ for PWM
-and $m_f = 129$ for DPWM1, whose sideband spread is wider. The three strategies
-were simulated on the same thermal model and filter, sweeping the output power
-between approximately 1 and 10~kW.
+Two carrier-based strategies are used as benchmarks: phase-disposition PWM
+(PD-PWM) at 2850~Hz and the space-vector generalized discontinuous PWM
+(SV-GDPWM) \cite{hava_gdpwm} at 4050~Hz, which clamps each phase to P or N
+around the peak of its current. In both cases $m_f$ was restricted to odd
+multiples of three, so that neither even nor triplen harmonics are
+generated, and set to the lowest such value meeting IEEE~519, $m_f = 57$
+and $m_f = 81$, respectively. The binding requirement for the carriers is
+not the TDD but the individual limits: compliance is reached only once the
+sideband cluster around the carrier is pushed beyond $n = 50$. The
+comparison covers the operating range in the $(I_d,I_q)$ plane, with
+current amplitudes between 10 and 20~A; the nominal point,
+$P_{out} = 9.8$~kW, corresponds to $I_d = 20$~A and $I_q = 0$.
 
-Fig.~\ref{fig:perdidas}(a) shows that the OPP exhibits the lowest total losses
-over the whole range, with the sole exception of a narrow region around 3.7~kW
-where PWM briefly matches it. At the nominal point, summarized in
-Table~\ref{tab:comparacion}, the total losses fall by 56\pct{} with respect to
-DPWM1 and by 40\pct{} with respect to PWM; against DPWM1 the advantage is
-largest at partial load, reaching 76\pct{} at 1.2~kW. The OPP therefore wins on
-neither mechanism alone but on their balance: it concedes part of the conduction
-advantage of DPWM1 and recovers far more in switching, as the decomposition
-below shows.
+Fig.~\ref{fig:perdidas} shows the losses given by the model over that
+range. They grow with the current amplitude and, for a given amplitude,
+with $I_q$, which changes the modulation index and the load angle. The OPP
+exhibits the lowest total losses at every operating point
+(Fig.~\ref{fig:perdidas}(l)), with a mean value of 6.8~W against 10.1~W for
+PD-PWM and 10.3~W for SV-GDPWM. The gain comes mainly from switching: the
+switching losses of the OPP remain around 3~W over the whole range
+(Fig.~\ref{fig:perdidas}(e)), whereas those of the carriers grow with the
+current and exceed 10~W at full current (Fig.~\ref{fig:perdidas}(f),(g)).
+In conduction the three strategies are closer
+(Fig.~\ref{fig:perdidas}(a)--(c)). The OPP is the lowest over most of the
+range, except in four narrow bands of current angle where SV-GDPWM, clamped
+to P or N around the current peak, conducts through a single device for
+longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PD-PWM is
+never the lowest-loss strategy.
 
-Panels (c) and (d) decompose that result and show where the gain originates. In
-conduction the three strategies are comparable: the OPP dissipates 3\pct{} less
-than PWM and 15\pct{} more than DPWM1, which spends a third of the fundamental
-period clamped to P or N and therefore conducts through a single device instead
-of through $S_2+S_3$ in series (Table~\ref{tab:estados_cond}). The whole gain
-comes from panel (d), where the switching losses of the OPP are less than half
-those of PWM and little more than a quarter of those of DPWM1. Clamping lowers
-DPWM1's switching loss relative to its carrier frequency, but the savings do not
-cover the cost of raising that frequency in the first place.
-\upd{Agregar el RT-OPP a la comparacion (OPP off-line vs.\ RT-OPP vs.\
-PWM/DPWM1). Con $d=19$ la frecuencia por dispositivo sube a 950~Hz: rehacer
-o justificar.}
-
-
-
+Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
+measurements on the 10~kW prototype at eight operating points
+\textbf{[describir el montaje y la medicion de perdidas]}. Against SV-GDPWM,
+the model predicts a mean reduction of 36.0\pct{}, between 27.7 and
+47.7\pct{} at the measured points, and the measurements confirm it: the OPP
+reduces the losses by 33.4\pct{} on average, from 29.3 to 37.7\pct{}, that
+is, 7.1~W. Against PD-PWM, the model predicts a mean reduction of
+33.9\pct{}, whereas the measured one is 8.4\pct{}, from 4.1 to 14.4\pct{},
+that is, 1.4~W. The measured losses exceed the model in every case, 14.2~W
+against 6.8~W on average for the OPP, since the measurement includes losses
+that the model does not consider \textbf{[XX]}. Even so, the OPP remains the
+lowest-loss strategy at every measured point. Table~\ref{tab:comparacion}
+summarizes the nominal point.
+\upd{Explicar por que la reduccion medida frente a PD-PWM (8.4\pct{}) es mucho
+menor que la del modelo (33.9\pct{}), mientras que frente a SV-GDPWM coincide
+(33.4 vs.\ 36.0\pct{}). La medicion supera al modelo en 5.5~W en PD-PWM,
+7.4~W en el OPP y 11.0~W en SV-GDPWM (medias). Confirmar que los marcadores
+con borde segmentado son el espejo de los medidos respecto de $I_d=0$, que
+$\mu$ es la media de cada panel, y que el triangulo y el circulo de
+Fig.~\ref{fig:perdidas} marcan el maximo y el minimo de cada mapa.}
+\upd{Agregar el RT-OPP a la comparacion.}
 
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
-    \caption{Comparison between the proposed OPP, PWM at 2850~Hz and DPWM1 at 6450~Hz as a function of the delivered power: (a) total losses; (b) efficiency; (c) conduction losses; (d) switching losses.}
+    \caption{Losses given by the model over the operating range in the
+    $(I_d,I_q)$ plane, with current amplitudes between 10 and 20~A, for the
+    proposed OPP ($d=19$), PD-PWM at 2850~Hz and SV-GDPWM at 4050~Hz:
+    (a)--(c) conduction, (e)--(g) switching and (i)--(k) total losses;
+    (d), (h), (l) strategy with the lowest loss at each operating point.
+    Triangles and circles mark the maximum and the minimum of each map.}
     \label{fig:perdidas}
     \upd{Agregar curva RT-OPP.}
 \end{figure*}
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
+    \caption{Total losses of SV-GDPWM at 4050~Hz and of the proposed OPP
+    ($d=19$): (a)--(d) loss model and (e)--(h) measurements on the 10~kW
+    prototype. (a), (e) SV-GDPWM; (b), (f) OPP; (c), (g) absolute and (d), (h)
+    relative reduction achieved by the OPP. Dashed markers mirror the measured
+    points about $I_d = 0$, and $\mu$ is the mean value of each panel.}
+    \label{fig:comp_gdpwm}
+\end{figure*}
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
+    \caption{Total losses of PD-PWM at 2850~Hz and of the proposed OPP
+    ($d=19$): (a)--(d) loss model and (e)--(h) measurements on the 10~kW
+    prototype. (a), (e) PD-PWM; (b), (f) OPP; (c), (g) absolute and (d), (h)
+    relative reduction achieved by the OPP. Dashed markers mirror the measured
+    points about $I_d = 0$, and $\mu$ is the mean value of each panel.}
+    \label{fig:comp_pwm}
+\end{figure*}
 \begin{table}[!t]
     \centering
-    \caption{Comparison of the three strategies at the nominal operating point
-    ($P_{out} = 9.8$~kW).}
+    \caption{Total losses at the nominal operating point ($I_d = 20$~A,
+    $I_q = 0$, $P_{out} = 9.8$~kW) and reduction achieved by the OPP.}
     \bgroup
     \def\arraystretch{1.0}
     \setlength{\tabcolsep}{4pt}
-    \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lccccc@{}}
+    \begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccc@{}}
         \toprule
         \rowcolor{Gray}
-        Strategy & $P_{cond}$ [W] & $P_{sw}$ [W] & $P_{tot}$ [W] & $\eta$ [\pct{}] & TDD [\pct{}] \\
+        & \multicolumn{2}{c}{$P_{tot}$ [W]} & \multicolumn{2}{c}{Reduction [\pct{}]} \\
+        \rowcolor{Gray}
+        Strategy & Model & Meas. & Model & Meas. \\
         \midrule
-        OPP   &  9.9 &  9.7 & 19.6 & 99.82 & 5.00 \\
-        PWM   & 10.2 & 22.3 & 32.5 & 99.70 & 0.25 \\
-        DPWM1 &  8.6 & 36.0 & 44.6 & 99.58 & 1.15 \\
+        OPP, $d=19$        & 12.7 & 19.6 & --   & --   \\
+        PD-PWM, 2850~Hz    & 17.4 & 21.7 & 26.8 & 9.7  \\
+        SV-GDPWM, 4050~Hz  & 17.6 & 28.8 & 27.7 & 32.2 \\
         \bottomrule
     \end{tabular*}
     \egroup
@@ -1335,48 +1382,28 @@ both between table entries and under grid background distortion of up to
 model remain within 1\pct{} of those of the off-line pattern.}
 
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
-pattern reduces the total losses at the nominal point by 56\pct{} with respect
-to DPWM1 at 6450~Hz and by 40\pct{} with respect to PWM at 2850~Hz, while
-meeting IEEE~519 over the whole power range. The decomposition shows that the
-gain comes entirely from switching, 9.7~W against 22.3 and 36.0~W, and that the
-conduction penalty remains marginal even though the OPP switches three to seven
-times more slowly. The optimizer drives the current distortion to the regulatory
+pattern exhibits the lowest total losses over the whole operating range while
+meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
+4050~Hz and 34\pct{} with respect to PD-PWM at 2850~Hz according to the loss
+model. The gain comes mainly from switching, and the OPP also conducts less
+over most of the range. Measurements on a 10~kW grid-connected T-Type
+prototype confirm the reduction with respect to SV-GDPWM, 33\pct{} on average,
+whereas with respect to PD-PWM it is smaller, 8\pct{}. The optimizer drives the current distortion to the regulatory
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
-by-product of the carrier frequency rather than a specification. Experimental validation on a 10 kW grid-connected T-Type prototype is the
-immediate future work.
-\upd{``Experimental validation \dots\ future work'': actualizar si la validacion en tiempo real ya forma parte del
-paper.}
-\sug{(Ultima frase:) Experimental validation on a 10~kW
-grid-connected T-Type prototype is the immediate future work
-\textbf{[o, si ya hay HIL: ``The real-time optimizer has been validated in
-hardware-in-the-loop on an OPAL-RT OP4510; experimental validation on a 10~kW
-prototype is the immediate future work.'']}}
-
-
-\begin{figure*}[htbp]
-  \centering
-  \includegraphics[width=1\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
-  \caption{Descripción de la figura}
-  \label{fig:comparacion_opp_gdpwm_sinplecs}
-\end{figure*}
-
-
-
-\begin{figure*}[htbp]
-  \centering
-  \includegraphics[width=1\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
-  \caption{Descripción de la figura}
-  \label{fig:resumen_3x4}
-\end{figure*}
-
+by-product of the carrier frequency rather than a specification.
+\upd{Se quito ``Experimental validation \dots\ is the immediate future work'',
+ya que hay mediciones de perdidas. Si el RT-OPP aun no se valida en el
+prototipo, agregar la frase sugerida.}
+\sug{(Ultima frase:) The experimental validation of the real-time optimizer
+is the immediate future work.}
 
 
 % ----------------------------- Bibliografia -----------------------------
 \upd{Bibliografia: referencias candidatas aun no incluidas (Rahmanpour TIA
 2025, Koukoula TIA 2025, Begh TPEL 2022, entre otras):
 ver \texttt{docs/REFERENCIAS.md}.}
-\begin{thebibliography}{28}
+\begin{thebibliography}{29}
 
 \bibitem{zhang_hpm}
 Z. Zhang, G. Chen, and D. Xu, ``Harmonic programmed modulation for high-power
@@ -1526,6 +1553,11 @@ E. Tsekouras, R. P. Aguilera, and T. Geyer, ``Real-time computation of
 optimized pulse patterns for compensation of estimated grid voltage
 harmonics,'' in \emph{Proc. IEEE Energy Convers. Congr. Expo. (ECCE)}, Oct.
 2024, pp. 4590--4597.
+
+\bibitem{hava_gdpwm}
+A. M. Hava, R. J. Kerkman, and T. A. Lipo, ``A high-performance generalized
+discontinuous PWM algorithm,'' \emph{IEEE Trans. Ind. Appl.}, vol. 34, no. 5,
+pp. 1059--1071, Sep. 1998.
 
 \end{thebibliography}
 
