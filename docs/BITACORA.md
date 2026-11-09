@@ -216,6 +216,23 @@ Analisis punto a punto (8 puntos, valores de las figuras):
   resumen y esqueleto propuesto en la seccion 6 de `main_plan.tex`. No
   aplicado al paper: el autor decide.
 
+### Decisiones del autor sobre la revision del hilo (2026-11-09)
+
+Nueva regla del autor: en `MAIN_FINAL.tex` no se edita texto directo; solo
+comentarios `\upd` (rojo) y sugerencias `\sug` (verde). El autor aplica o
+responde. (Agregada a CLAUDE.md.)
+1. El RT si minimiza perdidas: se mantiene titulo y contribuciones; `\sug` en
+   S5.4 para no decir "regularizer rather than a loss minimizer".
+2. TDD 1.7 % RT vs 5 % off-line: off-line con restricciones duras, RT con
+   pesos en la FO. `\sug` en S4.1, S6.2 y conclusiones ("The off-line
+   optimizer drives ...").
+3. El RT si se valido experimentalmente: quitadas las notas de trabajo futuro
+   en conclusiones y el punto (3) de la nota de S6.3.
+4. Observador de armonicos: `\sug` con corchetes en S4.2.
+- `main_plan.tex`: cada bloque lleva los hallazgos de la revision como
+  comentario rojo + sugerencia verde; bloque propuesto S2* "System
+  Description"; seccion 6.1 con estas decisiones.
+
 ### Pendientes
 
 
