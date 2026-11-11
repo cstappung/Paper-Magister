@@ -453,3 +453,7 @@ responde. (Agregada a CLAUDE.md.)
   quinto); un CHB011M12GM4T por fase. \sug y caption actualizados; queda
   \upd para confirmar que la figura es a 5 kW (deducido de la corriente) y
   el de rotulos en ingles / I_nom.
+- El autor confirma que la figura de compensacion es a 5 kW (se borra el
+  \upd). Pide ocultar los textos en gris: se activa
+  `\renewcommand{\old}[1]{}` en el preambulo (los 10 \old siguen en el
+  .tex; comentar esa linea para volver a verlos).
