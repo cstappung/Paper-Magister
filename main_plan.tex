@@ -87,11 +87,10 @@ Formato            & IEEEtran; hoy con la opción \texttt{conference}
 Revista objetivo   & \pendiente{definir (TPEL / TIE / JESTPE...) y su límite de páginas} \\
 Idioma             & Inglés, estilo IEEE \\
 Estado             & Off-line completo; RT-OPP descrito; mediciones de
-                     pérdidas en el prototipo de 10~kW; los resultados del
-                     RT-OPP (S6.4) quedan para después \\
+                     pérdidas en el prototipo de 10~kW; S6.4 (compensación
+                     de armónicos) con figura y texto sugerido \\
 Secciones          & 7 (S1--S7) \\
-Figuras / tablas   & 9 figuras (F1--F9), 6 tablas (T1--T6), 1 algoritmo (A1);
-                     F9 (foto del montaje) y T6 (equipos) por hacer \\
+Figuras / tablas   & 10 figuras (F1--F10), 6 tablas (T1--T6), 1 algoritmo (A1) \\
 Referencias        & 29, embebidas como \texttt{thebibliography}, orden de cita \\
 \bottomrule
 \end{tabularx}
@@ -154,7 +153,7 @@ S2 & Multipolar Harmonic Formulation   & Convierte el OPP en un NLP continuo; fi
 S3 & Loss Estimation                   & Pérdidas en función de $\gv$ & p\_con, t\_i, pcond\_final, p\_sw & F2, F3, T1, T2\\
 S4 & OPP Implementation Scheme         & Diseño off-line (problema, multi-start, LUT) y lazo de control & opp\_propuesto & T3\\
 S5 & Real-Time Implementation          & Refinamiento en línea (SQP) & rt\_lin \dots\ rt\_theta & A1, T4\\
-S6 & Simulation and Experimental Results & Evidencia & -- & F4--F9, T5, T6\\
+S6 & Simulation and Experimental Results & Evidencia & -- & F4--F10, T5, T6\\
 S7 & Conclusions                       & Cierre: off-line $\rightarrow$ RT $\rightarrow$ medición & -- & --\\
 \bottomrule
 \end{tabularx}}
@@ -179,7 +178,8 @@ F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendie
 F6 & \texttt{fig:perdidas}       & S6.3 & \listo Mapas de pérdidas del modelo en $(I_d,I_q)$: OPP, PD-PWM, SV-GDPWM & 2 col.\\
 F7 & \texttt{fig:comp\_gdpwm}    & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ SV-GDPWM & 2 col.\\
 F8 & \texttt{fig:comp\_pwm}      & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ PD-PWM & 2 col.\\
-F9 & \texttt{fig:setup}          & S6.0 & \pendiente{Una sola foto del montaje; la arma el autor} & 2 col.\\
+F9 & \texttt{fig:setup}          & S6.0 & \listo Montaje: esquema trifásico al centro y equipos a los lados (\texttt{tools/figura\_setup}) & 1 col.\\
+F10 & \texttt{fig:compensacion}  & S6.4 & Compensación de armónicos (5~kW, 8\pct{} de quinto) \pendiente{rótulos en español; rehacer en inglés} & 2 col.\\
 \midrule
 T1 & \texttt{tab:estados\_cond}  & S3.1 & \listo Estados de conducción por pierna & 1 col.\\
 T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\\
@@ -432,10 +432,9 @@ contribuciones y el resumen se habla del prototipo de 10~kW).
 \campo{Contenido} Un párrafo corto: prototipo T-Type SiC de 10~kW, 750~V,
 con el LCL de T3; fuente DC y conexión AC; OPAL-RT OP4510; método y equipo
 de medición de pérdidas.\\
-\campo{Elementos} F9 (una sola foto del montaje), T6 (equipos).\\
-\listo T6 con fuentes ITECH IT6006C-800-25 (2 en paralelo), emulador NHR 9410,
-OPAL-RT OP4510 y Hioki PW6001. \pendiente{Foto (la arma el autor) y confirmar
-$P_{in}-P_{out}$ y dónde se mide $P_{out}$.}
+\campo{Elementos} F9 (montaje), T6 (equipos).\\
+\listo T6 y F9. Pérdidas $P_{in}-P_{out}$ antes del LCL.
+\pendiente{Confirmar un módulo CHB011M12GM4T por fase.}
 
 \bloque{S6.1}{Optimized Angles and Pulse Pattern}
 \campo{Contenido} Patrón multipolar en $M=0.8660$; conmutaciones cerca de
@@ -480,12 +479,15 @@ hasta 14.4/37.7\pct{}.\\
 33/34\pct{}): se ve después. Offset mayor de SV-GDPWM; confirmar que se
 midió con el RT-OPP activo.}
 
-\bloque{S6.4}{(a futuro) Harmonic Compensation}
-\pendiente{La escribe el autor más adelante: ejemplo con red con fondo
-armónico y el ahorro de pérdidas por compensar (aprox.\ 5\pct{}). El barrido
-de $\lambda_\ell$ y la sugerencia de convergencia quedaron comentados (\%) al
-final de los resultados del paper. Convergencia, transitorios y costo por
-muestra no van por ahora.}
+\bloque{S6.4}{Harmonic Compensation}
+\campo{Contenido} Ejemplo a 5~kW con 8\pct{} de quinto en la red:
+compensación activada en $t=0.3$~s, TDD de 29.5\pct{} a 3.9\pct{}, todo bajo
+IEEE~519 hasta $n=50$, y 5\pct{} menos pérdidas (texto en \texttt{\textbackslash
+sug}).\\
+\campo{Elementos} F10.\\
+\pendiente{Rehacer F10 en inglés y con $I_{nom}$; confirmar si es medición
+o HIL y el contenido armónico de la red. El barrido de $\lambda_\ell$ y la
+sugerencia de convergencia siguen comentados (\%).}
 
 %-------------------------------------------------------------------------
 \bloque{S7}{Conclusions}
@@ -510,10 +512,9 @@ pérdidas.\\
 \item \pendiente{Revista objetivo, límite de páginas y clase
       \texttt{journal}; biografías de autores con foto (después).}
 \item \pendiente{Abstract, al final.}
-\item \pendiente{S6.4 resultados RT y figura [X] de S6.2 (a futuro, el autor).}
+\item \pendiente{F10 en inglés; figura [X] de S6.2 (a futuro, el autor).}
 \item \pendiente{S2* System Description (a futuro).}
 \item \pendiente{F5 con los benchmarks y $d$ actuales.}
-\item \pendiente{F9 (foto) y datos de T6 y de la medición.}
 \item \pendiente{Medias frente a reducciones punto a punto; offset mayor de
       SV-GDPWM.}
 \item \pendiente{Bug de signo en \texttt{P\_loss} del código (afecta solo
