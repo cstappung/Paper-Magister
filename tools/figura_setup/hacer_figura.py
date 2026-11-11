@@ -160,13 +160,13 @@ def panel(x, y, w, h, zona=None, grad=False):
         return "#" + "".join(f"{round(p*(1-t)+q*t):02x}" for p, q in zip(a, b))
     cono_c = mezcla(fondo if zona else "#f2f2f2", cono_c, 0.5)
     if not any('id="difuso"' in d for d in defs):
-        defs.append('<filter id="difuso" x="-10%" y="-10%" width="120%" '
-                    'height="120%"><feGaussianBlur stdDeviation="8"/>'
+        defs.append('<filter id="difuso" x="-60%" y="-60%" width="220%" '
+                    'height="220%"><feGaussianBlur stdDeviation="34"/>'
                     '</filter>')
     cid = f"clip{len(defs)}"
     defs.append(f'<clipPath id="{cid}"><rect x="{x}" y="{y}" width="{w}" '
                 f'height="{h}" rx="14"/></clipPath>')
-    m = 12                                   # ancho de la franja de color
+    m = 48                 # el blanco empieza lejos del borde (degradado lento)
     add(f'<g clip-path="url(#{cid})">'
         f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{cono_c}"/>'
         f'<rect x="{x+m}" y="{y+m}" width="{w-2*m}" height="{h-2*m}" '
