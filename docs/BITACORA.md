@@ -299,9 +299,12 @@ responde. (Agregada a CLAUDE.md.)
   convergencia se quita hasta tener datos (comentada al final de resultados,
   junto con el barrido de lambda_l); solo queda pendiente una subseccion RT
   de compensacion de armonicos.
-- Pendientes nuevos: foto del montaje; P_in - P_out y donde se mide P_out;
-  confirmar Julia con f_1 y signo; TDD de PD-PWM/SV-GDPWM al rehacer la
-  Fig. 5; cifra unica de cambio de perdidas en RT; ensayo del 5 %.
+- Pendientes nuevos: foto del montaje; TDD de PD-PWM/SV-GDPWM al rehacer la
+  Fig. 5; cifra unica de cambio de perdidas en RT.
+- Respuestas del autor: las perdidas se miden antes del LCL (no incluyen el
+  filtro); el off-line se describe con el mismo modelo de conmutacion del RT
+  (no hay que revisar Julia); el 5 % de ahorro es al compensar un 8 % de
+  quinto armonico a 5 kW.
 
 ### Pendientes
 
