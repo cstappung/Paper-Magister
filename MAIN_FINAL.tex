@@ -1183,7 +1183,7 @@ la Seccion~\ref{sec:rt}, y la frase de PLECS se quito.}
 \subsection{Experimental Setup}
 \label{subsec:setup}
 
-The experimental setup is shown in Fig.~\textbf{[F9]} and the equipment is
+The experimental setup is shown in Fig.~\ref{fig:setup} and the equipment is
 listed in Table~\ref{tab:equipos}. The 10~kW SiC T-Type prototype is
 supplied by two 6~kW DC sources in parallel and connected to a grid
 emulator through the LCL filter of Table~\ref{tab:parametros}. The
@@ -1191,7 +1191,18 @@ modulation and the real-time optimizer run on the OPAL-RT OP4510. The
 losses are obtained as the difference between the DC input power and the AC
 output power at the converter terminals, before the LCL filter, both
 measured with the power analyzer, so they exclude the filter losses.
-\upd{Pendiente: foto del montaje (Fig.~[F9]).}
+\sug{Agregar al final del parrafo: ``Each phase leg is built with one
+CHB011M12GM4T T-Type module, and the colored areas of Fig.~\ref{fig:setup}
+relate each part of the schematic to the corresponding equipment.''}
+\upd{Confirmar que es un modulo CHB011M12GM4T por fase (la figura resalta
+una pierna y la une a la foto del modulo).}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{figuras/setup/setup.pdf}
+    \caption{Experimental setup.}
+    \label{fig:setup}
+\end{figure}
 
 \begin{table}[!t]
     \centering
@@ -1311,8 +1322,6 @@ a secondary term, so it settles below the limit: \dots}
 \upd{Tolerancia a fondo armonico de red ($\sim$9\pct{} de la fundamental por
 armonico individual): definir el ensayo (barrido por armonico, criterio de
 cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
-
-\textcolor{blue}{Comentario, realmente falta toda una seccion en resultados que muestre un ejemplo de compensacion de armonicos, pero lo dejare pendiente.}
 
 \subsection{Loss Comparison}
 
@@ -1454,8 +1463,42 @@ SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 %    \label{fig:perdidasBarra}
 %\end{figure}
 
-\upd{Pendiente (autor): subseccion de resultados RT con red con fondo
-armonico, un ejemplo de compensacion de armonicos.}
+\subsection{Harmonic Compensation}
+\label{subsec:compensacion}
+
+\sug{Fig.~\ref{fig:compensacion} shows the RT-OPP at 5~kW with a fifth
+harmonic of 8\pct{} in the grid voltage. Until $t = 0.3$~s the compensation
+is disabled, and the grid harmonics drive harmonic currents through the LCL
+filter: the TDD is 29.5\pct{}, with fifth and seventh components of
+25.3\pct{} and 14.2\pct{}. When the compensation is enabled, the optimizer
+takes the grid harmonics estimated by the observer of
+Section~\ref{sec:implementacion} and reshapes the pattern so that the
+converter voltage cancels them. After about one fundamental period the
+current becomes nearly sinusoidal, the TDD falls to 3.9\pct{} and every
+component up to $n = 50$ is within its IEEE~519 limit; the components above
+$n = 50$, outside the scope of the standard, are not affected. Since the
+converter no longer carries the harmonic currents, the losses decrease by
+5\pct{}.}
+\upd{Figura con rotulos en espanol: rehacerla en ingles (Voltage [V],
+Current [A], Time [s], Compensation enabled, Harmonic order $n$, Magnitude
+[\% of $I_{nom}$], Uncompensated, Compensated, IEEE~519 limit). El eje usa
+$I_L$; en el paper la TDD se define con $I_{nom}$. Mandar el PDF original
+si existe (ahora va el PNG).}
+\upd{Confirmar: (1) si es medicion en el prototipo o HIL; (2) contenido
+armonico de la red en el ensayo (solo 8\pct{} de quinto, o tambien
+septimo); (3) que el 5\pct{} de ahorro de perdidas es de este mismo
+ensayo, y el motivo (menor corriente armonica en los dispositivos).}
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=\textwidth]{figuras/compensacion_armonicos/compensacion_armonicos.png}
+    \caption{Harmonic compensation with the RT-OPP at 5~kW and a fifth
+    harmonic of 8\pct{} in the grid voltage. Top: grid voltage, grid
+    current and converter voltage, with the compensation enabled at
+    $t = 0.3$~s. Bottom: grid current spectrum without and with
+    compensation.}
+    \label{fig:compensacion}
+\end{figure*}
 % Guardado para esa subseccion (no se compila):
 % - Barrido de lambda_l, sacado de Local Quadratic Problem: "Fig.~[X] sweeps
 %   $\lambda_\ell$ at $M=0.87$ and $\varphi=-15^\circ$: the steady-state TDD
@@ -1493,8 +1536,8 @@ fundamental period, both between table entries and under grid background
 distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the losses by
 5\pct{}.
-\upd{Esta cifra debe aparecer tambien en la subseccion de compensacion de
-armonicos (pendiente).}
+\upd{Esta cifra va tambien en la \sug{} de la
+Seccion~\ref{subsec:compensacion}; mantenerlas iguales.}
 
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while

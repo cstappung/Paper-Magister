@@ -426,3 +426,24 @@ responde. (Agregada a CLAUDE.md.)
   derecho al LCL, saltando sobre las filas de las otras piernas.
 - Rotulos S1..S4 y O de vuelta (pierna a). Esquema de nuevo 400 px de
   ancho util (figura 1170x1270), columnas de fotos de 330 px.
+
+### 2026-11-11 - Figuras del montaje y de compensacion en el paper
+
+- `MAIN_FINAL.tex`, Experimental Setup: figura `fig:setup`
+  (`figuras/setup/setup.pdf`, una columna, caption "Experimental setup."),
+  el [F9] del texto pasa a `\ref{fig:setup}` y se borra el \upd de la foto.
+  \sug con una frase sobre el modulo por fase y las zonas de color; \upd para
+  confirmar un CHB011M12GM4T por fase.
+- Nueva `\subsection{Harmonic Compensation}` (`subsec:compensacion`) antes
+  de Conclusions, con la figura `fig:compensacion` (doble columna,
+  `figuras/compensacion_armonicos/compensacion_armonicos.png`, convertida
+  del webp que mando el autor) y el parrafo en \sug: 5 kW, 8 % de quinto,
+  compensacion en t = 0.3 s, TDD 29.5 % -> 3.9 %, quinto 25.3 % y septimo
+  14.2 % antes, todo bajo IEEE 519 hasta n = 50, 5 % menos perdidas.
+- \upd: la figura tiene rotulos en espanol y el eje usa I_L (en el paper es
+  I_nom); pedir el PDF original. Confirmar medicion o HIL, contenido de la
+  red y que el 5 % es del mismo ensayo.
+- Se borro el comentario azul de Harmonic Compliance ("falta toda una
+  seccion... compensacion de armonicos") y el \upd "Pendiente (autor)" que
+  ocupaba ese lugar.
+- `main_plan.tex`: F9 lista (1 col.), F10 nueva, S6.4 con contenido.
