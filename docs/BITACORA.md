@@ -328,3 +328,10 @@ responde. (Agregada a CLAUDE.md.)
 - Pendientes del autor (no tocar sin que lo pida): abstract, figura de
   control y su caption, Fig. 5 de armonicos con GDPWM y d = 19, Fig. 4, conclusiones,
   bibliografia, resultados experimentales.
+
+- Figura del montaje (2026-11-11, borrador 1): generador en
+  `tools/figura_setup/` (`hacer_figura.py` arma el SVG con las fotos
+  embebidas y `render.js` lo pasa a PNG/PDF con Chromium). Fotos del autor en
+  `tools/figura_setup/fotos/` (y el ejemplo de referencia). Salida en
+  `figuras/setup/`. Aun no se incluye en `MAIN_FINAL.tex`: se itera con el
+  autor.
