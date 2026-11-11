@@ -94,6 +94,8 @@ Referencias        & 29, embebidas como \texttt{thebibliography}, orden de cita 
 \bottomrule
 \end{tabularx}
 
+\textcolor{blue}{Comentario: Todo esto del formato revista journal lo vere despues, ahora me interesa mas que nada el contenido.}
+
 %=========================================================================
 \section*{1. Hilo argumental}
 
@@ -140,6 +142,8 @@ red distorsionada; el RT-OPP lo refina en línea minimizando distorsión y
 pérdidas, con los límites como pesos adaptativos, y recupera el cumplimiento
 con costo acotado por muestra.''}
 
+\textcolor{blue}{Comentario: OK cambialo.}
+
 %=========================================================================
 \section*{2. Mapa de secciones}
 
@@ -173,19 +177,19 @@ S3.1.}
 F1 & \texttt{fig:ttype}          & tras S1 & \listo Topología T-Type y estados P/O/N & 2 col.\\
 F2 & \texttt{fig:patron\_opp}    & S3.1 & \listo Patrón multipolar $d=5$, pares $(\gamma_i,\gamma_{i+d})$ & 1 col.\\
 F3 & \texttt{fig:control}        & S3.2 & \listo Esquema de control v4 (rediseño del autor) & 2 col.\\
-F4 & \texttt{fig:patron\_pulsos} & S6.1 & Ángulos vs.\ $M$ y patrón \pendiente{verificar $d=19$; dependencia en $\varphi$} & 2 col.\\
-F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendiente{aún DPWM1 6450~Hz y $d=17$} & 2 col.\\
+F4 & \texttt{fig:patron\_pulsos} & S6.1 & Ángulos vs.\ $M$ y patrón \pendiente{verificar $d=19$; dependencia en $\varphi$} \textcolor{blue}{Comentario: No actaulizare esta figura, ya es D19, pero la depencia de phi dire que simplemente tiene discontinuidades} & 2 col.\\
+F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendiente{aún DPWM1 6450~Hz y $d=17$}\textcolor{blue}{Comentario: Sigue pendiente} & 2 col.\\
 F6 & \texttt{fig:perdidas}       & S6.3 & \listo Mapas de pérdidas del modelo en $(I_d,I_q)$: OPP, PD-PWM, SV-GDPWM & 2 col.\\
 F7 & \texttt{fig:comp\_gdpwm}    & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ SV-GDPWM & 2 col.\\
 F8 & \texttt{fig:comp\_pwm}      & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ PD-PWM & 2 col.\\
-F9 & \texttt{fig:setup}         & S6.0 & \pendiente{Foto del banco con los equipos numerados + diagrama de conexiones y puntos de medición} & 2 col.\\
+F9 & \texttt{fig:setup}         & S6.0 & \pendiente{Foto del banco con los equipos numerados + diagrama de conexiones y puntos de medición} \textcolor{blue}{Comentario: Sigue pendiente} & 2 col.\\
 \midrule
 T1 & \texttt{tab:estados\_cond}  & S3.1 & \listo Estados de conducción por pierna & 1 col.\\
 T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\\
 T3 & \texttt{tab:parametros}     & S4.1 & \listo Parámetros del sistema ($d=19$, 950~Hz) & 1 col.\\
 T4 & \texttt{tab:rt\_param}      & S5 & \listo Parámetros del RT-OPP & 1 col.\\
 T5 & \texttt{tab:comparacion}    & S6.3 & \listo Pérdidas totales en el punto nominal, modelo y medición & 1 col.\\
-T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos: fuente DC, red/emulador, OPAL-RT, analizador de potencia, sondas, osciloscopio} & 1 col.\\
+T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos: fuente DC, red/emulador, OPAL-RT, analizador de potencia, sondas, osciloscopio}\textcolor{blue}{COmentario: Si deberiamos agregar esta tabla, luego cunado pasemos esto al paper me pides la info para que la pongamos en la tabla} & 1 col.\\
 \midrule
 A1 & \texttt{alg:rtopp}          & S5 & \listo Refinamiento RT del OPP & 1 col.\\
 \bottomrule
@@ -207,6 +211,7 @@ lineal $\rightarrow$ reducciones medias de 36/34\pct{} (modelo) y 33/8\pct{}
 (medido, hasta 14\pct{}) frente a SV-GDPWM y PD-PWM.\\
 \pendiente{El texto principal aún no menciona el RT-OPP; hay una \texttt{\textbackslash sug}
 completa. El autor lo revisa al final.}
+\textcolor{blue}{Comentario: si esto lo dejo al final, para no rescribirlo tantas veces.}
 
 \bloque{S1}{Introduction}
 \campo{Rol} Instalar el problema, ubicar las dos brechas y declarar el aporte.\\
@@ -241,6 +246,9 @@ constraint remains an integer one that must be reconstructed at every solver
 iteration \texttt{\textbackslash cite\{koukoula\_junction\}}.'' (c) ``whose Hessian is positive
 definite for a proximal weight above a bound given by the loss weight''.}
 
+\textcolor{blue}{Comentario: (a) Ok tines razon aqui, hay que inverilas. (b) no entiendo esto, mi aporte es que ahora ya no hay variables enteras que antes si, asi que no veo el problema. (c) en este caso asumiremos que si}
+
+
 \bloque{S2*}{(nueva, propuesta) System Description}
 \upd{La revisión propone juntar en una sección propia todo lo que define el
 sistema y que hoy está repartido: topología (párrafo 2 de S1 y F1), estados
@@ -254,6 +262,8 @@ $dq$ $\rightarrow$ $M,\delta$; $\varphi$ desde $P^\star,Q^\star$; observador de
 armónicos; LUT $\rightarrow$ RT-OPP $\rightarrow$ generador (F3). Cierre:
 ``These elements define the quantities ($g_n$, $\varphi$, $I$) on which the
 pattern design depends.'' La motivación de T-Type + SiC sigue en S1.}
+
+\textcolor{blue}{COmentario: me gusta tu idea, pero lo dejaremos para el futuro, ahora no quiero estos cambios tan estructurales. pero lo tendre pendiente}
 
 \bloque{S2}{Multipolar Harmonic Formulation}
 \campo{Rol} Convertir el OPP en un problema continuo y sin enteros.
@@ -277,6 +287,7 @@ $-1\le u_i\le 1$; separación mínima $\epsilon_{sep}$ en tiempo real.\\
 aparece en S5.5 ni en T4 (el RT usa barrera y $\tau_B$).}
 \sug{Mover la frase de $\epsilon_{sep}$ a S5.5 (párrafo de ángulos) y
 agregarla a T4, o borrarla.}
+\textcolor{blue}{Comentario: la esep es algo que tuve que aplicar para evitar los saltos de -1 a 1 y viceversa, seria bueno explicar que este minemo evita esos saltos no deseados.}
 
 \bloque{S3}{Loss Estimation}
 \campo{Rol} Escribir las pérdidas como funciones cerradas y diferenciables
@@ -298,6 +309,8 @@ estará presentada. (b) Un solo símbolo de amplitud de corriente, definido en
 S2* o T3, y una frase en S4.1 que diga qué corriente usa cada punto
 $(M,\varphi)$ de la tabla.}
 
+\textcolor{blue}{Comentario: en $\varphi$ es simplemente el desfase de la corriente del conversor con respecto a la fundamental, asi que no la llamaria load angle. (b) Ok pongamoele $I_{cond}$ }
+
 \bloque{S3.2}{Switching Losses}
 \campo{Contenido} Tensión conmutada $V_{dc}/2$; ZVS por dirección de la
 corriente; un encendido por $\gamma_i$ y un apagado por $\gamma_{i+d}$.\\
@@ -307,6 +320,7 @@ corriente; un encendido por $\gamma_i$ y un apagado por $\gamma_{i+d}$.\\
 \upd{F3 (esquema de control) está anclada aquí pero pertenece a S4.2 o a
 S2*.}
 \sug{Mover el bloque \texttt{figure*} de F3 a S2* (o al inicio de S4.2).}
+\textcolor{blue}{Comentario: esta aqui porque se ve mejor ene l paper, no te preocupes de eso}
 
 \bloque{S3.3}{LCL Filter}
 \campo{Contenido} Resonancia en el armónico 21; 19 y 23 los más
@@ -317,6 +331,7 @@ restrictivos; $L_1=L_2$ y $C$ mínimo.\\
 adelante), el cálculo de $\varphi$ y $\mathbf{Q}$ (S5.2). También cita
 \texttt{Section\textasciitilde\textbackslash ref\{sec:rt\}} hacia adelante.}
 \sug{Mover S3.3 completo a S2*.}
+\textcolor{blue}{OK Movamoslo}
 
 \bloque{S4}{OPP Implementation Scheme}
 \campo{Rol} Juntar los modelos en el problema off-line y mostrar cómo se usa
@@ -342,6 +357,8 @@ que sigue a la ecuación. (b) Traer a S4.1 el procedimiento multi-start y la
 construcción de la LUT $(M,\varphi)$; título posible ``Off-Line Pattern
 Design''. (c) Aplicar la \texttt{\textbackslash sug} de S4.1 del paper.}
 
+\textcolor{blue}{Comentario: creo que aqui tienes la razon en todos los puntos, apliquemoslo}
+
 \bloque{S4.2}{Control and Pattern Generation}
 \campo{Contenido} LUT $\gv(M,\varphi)$; lazo $dq$ $\rightarrow$ $M$ y
 $\delta$; $\varphi$ desde $P^\star,Q^\star$ sin mediciones; observador de
@@ -365,6 +382,8 @@ converter, $M$ is set mostly by the grid voltage, whereas $\varphi$ spans the
 whole circle with $P^\star$ and $Q^\star$; the table is therefore dense in
 $\varphi$ and narrow in $M$.''}
 
+\textcolor{blue}{Comentarios: (a) aplicar, (b) simplemente no se maneja el transitorio en varphi, simplemente hay que mensionar al aplicarse los cambios pocas veces, no afectan al lazo de control (c) aplicar (d) Es porque son los M cerca del punto de operacion. los otros M en realidad no se usan (se ppodrian guardar pero para esta aplicacion no fue necesario)}
+
 \bloque{S5}{Real-Time Implementation}
 \campo{Rol} Refinar el patrón en línea con costo acotado por muestra.\\
 \campo{Contenido} Por qué refinar (entre puntos de la tabla, red
@@ -376,6 +395,10 @@ restricciones como pesos adaptativos; la LUT da semilla y re-siembras.\\
 la implementación. ``OF'' se usa antes de definirse.}
 \sug{Mover la frase de la plataforma y $T_s$ al párrafo inicial de S5;
 escribir ``objective function (OF)'' en su primer uso.}
+
+
+\textcolor{blue}{Comentraio: aplicar}
+
 
 \bloque{S5.1}{Linearized Harmonic Model}
 \campo{Contenido} $\mathbf{x}$ con los armónicos de $\mathcal{N}$; Jacobiano
@@ -399,6 +422,10 @@ con pesos adaptativos; término de rizado 53--97.\\
 \sug{``\dots\ are reused with three adjustments: \dots''; una frase por
 ajuste.}
 
+\textcolor{blue}{Creo que aqui lo mejor seria ajustar los de S3 para que calncen bien}
+
+
+
 \bloque{S5.4}{Local Quadratic Problem}
 \campo{Contenido} Función objetivo cuadrática; ecuaciones normales;
 $\mathbf{W}$ definida positiva si $\lambda_u>2\lambda_\ell c$; los residuos
@@ -419,6 +446,8 @@ y dejar aquí solo el criterio para elegir $\lambda_\ell$. (c) Quitar la cita
 a F6 o reemplazarla por la tabla de parámetros. (d) Unificar en una sola
 cifra.}
 
+\textcolor{blue}{Comentario: creo que tienes razón en todos los puntos aqui,}
+
 \bloque{S5.5}{Constraint Handling}
 \campo{Contenido} Límites IEEE~519 y TDD como pesos con integrador
 logarítmico (lectura KKT); fundamental como igualdad + trim de Newton;
@@ -427,6 +456,8 @@ barrera logarítmica sobre el poliedro de ángulos; re-siembras.\\
 
 \upd{Falta el transitorio al re-sembrar en $\varphi$ (ver S4.2).}
 \sug{Una frase al final del párrafo de re-siembras.}
+\textcolor{blue}{Comentario: Diremos que los transitorios solo se dan al cambiar de punto de operacion y no afectan al control}
+
 
 \bloque{S6}{Simulation and Experimental Results}
 \campo{Rol} Mostrar que el diseño cumple y que la ganancia es real.\\
@@ -442,6 +473,7 @@ de tres formas: potencia (F5), plano $(I_d,I_q)$ (F6--F8) y $M$ (F4).}
 \sug{(a) Mover el método a S4.1/S5. (b) Ver el bloque nuevo S6.0. (c) Una frase que
 relacione $|I|$, $P$ y $M$ (p.ej.\ el punto nominal $I_d=20$~A $\Leftrightarrow$
 9.8~kW).}
+\textcolor{blue}{(a) Aplicar. (b) aplicar (c) me gusta sobre todo en funcion id iq, pero igual hay que mencionr que id 20 iq 0 es 9,8 kW. aprox 20 kW}
 
 \bloque{S6.0}{(nueva, propuesta) Experimental Setup}
 \campo{Rol} Decir con qué se obtuvo cada resultado y por qué la medición de
@@ -476,6 +508,8 @@ losses are obtained as [the difference between the DC input power and the AC
 output power] measured by [power analyzer], whose accuracy of [XX] amounts to
 [XX]~W at the nominal point.''}
 
+\textcolor{blue}{Comentario: me gustaria que seta seccion sea breve mas una unica foto del setup, intentare armarla de tal manera que se entienda el setup.}
+
 \bloque{S6.1}{Optimized Angles and Pulse Pattern}
 \campo{Contenido} Patrón multipolar en $M=0.8660$; conmutaciones cerca de
 los cruces por cero; trayectorias continuas en $M$.\\
@@ -496,6 +530,7 @@ llama ``table point''.}
 \sug{(a) Aplicar la \texttt{\textbackslash sug} de S6.2 del paper. (b) Verificar
 la grilla y usar un nodo real (p.ej.\ $M=0.8756$) o no llamarlo ``table
 point''. Separar en dos subsecciones: cumplimiento off-line y resultados RT.}
+\textcolor{blue}{COmentario: es que los pasos son de 0.001 , pero justo agregue el puinto extra 0.835, por eso parece saltase e 0.87 pero no lo hace}
 
 \bloque{S6.3}{Loss Comparison}
 \campo{Contenido} Benchmarks PD-PWM 2850~Hz y SV-GDPWM 4050~Hz (mínimo $m_f$
@@ -517,6 +552,8 @@ rizado residual explica parte de la brecha medida. (c) Una frase con la
 frecuencia de conmutación promedio por dispositivo de cada benchmark. Llevar
 S6.3 al final de S6, después de los resultados RT.}
 
+\textcolor{blue}{Comentario: (a) Da igual, eso lo veremos despues (b) el optmizador offline no tiene ninguna restriccion de risado, solo en el RT se optmiza hasta armonicos mas altos para que el risado no crezca con el timepo. (c) en realidad el equivalente es 950 * 2, asi que es 1900 hz (la frecuencia de 2850 y 4050 son las carriers no la frecuecnia que conmutan los transistores), y la comparacion es justa porque son los minimos que cumplen dcon la normatica IEEE 519}
+
 \bloque{S6.4}{(propuesta) Convergence of the Real-Time Optimizer}
 \campo{Contenido} Hoy es una \texttt{\textbackslash sug}: convergencia desde
 la semilla, punto entre celdas, red distorsionada, semilla perturbada.\\
@@ -528,6 +565,8 @@ $M$ y $\varphi$ y costo por muestra.}
 distorsionada (desde S6.2), convergencia, transitorios ante escalones de $M$ y
 $\varphi$, costo por muestra.}
 
+
+\textcolor{blue}{COmentario: si pero esta secion la hare en un futuro como comente antes.}
 \bloque{S7}{Conclusions}
 \campo{Contenido} Formulación continua y modelos de pérdidas; cifras de la
 comparación (modelo y medición); el margen de distorsión convertido en
@@ -542,6 +581,7 @@ validó; ya no va como trabajo futuro (notas quitadas del paper).}
 \sug{(a) ``The off-line optimizer drives \dots''. (b) Actualizar con la LUT
 $(M,\varphi)$ y $d=19$. Orden del cierre: off-line $\rightarrow$ RT
 $\rightarrow$ medición, igual que el cuerpo.}
+\textcolor{blue}{Comentario; Ok aplicar}
 
 %=========================================================================
 \section*{5. Decisiones abiertas}
