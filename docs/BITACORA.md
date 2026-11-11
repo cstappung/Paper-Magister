@@ -403,3 +403,14 @@ responde. (Agregada a CLAUDE.md.)
   del cono), franja de 12 px y difuminado de 8 px: mas blanco al centro.
 - Borrador 10: degradado lento (blanco desde 48 px del borde y difuminado
   de 34 px), el blanco solo se ve al centro.
+
+### 2026-11-11 - Figura del montaje, borrador 11
+
+- Pedido del autor: fases rectas como el ejemplo y puntos medios a tierra
+  para tener menos cables.
+- Conversor redibujado: piernas en columnas (riel P arriba, riel N abajo),
+  rama del punto medio (S2, S3 en antiserie) a su propio simbolo de tierra,
+  enlace DC con punto medio a tierra, salidas a, b, c rectas hasta el LCL
+  (saltos solo sobre el riel N). Se quito el bus O y los rotulos S1..S4/O.
+- Esquema mas ancho (figura 1180x1270), columnas de fotos de 300 px.
+- C_f hacia la izquierda; P_in en la bajada de P; P_out en las tres fases.
