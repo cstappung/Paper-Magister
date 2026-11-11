@@ -399,3 +399,5 @@ responde. (Agregada a CLAUDE.md.)
 - Degradado con la forma del recuadro (no circular): fondo del color del
   bloque y encima un rectangulo blanco difuminado (feGaussianBlur),
   recortado al recuadro. Las esquinas ya no quedan mas oscuras.
+- Borrador 9: borde mas suave (color a mitad entre el relleno claro y el
+  del cono), franja de 12 px y difuminado de 8 px: mas blanco al centro.
