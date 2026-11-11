@@ -225,7 +225,8 @@ lineal $\rightarrow$ reducciones medias de 36/34\pct{} (modelo) y 33/8\pct{}
 \item Contribuciones (4), en el orden del cuerpo: formulación con
       restricción lineal de nivel (sin variables enteras); modelo de
       pérdidas; RT-OPP con una iteración GN y Hessiano definido positivo;
-      validación experimental.
+      validación experimental en el prototipo de 10~kW (potencia
+      redondeada; en resultados, 9.8~kW).
 \end{itemize}
 \campo{Elementos} F1 (anclada aquí).\\
 \campo{Cambios}
@@ -272,11 +273,8 @@ prevents direct transitions between the levels $-1$ and $1$.''}
 restrictivos; $L_1=L_2$ y $C$ mínimo; de aquí sale $g_n$.\\
 \campo{Elementos} \texttt{eq:fres}.\\
 \campo{Cambios} Sacar el LCL de ``Loss Estimation'' (no es una pérdida) y
-borrar la referencia hacia adelante a \texttt{sec:rt}.
-\upd{Destino propuesto: al final de S2, porque $g_n$ entra en
-\texttt{eq:tdd}. Así S2.2 cita a S2.4 dentro de la misma sección. Si
-prefieres evitar también esa referencia, va como S2.2 y el ángulo virtual
-pasa a S2.3.}
+borrar la referencia hacia adelante a \texttt{sec:rt}. Va al final de S2
+(decisión del autor); S2.2 cita a S2.4 para $g_n$.
 
 %-------------------------------------------------------------------------
 \bloque{S3}{Loss Estimation}
@@ -421,9 +419,8 @@ loop.''}
 $(I_d,I_q)$, con el punto nominal $I_d=20$~A, $I_q=0$ $\Leftrightarrow$
 9.8~kW.\\
 \campo{Cambios} Sacar el método (multi-start, LUT, OPAL-RT) a S4.1 y S5;
-agregar la equivalencia del punto nominal.
-\upd{En tu comentario escribiste ``9,8 kW. aprox 20 kW''. Dejé 9.8~kW
-(lo que dice el paper); confirma si el ``20'' era otra cosa.}
+agregar la equivalencia del punto nominal (9.8~kW, sin redondear; en las
+contribuciones y el resumen se habla del prototipo de 10~kW).
 
 \bloque{S6.0}{(nueva) Experimental Setup}
 \campo{Rol} Decir con qué se midió, breve.\\
@@ -511,8 +508,6 @@ pérdidas.\\
 \item \pendiente{S2* System Description (a futuro).}
 \item \pendiente{F5 con los benchmarks y $d$ actuales.}
 \item \pendiente{F9 (foto) y datos de T6 y de la medición.}
-\item \pendiente{Destino del LCL (S2.4 o S2.2) y la cifra del 20~kW
-      (comentarios rojos de S2.4 y S6).}
 \item \pendiente{Medias frente a reducciones punto a punto; offset mayor de
       SV-GDPWM.}
 \item \pendiente{Bug de signo en \texttt{P\_loss} del código (afecta solo
@@ -545,7 +540,7 @@ pérdidas.\\
 \toprule
 \textbf{Qué} & \textbf{De $\rightarrow$ a}\\
 \midrule
-LCL                          & S3.3 $\rightarrow$ S2.4 (por confirmar) \\
+LCL                          & S3.3 $\rightarrow$ S2.4 \\
 Multi-start y LUT            & párrafo inicial de S6 $\rightarrow$ S4.1, que pasa a
                                llamarse ``Off-Line Pattern Design'' \\
 Plataforma y $T_s$           & párrafo inicial de S6 $\rightarrow$ párrafo inicial de S5 \\

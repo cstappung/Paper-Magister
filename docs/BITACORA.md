@@ -253,8 +253,9 @@ responde. (Agregada a CLAUDE.md.)
   punto de tabla (paso 0.001 + punto extra 0.835); el OPP equivale a
   1900 Hz y 2850/4050 Hz son portadoras, cada una la minima que cumple
   IEEE 519; el off-line no restringe el rizado, solo el RT (53-97).
-  Por confirmar: destino del LCL y el "aprox 20 kW" del comentario de S6
-  (el paper dice 9.8 kW).
+  Confirmado despues: LCL en S2.4 (al final de S2); punto nominal 9.8 kW
+  sin redondear en resultados, 10 kW en contribuciones y resumen (el paper
+  ya lo cumple).
 
 ### Pendientes
 
