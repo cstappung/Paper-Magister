@@ -387,3 +387,9 @@ responde. (Agregada a CLAUDE.md.)
 - Espacio entre el recuadro del LCL y el de la red.
 - P_out marcado en las tres fases a la entrada del LCL; rotulos a, b, c
   sobre el codo de cada fase.
+
+### 2026-11-11 - Figura del montaje, borrador 7
+
+- Recuadros de las fotos con degradado radial: blanco al centro y el color
+  del bloque mas fuerte en los bordes (gris para PW6001 y OP4510).
+- Figura 40 px mas alta (1150x1270) para separar mas el LCL de la red.
