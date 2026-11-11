@@ -24,7 +24,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 FOTOS = os.path.join(AQUI, "fotos")
 SALIDA = os.path.join(AQUI, "..", "..", "figuras", "setup")
 
-W, H = 1150, 1230
+W, H = 1150, 1270
 FUENTE = "'Times New Roman', 'Liberation Serif', serif"
 TXT = 30
 GRIS = "#efefef"
@@ -137,15 +137,31 @@ def imagen(b64, x, y, w, h, png=True, rx=0):
         f'width="{w}" height="{h}" preserveAspectRatio="none"{clip}/>')
 
 
-def panel(x, y, w, h, zona=None):
+def degradado(zona):
+    """Degradado radial: blanco al centro y color mas fuerte en los bordes,
+    para que resalte el equipo. Devuelve la url del gradiente."""
+    gid = f"grad_{zona or 'gris'}"
+    if not any(f'id="{gid}"' in d for d in defs):
+        borde = COLORES[zona][2] if zona else "#cfcfcf"
+        defs.append(f'<radialGradient id="{gid}" cx="50%" cy="55%" r="72%">'
+                    f'<stop offset="0" stop-color="#fff"/>'
+                    f'<stop offset="0.45" stop-color="#fff"/>'
+                    f'<stop offset="1" stop-color="{borde}"/>'
+                    f'</radialGradient>')
+    return f"url(#{gid})"
+
+
+def panel(x, y, w, h, zona=None, grad=False):
     """Recuadro gris, o con el color de la zona si es la foto de un bloque
-    del esquema."""
+    del esquema. Con grad=True el relleno es un degradado hacia el borde."""
     if zona:
         borde, fondo, _ = COLORES[zona]
         est = (f'stroke="{borde}" stroke-width="3.4" '
                f'stroke-dasharray="10 6"')
     else:
         fondo, est = GRIS, f'stroke="{BORDE}" stroke-width="1.6"'
+    if grad:
+        fondo = degradado(zona)
     add(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" '
         f'fill="{fondo}" {est}/>')
 
@@ -185,7 +201,7 @@ def recuadro_equipo(x, y, w, titulo, equipos, gap=10, ancho=None,
     wi = ancho or w - 2 * pad
     imgs = [recorte(c, wi) for c in equipos]
     h = ht + sum(a for _, a in imgs) + gap * (len(imgs) - 1) + pad
-    panel(x, y, w, h, zona=zona)
+    panel(x, y, w, h, zona=zona, grad=True)
     texto(x + w / 2, y + 31, titulo)
     yy = y + ht
     for (b64, a), c in zip(imgs, equipos):
@@ -328,7 +344,7 @@ UCAP = 195
 UD = [800, 775, 750]                     # bajadas al LCL (a, b, c)
 VR = [95, 195, 295]                      # columnas del LCL (a, b, c)
 UL1, UC, UL2 = (835, 890), [915, 940, 965], (990, 1040)
-UG, USTAR = 1100, 1145
+UG, USTAR = 1140, 1185
 VSTAR = 352
 
 # fuentes DC en paralelo y enlace DC
@@ -429,7 +445,7 @@ CAJAS = {
     "conv":  (180, VT[0] - 12, 720, vN + 22),
     "pierna": (US[2] - 127, vP - 22, US[2] + 51, vN + 8),
     "lcl":   (815, VR[0] - 34, 1058, VSTAR + 16),
-    "red":   (1072, VR[0] - 34, 1165, VR[2] + 34),
+    "red":   (1112, VR[0] - 34, 1205, VR[2] + 34),
 }
 for nombre, c in CAJAS.items():
     caja_zona(nombre, *c)
@@ -444,7 +460,7 @@ def caja_xy(nombre):
 
 # recuadro gris del esquema (al centro)
 SX0, SY0 = X0 - 20, 20
-SX1, SY1 = X0 + 380, Y0 + 1185
+SX1, SY1 = X0 + 380, Y0 + 1225
 panel(SX0, SY0, SX1 - SX0, SY1 - SY0)
 conos = len(partes)      # aqui se insertan los conos, bajo el esquema
 add(f'<g transform="matrix(0 1 1 0 {X0} {Y0})">' + "".join(esq_fondo)
@@ -468,7 +484,7 @@ f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
 f_op = recuadro_equipo(XD, f_hi[1] + f_hi[3] + 16, WC, "OP4510", ["opal"])
 f_mo = recuadro_equipo(XD, 470, WC, "CHB011M12GM4T", ["modulo"],
                        ancho=230, zona="pierna")
-f_nh = recuadro_equipo(XD, 950, WC, "NHR9410", ["nhr"], zona="red")
+f_nh = recuadro_equipo(XD, 990, WC, "NHR9410", ["nhr"], zona="red")
 
 
 def cono(caja, foto, lado):
