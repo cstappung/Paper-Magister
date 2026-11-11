@@ -61,6 +61,8 @@
 
 \setlist[itemize]{leftmargin=6mm,itemsep=0.4mm,topsep=0.8mm}
 \setlength{\tabcolsep}{4pt}
+% Columna de ancho fijo con salto de linea (mapa de secciones).
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \title{\textbf{Esqueleto del paper de revista}\\[2mm]
 \large Real-Time Loss-Minimizing Multipolar Optimal Pulse Patterns\\
@@ -86,7 +88,8 @@ Estado             & Off-line completo; RT-OPP descrito; mediciones de
                      del RT-OPP (convergencia, transitorios, red distorsionada,
                      costo) \\
 Secciones          & 7 (S1--S7) \\
-Figuras / tablas   & 8 figuras (F1--F8), 5 tablas (T1--T5), 1 algoritmo (A1) \\
+Figuras / tablas   & 8 figuras (F1--F8), 5 tablas (T1--T5), 1 algoritmo (A1);
+                     propuestas F9 (montaje) y T6 (equipos) \\
 Referencias        & 29, embebidas como \texttt{thebibliography}, orden de cita \\
 \bottomrule
 \end{tabularx}
@@ -140,7 +143,8 @@ con costo acotado por muestra.''}
 %=========================================================================
 \section*{2. Mapa de secciones}
 
-\noindent\begin{tabularx}{\textwidth}{llXll}
+{\small
+\noindent\begin{tabularx}{\textwidth}{@{}lP{3.7cm}XP{3.6cm}P{1.9cm}@{}}
 \toprule
 \textbf{ID} & \textbf{Sección} & \textbf{Rol en el argumento} & \textbf{Ecs.} & \textbf{Fig./Tab.}\\
 \midrule
@@ -149,10 +153,10 @@ S2 & Multipolar Harmonic Formulation   & Convierte el OPP en un NLP continuo & f
 S3 & Loss Estimation                   & Pérdidas en función de $\gv$; filtro & p\_con, t\_i, pcond\_final, p\_sw, fres & F2, F3, T1, T2\\
 S4 & OPP Implementation Scheme         & Problema off-line y lazo de control & opp\_propuesto & T3\\
 S5 & Real-Time Implementation          & Refinamiento en línea (SQP) & rt\_lin \dots\ rt\_theta & A1, T4\\
-S6 & Simulation and Experimental Results & Evidencia & -- & F4--F8, T5\\
+S6 & Simulation and Experimental Results & Evidencia & -- & F4--F9, T5, T6\\
 S7 & Conclusions                       & Cierre y trabajo futuro & -- & --\\
 \bottomrule
-\end{tabularx}
+\end{tabularx}}
 
 \vspace{1mm}
 \nota{La topología (T-Type + SiC) ya no es una sección propia: vive en el
@@ -174,12 +178,14 @@ F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendie
 F6 & \texttt{fig:perdidas}       & S6.3 & \listo Mapas de pérdidas del modelo en $(I_d,I_q)$: OPP, PD-PWM, SV-GDPWM & 2 col.\\
 F7 & \texttt{fig:comp\_gdpwm}    & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ SV-GDPWM & 2 col.\\
 F8 & \texttt{fig:comp\_pwm}      & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ PD-PWM & 2 col.\\
+F9 & \texttt{fig:setup}         & S6.0 & \pendiente{Foto del banco con los equipos numerados + diagrama de conexiones y puntos de medición} & 2 col.\\
 \midrule
 T1 & \texttt{tab:estados\_cond}  & S3.1 & \listo Estados de conducción por pierna & 1 col.\\
 T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\\
 T3 & \texttt{tab:parametros}     & S4.1 & \listo Parámetros del sistema ($d=19$, 950~Hz) & 1 col.\\
 T4 & \texttt{tab:rt\_param}      & S5 & \listo Parámetros del RT-OPP & 1 col.\\
 T5 & \texttt{tab:comparacion}    & S6.3 & \listo Pérdidas totales en el punto nominal, modelo y medición & 1 col.\\
+T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos: fuente DC, red/emulador, OPAL-RT, analizador de potencia, sondas, osciloscopio} & 1 col.\\
 \midrule
 A1 & \texttt{alg:rtopp}          & S5 & \listo Refinamiento RT del OPP & 1 col.\\
 \bottomrule
@@ -433,11 +439,42 @@ tiempo de ejecución [XX]; frase de PLECS frente a figuras ``sinplecs''.}
 resultados. (b) No se dice qué resultado es simulación, cuál HIL y cuál
 medición; falta el montaje experimental. (c) El rango de operación aparece
 de tres formas: potencia (F5), plano $(I_d,I_q)$ (F6--F8) y $M$ (F4).}
-\sug{(a) Mover el método a S4.1/S5. (b) Nueva S6.0 ``Experimental Setup and
-Platforms'': prototipo de 10~kW, OPAL-RT OP4510, medición de pérdidas, y una
-frase que diga qué se obtuvo en cada plataforma. (c) Una frase que
+\sug{(a) Mover el método a S4.1/S5. (b) Ver el bloque nuevo S6.0. (c) Una frase que
 relacione $|I|$, $P$ y $M$ (p.ej.\ el punto nominal $I_d=20$~A $\Leftrightarrow$
 9.8~kW).}
+
+\bloque{S6.0}{(nueva, propuesta) Experimental Setup}
+\campo{Rol} Decir con qué se obtuvo cada resultado y por qué la medición de
+pérdidas es confiable.\\
+\campo{Contenido}
+\begin{itemize}
+\item Prototipo T-Type SiC de 10~kW, 750~V (módulo CHB011M12GM4T) con el
+      filtro LCL de T3; conexión a red \textbf{[directa, transformador o
+      emulador de red]}.
+\item Alimentación DC \textbf{[fuente, rango]} y lado AC \textbf{[red,
+      emulador o carga]}.
+\item Control y modulación en OPAL-RT OP4510: RT-OPP a $T_s=200~\mu$s y
+      generación de pulsos \textbf{[FPGA, resolución]}.
+\item Medición de pérdidas: \textbf{[analizador de potencia, precisión]},
+      método \textbf{[$P_{in}-P_{out}$ o calorimétrico]}, sondas de tensión y
+      corriente, osciloscopio.
+\item Qué resultado viene de cada plataforma: simulación (Julia, PLECS),
+      HIL (OPAL-RT) y prototipo.
+\end{itemize}
+\campo{Elementos} F9 (foto + diagrama de conexiones), T6 (equipos).
+\upd{Hoy el paper no describe el montaje. De esto dependen dos preguntas del
+revisor: qué incluye la pérdida medida y si la precisión alcanza para las
+diferencias de 0.4--0.5~W a carga ligera.}
+\sug{F9 en dos paneles: (a) foto del banco con los equipos numerados;
+(b) diagrama de conexiones con los puntos donde se miden $P_{in}$ y
+$P_{out}$. T6 con columnas Equipo | Modelo | Uso | Precisión. Párrafo:
+``The experimental setup is shown in Fig.~[F9] and the equipment is listed
+in Table~[T6]. The 10~kW SiC T-Type prototype is supplied by [DC source] and
+connected to [grid/emulator] through the LCL filter of Table~III. The
+modulation and the RT-OPP run on an OPAL-RT OP4510 with $T_s=200~\mu$s. The
+losses are obtained as [the difference between the DC input power and the AC
+output power] measured by [power analyzer], whose accuracy of [XX] amounts to
+[XX]~W at the nominal point.''}
 
 \bloque{S6.1}{Optimized Angles and Pulse Pattern}
 \campo{Contenido} Patrón multipolar en $M=0.8660$; conmutaciones cerca de
