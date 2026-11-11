@@ -4,7 +4,8 @@
 # Uso:  python3 tools/figura_setup/hacer_figura.py
 #       node tools/figura_setup/render.js
 #
-# Formato vertical: esquema trifasico al centro, con la potencia fluyendo
+# Formato vertical: esquema trifasico al centro (piernas en columnas, salidas
+# rectas al LCL y puntos medios a tierra), con la potencia fluyendo
 # de arriba (fuentes DC) hacia abajo (red), y los equipos a ambos lados,
 # recortados sin fondo y unidos a su bloque con un cono del color del bloque.
 #
@@ -24,7 +25,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 FOTOS = os.path.join(AQUI, "fotos")
 SALIDA = os.path.join(AQUI, "..", "..", "figuras", "setup")
 
-W, H = 1150, 1270
+W, H = 1180, 1270
 FUENTE = "'Times New Roman', 'Liberation Serif', serif"
 TXT = 30
 GRIS = "#efefef"
@@ -222,7 +223,7 @@ def recuadro_equipo(x, y, w, titulo, equipos, gap=10, ancho=None,
 
 # ======================= esquema en (u, v) ==============================
 # El grupo transpone: x = X0 + v, y = Y0 + u.
-X0, Y0 = 395, 40
+X0, Y0 = 385, 40
 esq = []          # elementos del grupo (coordenadas u, v)
 txt = []          # textos ya en (x, y)
 
@@ -344,72 +345,82 @@ def caja_zona(nombre, u0, v0, u1, v1):
                f'stroke-dasharray="10 6"/>')
 
 
+def placas_u(u, v, ancho=16, sep=6):
+    """Placas de condensador para una rama a lo largo de u."""
+    L([(u - sep, v - ancho), (u - sep, v + ancho)], w=4.2)
+    L([(u + sep, v - ancho), (u + sep, v + ancho)], w=4.2)
+
+
+def tierra(u, v):
+    """Simbolo de tierra colgando hacia +u desde (u, v)."""
+    L([(u, v), (u + 10, v)])
+    for k, a in enumerate([14, 9, 4]):
+        L([(u + 10 + 6 * k, v - a), (u + 10 + 6 * k, v + a)], w=2.8)
+
+
 # --- geometria (u en el sentido del flujo, v transversal) ---------------
-vP, vX, vB, vN = 70, 150, 222, 330     # riel P, nodo, bus O, riel N
-VT = [10, 26, 42]                        # salidas por el costado (a, b, c)
-US = [330, 495, 660]                     # piernas a, b, c
+# Piernas en columnas, una al lado de la otra (como el ejemplo): riel P
+# arriba, riel N abajo, cada salida baja recta al LCL y cada punto medio va
+# a su propio simbolo de tierra (no hay bus O).
+VP_, VN_ = 0, 432                        # bajadas de P (izq.) y N (der.)
 UDC = [30, 90]                           # fuentes DC
-UCAP = 195
-UD = [800, 775, 750]                     # bajadas al LCL (a, b, c)
-VR = [95, 195, 295]                      # columnas del LCL (a, b, c)
-UL1, UC, UL2 = (835, 890), [915, 940, 965], (990, 1040)
+UPR, UNR = 215, 600                      # riel P y riel N
+UO = 360                                 # nodo de salida de cada pierna
+XL = [112, 242, 372]                     # columna S1/S4 de cada pierna
+VO = [x + 38 for x in XL]                # salidas a, b, c (rectas al LCL)
+VNEU = [x - 58 for x in XL]              # rama del punto medio (S2, S3)
+VR = VO                                  # columnas del LCL = salidas
+UL1, UC, UL2 = (835, 890), [965, 940, 915], (990, 1040)
 UG, USTAR = 1140, 1185
-VSTAR = 352
+VSTAR = VR[0] - 57                       # estrella de los C_f (a la izq.)
 
-# fuentes DC en paralelo y enlace DC
+# fuentes DC en paralelo
 for u in UDC:
-    fuente_dc(u, vP, vN)
-L_saltos(UDC[0], US[2], vP, [US[0] + 36, US[1] + 36])
-L([(UDC[0], vN), (US[2], vN)])
-L([(UCAP, vP), (UCAP, (vP + vB) / 2 - 6)])
-placas(UCAP, (vP + vB) / 2)
-L([(UCAP, (vP + vB) / 2 + 6), (UCAP, (vB + vN) / 2 - 6)])
-placas(UCAP, (vB + vN) / 2)
-L([(UCAP, (vB + vN) / 2 + 6), (UCAP, vN)])
-for u in UDC + [UCAP]:
-    P(u, vP)
-    P(u, vN)
-P(UCAP, vB)
-x, y = T(UCAP, vB)
-texto(x + 10, y + 30, "O", size=24, anchor="start", lista=txt)
+    fuente_dc(u, VP_, VN_)
+    P(u, VP_)
+    P(u, VN_)
+# bajada de P con el enlace DC (dos condensadores, punto medio a tierra)
+L([(UDC[0], VP_), (300 - 6, VP_)])
+placas_u(300, VP_)
+L([(300 + 6, VP_), (500 - 6, VP_)])
+placas_u(500, VP_)
+L([(500 + 6, VP_), (UNR, VP_)])
+L([(400, VP_), (400, VP_ - 22)])
+tierra(400, VP_ - 22)
+P(400, VP_)
+# bajada de N por la derecha
+L([(UDC[0], VN_), (UNR, VN_)])
+# rieles: P recto, N con saltos donde lo cruzan las salidas
+L([(UPR, VP_), (UPR, XL[2])])
+V_saltos(UNR, VP_, VN_, VO)
+P(UPR, VP_)
 
-# bus del punto medio, con saltos sobre los cables de S4 de a y b
-L_saltos(UCAP, US[2] - 125, vB, [US[0], US[1]])
-
-for k, u in enumerate(US):
-    vs1 = (vP + vX) / 2
-    L([(u, vP), (u, vs1 - 28)])
-    mosfet(u, vs1)
-    L([(u, vs1 + 28), (u, vX)])
-    vs4 = (vB + vN) / 2 + 6
-    L([(u, vX), (u, vs4 - 28)])
-    mosfet(u, vs4)
-    L([(u, vs4 + 28), (u, vN)])
-    P(u, vP)
-    P(u, vN)
-    ua = u - 125
-    L([(ua, vB), (ua, vX), (ua + 10, vX)])
-    mosfet(ua + 37, vX, rot=-90)
-    mosfet(u - 37, vX, rot=90)
-    L([(u - 10, vX), (u, vX)])
-    P(ua, vB)
-    P(u, vX)
-    uo = u + 36
-    L([(u, vX), (uo, vX)])
-    L([(uo, vX), (uo, VT[k]), (UD[k], VT[k]), (UD[k], VR[k])])
-
-# rotulos de los interruptores (pierna a)
-u = US[0]
-for (uu, vv, s, dx, dy) in [(u, (vP + vX) / 2, "1", -12, 50),
-                            (u, (vB + vN) / 2 + 6, "4", -12, 50),
-                            (u - 88, vX, "2", 34, 8),
-                            (u - 37, vX, "3", 34, 8)]:
-    x, y = T(uu, vv)
-    sub_txt(x + dx, y + dy, "S", s, size=22, lista=txt)
+for k, x in enumerate(XL):
+    # S1 (P -> salida) y S4 (salida -> N), con drenador arriba
+    L([(UPR, x), (290 - 28, x)])
+    mosfet(290, x, rot=-90)
+    L([(290 + 28, x), (470 - 28, x)])
+    mosfet(470, x, rot=-90)
+    L([(470 + 28, x), (UNR, x)])
+    P(UPR, x)
+    P(UNR, x)
+    P(UO, x)
+    # rama del punto medio: S2 y S3 en antiserie hasta tierra
+    vn = VNEU[k]
+    L([(UO, x), (UO, vn), (420 - 28, vn)])
+    mosfet(420, vn, rot=-90)
+    L([(420 + 28, vn), (490 - 28, vn)])
+    mosfet(490, vn, rot=90)
+    L([(490 + 28, vn), (545, vn)])
+    tierra(545, vn)
+    # salida recta hasta el LCL
+    L([(UO, x), (UO, VO[k]), (UL1[0], VO[k])])
+    xx, yy = T(700, VO[k])
+    texto(xx + 8, yy, "abc"[k], size=24, italic=True, anchor="start",
+          lista=txt)
 
 # LCL y red
 for k in range(3):
-    L([(UD[k], VR[k]), (UL1[0], VR[k])])
     bobina(UL1[0], UL1[1], VR[k])
     L([(UL1[1], VR[k]), (UL2[0], VR[k])])
     bobina(UL2[0], UL2[1], VR[k])
@@ -417,43 +428,42 @@ for k in range(3):
     fuente_ac(UG, VR[k])
     L([(UG + 21, VR[k]), (USTAR, VR[k])])
     P(USTAR, VR[k])
-    x, y = T(UD[k], VR[k])
-    texto(x - 8, y - 8, "abc"[k], size=24, italic=True, anchor="end",
-          lista=txt)
 for k in range(3):
+    # C_f hacia la izquierda, hasta la estrella
     uc = UC[k]
     P(uc, VR[k])
-    vpl = VR[k] + 30
-    L([(uc, VR[k]), (uc, vpl - 6)])
+    vpl = VR[k] - 30
+    L([(uc, VR[k]), (uc, vpl + 6)])
     placas(uc, vpl, ancho=12)
-    V_saltos(uc, vpl + 6, VSTAR, [VR[j] for j in range(k + 1, 3)])
-L([(UC[0], VSTAR), (UC[2], VSTAR)])
+    V_saltos(uc, VSTAR, vpl - 6, [VR[j] for j in range(k)])
+L([(min(UC), VSTAR), (max(UC), VSTAR)])
 L([(USTAR, VR[0]), (USTAR, VR[2])])
 x, y = T((UL1[0] + UL1[1]) / 2, VR[0])
 sub_txt(x - 14, y + 8, "L", "1", size=24, anchor="end", lista=txt)
 x, y = T((UL2[0] + UL2[1]) / 2, VR[0])
 sub_txt(x - 14, y + 8, "L", "2", size=24, anchor="end", lista=txt)
-x, y = T(UC[2], VR[2] + 30)
-sub_txt(x - 10, y + 44, "C", "f", size=24, lista=txt)
+x, y = T(max(UC), VSTAR)
+sub_txt(x - 10, y + 34, "C", "f", size=24, anchor="start", lista=txt)
 
 # medicion de potencia (antes del LCL)
-P(140, vN, 6.5, AZUL)
-x, y = T(140, vN)
+P(150, VP_, 6.5, AZUL)
+x, y = T(150, VP_)
 sub_txt(x + 12, y + 8, "P", "in", size=24, color=AZUL, lista=txt)
 # P_out en las tres fases, a la entrada del LCL
 UPO = 808
 for k in range(3):
     P(UPO, VR[k], 6.5, AZUL)
-x, y = T(UPO, VR[2])
-sub_txt(x + 12, y - 2, "P", "out", size=24, color=AZUL, lista=txt)
+x, y = T(UPO, VR[0])
+sub_txt(x - 12, y - 6, "P", "out", size=24, color=AZUL, anchor="end",
+        lista=txt)
 
 # recuadros de cada bloque (en u, v); la pierna va despues del conversor
 # para quedar encima. Entre el LCL y la red queda un espacio.
 CAJAS = {
-    "dc":    (8, 48, 115, vN + 22),
-    "conv":  (180, VT[0] - 12, 720, vN + 22),
-    "pierna": (US[2] - 127, vP - 22, US[2] + 51, vN + 8),
-    "lcl":   (815, VR[0] - 34, 1058, VSTAR + 16),
+    "dc":    (8, VP_ - 20, 115, VN_ + 20),
+    "conv":  (192, VP_ - 40, 628, VN_ + 20),
+    "pierna": (232, VNEU[2] - 32, 592, VO[2] + 14),
+    "lcl":   (815, VSTAR - 16, 1058, VR[2] + 34),
     "red":   (1112, VR[0] - 34, 1205, VR[2] + 34),
 }
 for nombre, c in CAJAS.items():
@@ -468,8 +478,8 @@ def caja_xy(nombre):
 
 
 # recuadro gris del esquema (al centro)
-SX0, SY0 = X0 - 20, 20
-SX1, SY1 = X0 + 380, Y0 + 1225
+SX0, SY0 = X0 - 40, 20
+SX1, SY1 = X0 + 452, Y0 + 1225
 panel(SX0, SY0, SX1 - SX0, SY1 - SY0)
 conos = len(partes)      # aqui se insertan los conos, bajo el esquema
 add(f'<g transform="matrix(0 1 1 0 {X0} {Y0})">' + "".join(esq_fondo)
@@ -481,8 +491,8 @@ XI, XD, WC = 20, SX1 + 25, SX0 - 45      # columna izquierda y derecha
 # izquierda: fuentes DC, prototipo y filtro LCL
 f_dc = recuadro_equipo(XI, 20, WC, "IT6006C-800-25 (&#215;2)",
                        ["itech1", "itech2"], zona="dc")
-f_pr = recuadro_equipo(XI, 345, WC, "10 kW SiC T-Type", ["proto"],
-                       ancho=280, zona="conv")
+f_pr = recuadro_equipo(XI, 300, WC, "10 kW SiC T-Type", ["proto"],
+                       ancho=260, zona="conv")
 f_lc = recuadro_equipo(XI, 850, WC, "LCL filter", ["lcl"], zona="lcl")
 # derecha: analizador, controlador, modulo SiC y emulador de red
 f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
@@ -491,8 +501,8 @@ f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
                        "font-size='19'>out</tspan></tspan><tspan dy='-6'>)"
                        "</tspan>", ["hioki"])
 f_op = recuadro_equipo(XD, f_hi[1] + f_hi[3] + 16, WC, "OP4510", ["opal"])
-f_mo = recuadro_equipo(XD, 470, WC, "CHB011M12GM4T", ["modulo"],
-                       ancho=230, zona="pierna")
+f_mo = recuadro_equipo(XD, 400, WC, "CHB011M12GM4T", ["modulo"],
+                       ancho=210, zona="pierna")
 f_nh = recuadro_equipo(XD, 990, WC, "NHR9410", ["nhr"], zona="red")
 
 
