@@ -263,6 +263,11 @@ The contributions of this work are the following:
     %the capacitor current, required for the loss model to be consistent with the
     %actual operation of the converter.
 \end{itemize}
+\upd{Plan S1: invertir el orden de los dos primeros items para que sigan
+el orden del cuerpo (formulacion en la Seccion II, perdidas en la III).}
+\sug{Mover el item ``A multipolar OPP formulation with half-wave symmetry
+\dots'' al primer lugar, antes de ``An analytical conduction and switching
+loss model \dots''.}
 
 % La figura de la topologia se cita en la introduccion y en la Seccion de
 % perdidas; se ancla aqui para que flote a la pagina siguiente al titulo.
@@ -283,6 +288,12 @@ This section poses the multipolar pattern as a continuous optimization variable:
 the symmetry is chosen first, the Fourier coefficients are then written in terms
 of the virtual angle, and finally the integer level constraint is replaced by
 linear inequalities on the angles.
+\upd{Plan S2.4: el LCL pasa al final de esta seccion; la apertura lo debe
+anunciar.}
+\sug{Reemplazar ``and finally the integer level constraint is replaced by
+linear inequalities on the angles.'' por: ``the integer level constraint is
+then replaced by linear inequalities on the angles, and finally the LCL
+filter that weights the harmonics is described.''}
 
 \subsection{Multipolar Modulation and Choice of Symmetry}
 
@@ -344,6 +355,11 @@ described exclusively by linear constraints on $\gv$. In the real-time stage, th
 ordering inequalities are tightened by a minimum separation
 $\epsilon_{sep}=0.2^\circ$ between consecutive switching instants, which
 prevents zero-width pulses that the gate driver cannot realize.
+\upd{Plan S2.3: explicar que $\epsilon_{sep}$ evita los saltos directos
+entre $-1$ y $+1$.}
+\sug{Reemplazar ``which prevents zero-width pulses that the gate driver
+cannot realize.'' por: ``which prevents zero-width pulses that would turn
+into direct transitions between the levels $+1$ and $-1$.''}
 
 
 % ============================ S4 ========================================
@@ -354,6 +370,9 @@ The objective function is the total converter loss, given by the sum of a conduc
 of the virtual angles, so that the optimizer can evaluate them and their
 gradients without simulating the pattern at each iteration. The section closes
 with the design of the LCL filter that couples the converter to the grid.
+\upd{Plan S2.4: con el LCL en la Seccion II, borrar la ultima frase ``The
+section closes with the design of the LCL filter that couples the converter
+to the grid.''}
 
 \subsection{Conduction Losses}
 
@@ -372,6 +391,22 @@ modulated voltage and the converter current. It does not vanish under unity
 power factor at the point of common coupling because of the LCL capacitor,
 and it is computed from the power references through the LCL model,
 without measurements (Fig.~\ref{fig:control}).
+\upd{Plan S3.1: $\varphi$ no es un ``load angle'' (es el desfase de la
+corriente del conversor respecto de la fundamental), pero el paper lo llama
+asi en cinco lugares: sugerencia del resumen, caption de la
+Fig.~\ref{fig:control}, Seccion~\ref{sec:implementacion}, parrafo inicial
+de los resultados y comparacion de perdidas. Propongo un nombre unico.}
+\sug{Aqui: ``where $\varphi$, the current displacement angle, is the
+displacement between the fundamental of the modulated voltage and the
+converter current.'' En los otros cinco lugares, cambiar ``load angle'' por
+``current displacement angle''.}
+\upd{Plan S3.1: un solo simbolo para la amplitud de corriente. Hoy aparecen
+$I$ en \eqref{eq:p_con} y \eqref{eq:pcond_final}, $I_{cond}$ en
+\eqref{eq:p_sw} e $I_{nom}$ en la Seccion~\ref{sec:rt}.}
+\sug{Cambiar $I$ por $I_{cond}$ en \eqref{eq:p_con}, \eqref{eq:pcond_final}
+y en ``where $r_{ds,on}I^2$ is the loss''. En la Seccion~\ref{sec:rt} se
+puede dejar $I_{nom}$, diciendo una vez que alli $I_{cond}=I_{nom}$ (ver la
+nota de Loss Terms).}
 \begin{table}[!t]
     \centering
     \caption{Per-leg conduction states of the three-level T-Type.}
@@ -478,6 +513,34 @@ modulation index under consideration, and $E_{on}$, $E_{off}$ are the switching
 energies from the datasheet of the SiC module, evaluated at the blocking voltage
 and normalized per ampere. With this, \eqref{eq:p_sw} is continuous and
 differentiable in $\gv$.
+\upd{Plan S3.2: dejar este modelo igual al del RT
+(\texttt{RTOPP\_D19\_simple\_rip.m}). Hoy difiere en tres cosas:
+(i) usa $f_1$, pero hay $d$ encendidos y $d$ apagados por semiciclo, o sea
+$2d$ de cada uno por periodo, y el codigo usa $2f_1$; (ii) la corriente entra
+con signo, asi que un evento en el semiciclo opuesto resta energia, y el
+codigo la toma en magnitud (ahi conmuta con perdidas el dispositivo
+complementario; el modelo lo aproxima con la misma energia); (iii) el codigo
+ajusta $E(i)=E_0+E'\,i$, con la parte constante en $P_{sw,0}$, y corrige
+ambas por $R_G$. Ojo: si Julia uso \eqref{eq:p_sw} tal como esta, el patron
+off-line se optimizo con la mitad del peso de conmutacion frente a la
+conduccion; eso si cambia el resultado y conviene confirmarlo.}
+\sug{Reemplazar \eqref{eq:p_sw} por
+\[
+  P_{sw} = P_{sw,0} + 2f_1\,I_{cond}\sum_{i=1}^{d}
+      \Big( E_{on}\big|\sin(\gamma_i-\varphi)\big|
+          + E_{off}\big|\sin(\gamma_{i+d}-\pi-\varphi)\big|\Big)
+\]
+y el texto que sigue (desde ``where $f_1$ is'' hasta ``differentiable in
+$\gv$.'') por: ``where $f_1$ is the fundamental frequency, and the factor 2
+accounts for the two half-cycles. The switching energies are fitted as
+$E(i)=E_0+E'i$ from the datasheet of the SiC module at the blocking voltage
+and corrected for the gate resistance $R_G$: $E_{on}$ and $E_{off}$ are the
+slopes $E'$, and $P_{sw,0}=2f_1d\,(E_{on,0}+E_{off,0})$ gathers the
+current-independent part, which does not depend on $\gv$. The magnitude
+also counts the events that fall in the opposite half-cycle of the current,
+where the complementary device switches under voltage. With this,
+\eqref{eq:p_sw} is continuous in $\gv$ and differentiable wherever no
+switching instant coincides with a zero crossing of the current.''}
 %Since $\gamma_{i+d} \in [\pi,2\pi]$, the term
 %$\sin(\gamma_{i+d})$ is negative and the subtraction accumulates positive
 %contributions, consistent with the physics of the process.
@@ -513,6 +576,11 @@ which makes them the most restrictive orders of the design
 minimize the injected reactive power, and $L_1=L_2$, which minimizes the
 total inductance for a given $f_{res}$ and with it the volume of the
 filter.
+\upd{Plan S2.4: el LCL no es una perdida. Mover esta subseccion completa
+(con \texttt{sec:filtro} y \texttt{eq:fres}) al final de la Seccion II,
+despues de ``Linear Level Constraints''. Al moverla, borrar
+``(Section~\textbackslash ref\{sec:rt\})'' de la frase de los armonicos 19 y
+23 (referencia hacia adelante).}
 
 % ============================ S5 ========================================
 \section{OPP Implementation Scheme}
@@ -524,6 +592,9 @@ described next.
 
 
 \subsection{Optimization Problem}
+\upd{Plan S4.1: cambiar el titulo a ``Off-Line Pattern Design'' y traer
+aqui el procedimiento de solucion que hoy abre la Seccion de resultados
+(sugerencia al final de esta subseccion).}
 
 Gathering the previous models, the problem to be solved for each operating
 point $(M,\varphi)$ is formulated as
@@ -560,17 +631,42 @@ the losses with the distortion as a constraint, whereas the real-time stage
 of Section~\ref{sec:rt} minimizes the distortion with the losses as a
 secondary term: the off-line solution sets the loss level, and the online
 refinement preserves harmonic compliance around it.
-\upd{Revisor: si el RT baja la TDD a 1.7\pct{} sin costo en perdidas, parece
-que el limite de TDD no costaba perdidas. Decision del autor: explicar que el
-off-line impone TDD y limites individuales como restricciones duras, mientras
-el RT los lleva en la FO.}
-\sug{Reemplazar la frase ``Note that \dots\ around it.'' por: Note that
-\eqref{eq:opp_propuesto} minimizes the losses with the TDD and the individual
-limits as hard constraints, whereas the real-time stage of
+\upd{Plan S4.1 (a): $\delta$ tiene dos significados: la cota de
+continuidad de la ultima restriccion (sin definir) y la fase de la tension
+en la Seccion~\ref{sec:implementacion}.}
+\sug{En la ultima linea de \eqref{eq:opp_propuesto}, cambiar $\delta$ por
+$\Delta\gamma_{\max}$. Reemplazar ``The last one enforces continuity with
+respect to $M$, required for Section~\textbackslash ref\{sec:implementacion\}.''
+por: ``The last one enforces continuity with respect to $M$ by bounding the
+change of every angle between consecutive modulation indices by
+$\Delta\gamma_{\max}=$~\textbf{[valor]}, as required in
+Section~\ref{sec:implementacion}.''}
+\upd{Plan S4.1 (b): el off-line impone TDD y limites individuales como
+restricciones duras, mientras el RT los lleva en la OF (y tambien minimiza
+perdidas).}
+\sug{Reemplazar la frase ``Note that \dots\ around it.'' por: ``Note that
+\eqref{eq:opp_propuesto} minimizes the losses with the TDD and the
+individual limits as hard constraints, whereas the real-time stage of
 Section~\ref{sec:rt} includes both the distortion and the losses in its
-objective and enforces the limits through adaptive weights only when they are
-exceeded: the off-line solution sets the loss level, and the online
-refinement restores harmonic compliance around it.}
+objective and enforces the limits through adaptive weights only when they
+are exceeded: the off-line solution sets the loss level, and the online
+refinement restores harmonic compliance around it.''}
+\upd{Plan S4.1 (c): parrafo del metodo, traido desde el inicio de la
+Seccion de resultados. Faltan los tiempos de la LUT $(M,\varphi)$ con
+$d=19$; las cifras de conferencia (440 de 1000 semillas, 3.4 y 3.8~s,
+LUT de 1000 indices, 8~min) ya no aplican.}
+\sug{(Parrafo nuevo, al final de esta subseccion.) ``Problem
+\eqref{eq:opp_propuesto} was solved in Julia with the interior-point solver
+Ipopt, in three stages: 1000 randomly generated angle sets were optimized
+for minimum TDD; the feasible ones were re-optimized with the total losses
+as the objective; and the best resulting pattern warm-started the sweep over
+the table, each modulation index starting from the previous solution. Since
+the formulation is purely continuous, all three stages use the same local
+solver and no mixed-integer or global search is required. The LUT stores
+9 modulation indices between 0.835 and 0.9 and 25 angles $\varphi$ between
+$-180^\circ$ and $180^\circ$. Only the modulation indices around the
+operating point are stored; a wider range could be stored but is not needed
+in this application. The whole table was computed in \textbf{[tiempo]}.''}
 % Pendiente: verificar como se impuso la continuidad a lo largo de phi en
 % Julia (o si no se impuso, porque la re-siembra con histeresis lo cubre).
 
@@ -710,19 +806,18 @@ angles $\gv^0$, which the real-time optimizer of Section~\ref{sec:rt} refines
 using the grid voltage harmonics estimated by the observer; the pattern
 generator converts the refined angles into firing instants shifted by
 $\delta$ and synchronized with the grid angle $\theta$ of the PLL.
-\upd{Revisor: el observador de armonicos solo aparece en la figura y como
-fuente de $\mathbf{x}^\star_h$; no se dice que metodo usa ni como se pasa a
-unidades espectrales. Decision del autor: agregarlo. Completar los
-corchetes.}
-\sug{(Parrafo nuevo, aqui) The harmonic observer estimates the background
-harmonics of the grid voltage from the measured $v_{abc}$ by
+\upd{Plan S4.2: el observador de armonicos solo aparece en la figura y
+como fuente de $\mathbf{x}^\star_h$. Decision del autor: agregarlo.
+Completar los corchetes.}
+\sug{(Parrafo nuevo, aqui.) ``The harmonic observer estimates the
+background harmonics of the grid voltage from the measured $v_{abc}$ by
 \textbf{[metodo: p.ej.\ filtro de Kalman, SOGI multiple o DFT recursiva]}
-\textbf{[cita]}, for every order $n\in\mathcal{N}$, $n\geq5$, with a settling time
-of \textbf{[XX]}~ms. Each estimated component is converted into the converter
-voltage that cancels the corresponding harmonic grid current
-\textbf{[relacion usada, p.ej.\ a traves del modelo del LCL]} and divided by
-$V_{dc}/2$, so that $\mathbf{x}^\star_h$ is expressed in the same spectral
-units as the pattern.}
+\textbf{[cita]}, for every order $n\in\mathcal{N}$, $n\geq5$, with a
+settling time of \textbf{[XX]}~ms. Each estimated component is converted
+into the converter voltage that cancels the corresponding harmonic grid
+current \textbf{[relacion usada, p.ej.\ a traves del modelo del LCL]} and
+divided by $V_{dc}/2$, so that $\mathbf{x}^\star_h$ is expressed in the same
+spectral units as the pattern.''}
 
 
 A critical point of the scheme is the continuity of the LUT: the sets of optimal
@@ -735,6 +830,12 @@ each update starts from the previous angles with a step bounded by the
 proximal term, so changes of $M$ are followed without jumps between table
 entries, while a change of $\varphi$ across a table cell re-seeds the
 optimizer, with hysteresis at the cell boundaries.
+\upd{Plan S4.2: dejar aqui solo la LUT y la cadena de control; el termino
+proximal y la re-siembra se explican en la Seccion~\ref{subsec:rt_con}.}
+\sug{Reemplazar desde ``In operation, the real-time stage reinforces it:''
+hasta el final del parrafo por: ``Along $\varphi$ the table is not
+continuous; changes of $\varphi$ are handled by the real-time stage
+(Section~\ref{subsec:rt_con}).''}
 % La seccion de tiempo real va DESPUES de "Control and Pattern Generation":
 % si se incluye antes, esa subseccion queda numerada dentro de la seccion RT
 % (V-E) y las referencias a sec:implementacion salen cruzadas.
@@ -770,6 +871,17 @@ the linearized model; they enter the OF as weights that adapt to the exact
 spectrum of the applied pattern. The LUT, now addressed by both $M$ and
 $\varphi$, only provides the initial pattern and the re-seeding points.
 The procedure is summarized in Algorithm~\ref{alg:rtopp}.
+\upd{Plan S5: (a) traer aqui la plataforma y $T_s$, hoy en la Seccion de
+resultados; (b) ``OF'' se usa antes de definirse; (c) ``now'' es resto de la
+version de conferencia.}
+\sug{(a) Despues de ``\dots\ per control period $T_s$.'' agregar: ``The
+optimizer is implemented as a MATLAB Function block and executed on an
+OPAL-RT OP4510 with $T_s=200~\mu$s, with a worst-case execution time of
+\textbf{[XX]}~$\mu$s per sample.'' (b) Cambiar ``they enter the OF as
+weights'' por ``they enter the objective function (OF) as weights'', y en
+el parrafo siguiente ``the objective function (OF) of the local problem''
+por ``the OF of the local problem''. (c) Cambiar ``The LUT, now addressed by
+both'' por ``The LUT, addressed by both''.}
 
 This section first presents the objective function (OF) of the local
 problem and then the constraint handling
@@ -930,6 +1042,19 @@ The loss models of Section~\ref{sec:perdidas} are reused, evaluated at the
 rated current $I_{nom}$, with two changes that make them suitable for a GN
 step: the absolute values are removed from the conduction term, and the
 switched current is taken in magnitude in the switching term.
+\upd{Plan S5.3: si se acepta el ajuste de \eqref{eq:p_sw} (Switching
+Losses), el modelo de conmutacion ya es el mismo y aqui queda un solo
+cambio.}
+\sug{Reemplazar este parrafo por: ``The loss models of
+Section~\ref{sec:perdidas} are reused, evaluated at the rated current,
+$I_{cond}=I_{nom}$, with one change that makes them suitable for a GN step:
+the absolute values are removed from the conduction term.'' En el parrafo
+\textit{Switching}, reemplazar desde ``in \eqref{eq:p_sw} the current
+enters'' hasta ``the energy per ampere of the $i$-th pulse is'' por ``the
+energy per ampere of the $i$-th pulse in \eqref{eq:p_sw} is'', y borrar
+``where $E_{on}$ and $E_{off}$ are corrected \dots\ negative one.'' y
+``where $P_{sw,0}=\dots$ does not depend on $\gv$.'' (pasan a Switching
+Losses).}
 
 \textit{Conduction:} the integral over each pulse is taken with its sign,
 %
@@ -1063,17 +1188,25 @@ than 0.3\pct{}, even when the quadratic residuals are replaced by the exact
 gradient of \eqref{eq:rt_pcond} and \eqref{eq:rt_psw}. The value
 $\lambda_\ell=0.01$ keeps the TDD at about one third of the limit, which
 leaves margin for grid background distortion.
-\upd{Decision del autor: el RT si minimiza perdidas en linea; no decir que
-los terminos de perdidas solo actuan como regularizador.}
-\sug{Reemplazar desde ``Although switching accounts'' hasta ``along the
-distortion axis.'' por: Although switching accounts for a significant share of
-the losses (Fig.~\ref{fig:perdidas}), the switching term is thus weighted
-several orders of magnitude below its actual share, so the online stage
-minimizes mainly the conduction losses, whereas the switching losses, with a
-number of events fixed by $d$, remain close to those of the table. Since the
-table already minimizes \eqref{eq:rt_pcond} and \eqref{eq:rt_psw} at its
-nodes, the losses change little around them, and $\lambda_\ell$ mainly sets
-the trade-off between distortion and losses.}
+\upd{Plan S5.4: (a) el RT si minimiza perdidas: no decir que los terminos
+de perdidas solo actuan como regularizador; (b) el barrido de
+$\lambda_\ell$ es un resultado y pasa a los resultados RT; (c) quitar la
+cita a la Fig.~\ref{fig:perdidas} (resultados); (d) hay tres cifras para el
+cambio de perdidas en RT: $<0.3$\pct{} aqui, 0.4\pct{} en Harmonic
+Compliance y 1\pct{} en las sugerencias de convergencia y conclusiones.
+Dejar una sola, regenerada con \texttt{RTOPP\_D19\_simple\_rip} (las de aqui
+son de \texttt{RTOPP\_D19}).}
+\sug{Reemplazar desde ``Although switching accounts'' hasta ``\dots\ of
+\eqref{eq:rt_pcond} and \eqref{eq:rt_psw}.'' (justo antes de ``The value
+$\lambda_\ell=0.01$'') por: ``Although switching accounts for a significant
+share of the losses, the switching term is thus weighted several orders of
+magnitude below its actual share, so the online stage minimizes mainly the
+conduction losses, whereas the switching losses, with a number of events
+fixed by $d$, remain close to those of the table. Since the table already
+minimizes \eqref{eq:rt_pcond} and \eqref{eq:rt_psw} at its nodes, the
+losses change little around them, and $\lambda_\ell$ mainly sets the
+trade-off between distortion and losses.'' La frase del barrido
+(``Fig.~[X] sweeps $\lambda_\ell$ \dots'') pasa a los resultados RT.}
 % Cifras de la Fig. E obtenidas con RTOPP_D19 (version con proyecciones).
 % Regenerar con RTOPP_D19_simple_rip antes de enviar.
 
@@ -1143,6 +1276,10 @@ when the pattern remains out of compliance for many iterations without
 improving. In the last case the seed alternates between the own cell and
 the two adjacent cells in $\varphi$. The weights are reset to
 $\theta_{\min}$ at each re-seeding.
+\upd{Plan S5.5: falta decir que pasa con el transitorio al re-sembrar.}
+\sug{Agregar al final del parrafo: ``Re-seeding introduces a transient only
+when the operating point changes; since this happens rarely, it does not
+affect the current control loop.''}
 
 % ============================ S7 ========================================
 \section{Simulation and Experimental Results}
@@ -1171,6 +1308,27 @@ $d=17$, 8~min). Actualizar los tiempos de calculo de la LUT $(M,\varphi)$.
 Las figuras de perdidas nuevas son ``sinplecs'': si el modelo de las
 Figs.~\ref{fig:perdidas}--\ref{fig:comp_pwm} es el analitico de la
 Seccion~\ref{sec:perdidas} y no PLECS, ajustar la frase de PLECS.}
+\upd{Plan S6: este parrafo es metodo. El procedimiento de Julia y la LUT
+pasan a la subseccion off-line (ver sugerencia en Optimization Problem), y
+la plataforma y $T_s$ al inicio de la Seccion~\ref{sec:rt}. Aqui queda un
+parrafo corto que diga de donde sale cada resultado.}
+\sug{Reemplazar el parrafo por: ``This section first describes the
+experimental setup and then presents the optimized patterns, their harmonic
+compliance and the losses. The waveforms were verified in PLECS with the
+parameters of Table~\ref{tab:parametros}, and the losses were measured on
+the prototype at eight operating points.''}
+\upd{Plan S6.0: subseccion nueva y breve, con una sola foto del montaje
+(la arma el autor, Fig.~[F9]) y la tabla de equipos (T6). Faltan los datos
+de los corchetes.}
+\sug{\textbf{Experimental Setup.} ``The experimental setup is shown in
+Fig.~\textbf{[F9]} and the equipment is listed in Table~\textbf{[T6]}. The
+10~kW SiC T-Type prototype is supplied by \textbf{[fuente DC]} and connected
+to \textbf{[red / emulador de red]} through the LCL filter of
+Table~\ref{tab:parametros}. The modulation and the real-time optimizer run
+on the OPAL-RT OP4510. The losses are obtained as
+\textbf{[$P_{in}-P_{out}$]} measured by \textbf{[analizador de potencia]},
+whose accuracy of \textbf{[XX]} amounts to \textbf{[XX]}~W at the nominal
+point.''}
 
 %\subsection{Effect of the Capacitor Current Constraint}
 %\textcolor{green}{Considero capaz eliminar esta seccion del paper, dado que no se hace ningun analisis que lo justifique}
@@ -1208,9 +1366,10 @@ peaks, which is where each event costs more energy.
 Fig.~\ref{fig:patron_pulsos}(a) traces the angles across the modulation index.
 Every trajectory is continuous, so the LUT can be swept without introducing a
 current transient.
-\upd{Verificar que la Fig.~4 sea con $d=19$ (es solo en $M$).
-Considerar agregar los angulos de la LUT vs.\ los refinados por el RT en el
-mismo punto, y la dependencia en $\varphi$.}
+\upd{Plan S6.1: la Fig.~\ref{fig:patron_pulsos} ya es $d=19$ y se deja
+asi; falta una frase sobre $\varphi$.}
+\sug{Agregar al final del parrafo: ``Along $\varphi$, in contrast, the
+optimal angles exhibit discontinuities.''}
 \textcolor{blue}{Comentario: Si aqui tengo pendiente mejroar esa foto.}
 
 % Los dos paneles vienen dentro del mismo PNG y no traen rotulos (a)/(b)
@@ -1257,14 +1416,15 @@ those of the table pattern. When the grid voltage carries background
 harmonics, the table pattern alone violates the individual limits, by a
 factor of 5.7 for a fifth harmonic of 4\pct{} and a seventh of 3\pct{}, and
 the optimizer restores compliance within 13~ms (Fig.~\textbf{[X]}).
-\upd{Punto 2 del revisor (TDD 1.7\pct{} en RT frente a 5\pct{} off-line).}
-\sug{Reemplazar ``In real time, the optimizer minimizes the distortion with the
-losses as a secondary term, so it settles below the limit:'' por: Unlike the
-off-line problem, where the TDD and the individual limits are hard
-constraints, the real-time stage includes them in the OF, and the adaptive
-weights of Section~\ref{subsec:rt_con} grow only when a limit is exceeded.
-The pattern therefore settles where the distortion and loss terms balance,
-below the limit for the chosen $\lambda_\ell$:}
+\upd{Plan S6.2: explicar por que el RT queda bajo el limite (TDD 1.7\pct{}
+frente a 5\pct{} off-line).}
+\sug{Reemplazar ``In real time, the optimizer minimizes the distortion with
+the losses as a secondary term, so it settles below the limit:'' por:
+``Unlike the off-line problem, where the TDD and the individual limits are
+hard constraints, the real-time stage includes them in the OF, and the
+adaptive weights of Section~\ref{subsec:rt_con} grow only when a limit is
+exceeded. The pattern therefore settles where the distortion and loss terms
+balance, below the limit for the chosen $\lambda_\ell$:''}
 \upd{Tolerancia a fondo armonico de red ($\sim$9\pct{} de la fundamental por
 armonico individual): definir el ensayo (barrido por armonico, criterio de
 cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
@@ -1283,6 +1443,13 @@ sideband cluster around the carrier is pushed beyond $n = 50$. The
 comparison covers the operating range in the $(I_d,I_q)$ plane, with
 current amplitudes between 10 and 20~A; the nominal point,
 $P_{out} = 9.8$~kW, corresponds to $I_d = 20$~A and $I_q = 0$.
+\upd{Plan S6.3: un revisor puede preguntar si es justo comparar 950~Hz por
+dispositivo con portadoras de 2850 y 4050~Hz.}
+\sug{Agregar despues de ``\dots\ pushed beyond $n = 50$.'': ``The OPP
+switches each device at 950~Hz, which corresponds to 1900~Hz in terms of
+carrier frequency, whereas the benchmarks use carriers of 2850 and
+4050~Hz. Since each benchmark uses the lowest carrier that complies with
+IEEE~519, all strategies are compared at equal compliance.''}
 
 Fig.~\ref{fig:perdidas} shows the losses given by the model over that
 range. They grow with the current amplitude and, for a given amplitude,
@@ -1323,6 +1490,11 @@ measurement, and the reduction falls from 40.0 to 4.8\pct{}, with a
 measured difference of only 0.5~W. Third, the model assumes a sinusoidal
 current, whereas the OPP, switching at 950~Hz per device, carries a larger
 current ripple, which adds losses that the model does not capture.
+\upd{Plan S6.3: conectar el rizado con el RT (el off-line no lo
+restringe).}
+\sug{Agregar aqui: ``The off-line problem does not constrain this ripple;
+only the real-time optimizer includes harmonics up to the 97th, so that the
+ripple does not grow over time.''}
 Accordingly, the offset of the OPP exceeds that of PD-PWM by 1.9~W on
 average, which reduces the mean measured difference from 3.3 to 1.4~W.
 Including the current ripple in the loss model is left for future work.
@@ -1336,12 +1508,13 @@ muerto, perdidas del filtro, precision de la medicion). (2) El offset de
 SV-GDPWM es el mayor, 9.9--12.8~W (media 11.0~W, 5.5~W sobre PD-PWM): si se
 atribuye al rizado, decirlo; si no, explicar a que se debe, porque un
 revisor lo va a preguntar. Ese offset mayor es lo que hace que la reduccion
-medida frente a SV-GDPWM coincida con el modelo.}
+medida frente a SV-GDPWM coincida con el modelo. (3) Confirmar que las
+mediciones del OPP se hicieron con el RT-OPP activo y no con la LUT sola.}
 \upd{Agregar el RT-OPP a la comparacion.}
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
+    \includegraphics[width=0.8\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
     \caption{Modeled losses in the $(I_d,I_q)$ plane: conduction (a)--(c),
     switching (e)--(g) and total (i)--(k); lowest-loss strategy (d), (h), (l).}
     \label{fig:perdidas}
@@ -1407,6 +1580,9 @@ seed the initial TDD exceeds 200\pct{}, which shows that convergence does not
 rely on starting close to the solution. Between table entries the optimizer
 settles at the 5\pct{} TDD limit, whereas at a table point it reaches
 1.7\pct{}.}
+\upd{Plan S6.4 (a futuro, la escribe el autor): aqui van tambien el barrido
+de $\lambda_\ell$ (sacado de la Seccion~\ref{subsec:rt_fo}) y el caso con red
+distorsionada.}
 
 % ============================ S8 ========================================
 \section{Conclusions}
@@ -1422,6 +1598,12 @@ switching loss models were derived as a function of the virtual angles, so far
 unavailable for this topology, with a decomposition that resolves the
 indeterminacy of the integration limits without losing the differentiability
 that the optimizer requires.
+\upd{Plan S7: la LUT de 1000 puntos y los 8~min son de la version de
+conferencia.}
+\sug{Reemplazar ``the complete pattern set, including the 1000-point LUT,
+is obtained in under 8~min without any mixed-integer or global search'' por
+``the complete $(M,\varphi)$ table with $d=19$ is obtained in
+\textbf{[tiempo]} without any mixed-integer or global search''.}
 \upd{Agregar un parrafo de conclusiones del RT: refinamiento por muestra,
 cumplimiento con red distorsionada, costo por muestra.}
 \sug{The off-line patterns were complemented with a real-time optimizer
@@ -1444,8 +1626,10 @@ such as the current ripple, and these weigh most at light load. The optimizer dr
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification.
-\upd{Revisor: esta frase choca con el RT, que queda bajo el limite. Punto 2.}
-\sug{Cambiar ``The optimizer drives'' por ``The off-line optimizer drives''.}
+\upd{Plan S7: esta frase choca con el RT, que queda bajo el limite. (Se
+borro la nota de trabajo futuro: el RT si se valido.)}
+\sug{Cambiar ``The optimizer drives'' por ``The off-line optimizer
+drives''.}
 
 
 % ----------------------------- Bibliografia -----------------------------

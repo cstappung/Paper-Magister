@@ -257,6 +257,24 @@ responde. (Agregada a CLAUDE.md.)
   sin redondear en resultados, 10 kW en contribuciones y resumen (el paper
   ya lo cumple).
 
+- `MAIN_FINAL.tex` (2026-11-11): el autor pego su version de Overleaf (commit
+  propio). Diferencias con la del repo: no tenia las 5 notas del PR #22
+  (restricciones duras, observador, regularizador, RT bajo el limite,
+  "off-line optimizer"), volvia la nota de trabajo futuro del RT y la Fig. de
+  perdidas va a 0.8\linewidth. Sobre esa version se agregaron las notas del
+  plan, solo como \upd/\sug (sin tocar texto): orden de contribuciones,
+  apertura de S2, epsilon_sep, LCL a S2.4, phi ("current displacement
+  angle" en vez de "load angle", 5 lugares), I_cond, modelo de conmutacion
+  igual al RT, titulo y metodo de S4.1, Delta gamma_max, observador, S4.2
+  sin RT, plataforma/OF/"now" en S5, S5.3 con un solo cambio, S5.4,
+  transitorio de re-siembra, parrafo inicial de S6, S6.0 Experimental Setup,
+  phi en S6.1, S6.2, frecuencias y rizado en S6.3, nota de S6.4 y S7. Se
+  borraron dos notas resueltas (verificar Fig. 4 y trabajo futuro del RT).
+- Diferencia que cambia el resultado (reportada en S3.2): eq:p_sw usa f_1 y
+  corriente con signo; el codigo RT usa 2 f_1, magnitud, E = E_0 + E' i y
+  correccion por R_G. Si Julia uso eq:p_sw tal cual, el off-line peso la
+  conmutacion a la mitad frente a la conduccion. Falta confirmar con el autor.
+
 ### Pendientes
 
 
