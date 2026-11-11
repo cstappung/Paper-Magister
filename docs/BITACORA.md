@@ -414,3 +414,15 @@ responde. (Agregada a CLAUDE.md.)
   (saltos solo sobre el riel N). Se quito el bus O y los rotulos S1..S4/O.
 - Esquema mas ancho (figura 1180x1270), columnas de fotos de 300 px.
 - C_f hacia la izquierda; P_in en la bajada de P; P_out en las tres fases.
+
+### 2026-11-11 - Figura del montaje, borrador 12
+
+- El autor prefiere la topologia ordenada (barras P y N como antes) y
+  mando un esquema clasico del T-Type como guia. Se descarto la version
+  con piernas en columnas y tierras.
+- Cada pierna es una fila P - S1 - nodo - S4 - N. Cada fase es una
+  columna recta: parte del punto O (bus O bajo el enlace DC), pasa por su
+  interruptor bidireccional (S2, S3), toca el nodo de su pierna y baja
+  derecho al LCL, saltando sobre las filas de las otras piernas.
+- Rotulos S1..S4 y O de vuelta (pierna a). Esquema de nuevo 400 px de
+  ancho util (figura 1170x1270), columnas de fotos de 330 px.
