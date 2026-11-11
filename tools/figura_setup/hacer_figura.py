@@ -137,33 +137,36 @@ def imagen(b64, x, y, w, h, png=True, rx=0):
         f'width="{w}" height="{h}" preserveAspectRatio="none"{clip}/>')
 
 
-def degradado(zona):
-    """Degradado radial: blanco al centro y color mas fuerte en los bordes,
-    para que resalte el equipo. Devuelve la url del gradiente."""
-    gid = f"grad_{zona or 'gris'}"
-    if not any(f'id="{gid}"' in d for d in defs):
-        borde = COLORES[zona][2] if zona else "#cfcfcf"
-        defs.append(f'<radialGradient id="{gid}" cx="50%" cy="55%" r="72%">'
-                    f'<stop offset="0" stop-color="#fff"/>'
-                    f'<stop offset="0.45" stop-color="#fff"/>'
-                    f'<stop offset="1" stop-color="{borde}"/>'
-                    f'</radialGradient>')
-    return f"url(#{gid})"
-
-
 def panel(x, y, w, h, zona=None, grad=False):
     """Recuadro gris, o con el color de la zona si es la foto de un bloque
-    del esquema. Con grad=True el relleno es un degradado hacia el borde."""
+    del esquema. Con grad=True el relleno va de blanco al centro al color
+    en el borde, siguiendo la forma del recuadro: fondo de color y encima
+    un rectangulo blanco difuminado, recortado al recuadro."""
     if zona:
-        borde, fondo, _ = COLORES[zona]
+        borde, fondo, cono_c = COLORES[zona]
         est = (f'stroke="{borde}" stroke-width="3.4" '
                f'stroke-dasharray="10 6"')
     else:
-        fondo, est = GRIS, f'stroke="{BORDE}" stroke-width="1.6"'
-    if grad:
-        fondo = degradado(zona)
+        fondo, cono_c = GRIS, "#cfcfcf"
+        est = f'stroke="{BORDE}" stroke-width="1.6"'
+    if not grad:
+        add(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" '
+            f'fill="{fondo}" {est}/>')
+        return
+    if not any('id="difuso"' in d for d in defs):
+        defs.append('<filter id="difuso" x="-10%" y="-10%" width="120%" '
+                    'height="120%"><feGaussianBlur stdDeviation="11"/>'
+                    '</filter>')
+    cid = f"clip{len(defs)}"
+    defs.append(f'<clipPath id="{cid}"><rect x="{x}" y="{y}" width="{w}" '
+                f'height="{h}" rx="14"/></clipPath>')
+    m = 18                                   # ancho de la franja de color
+    add(f'<g clip-path="url(#{cid})">'
+        f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{cono_c}"/>'
+        f'<rect x="{x+m}" y="{y+m}" width="{w-2*m}" height="{h-2*m}" '
+        f'rx="10" fill="#fff" filter="url(#difuso)"/></g>')
     add(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" '
-        f'fill="{fondo}" {est}/>')
+        f'fill="none" {est}/>')
 
 
 def texto(x, y, s, size=TXT, anchor="middle", italic=False, color="#000",
