@@ -343,3 +343,17 @@ responde. (Agregada a CLAUDE.md.)
   Respuestas del autor: emulador conectado directo; no detallar las senales
   del OPAL-RT (solo "control"); dejar por ahora las etiquetas del lab y las
   IP; cuidar el espacio.
+
+### 2026-11-11 - Figura del montaje, borrador 3 (vertical)
+
+- Pedido del autor: recortes que muestren el equipo completo, sin fondo,
+  figura vertical, rotulos cortos como en el ejemplo.
+- `tools/figura_setup/hacer_figura.py`: esquema trifasico a la izquierda
+  (fuentes DC arriba, T-Type, LCL y red abajo), fotos a la derecha.
+  Fotos recortadas con poligono a mano y fondo transparente (sin rembg).
+  Lineas naranjas punteadas unen cada bloque del esquema con su foto.
+- Rotulos: IT6006C-800-25 (x2), PW6001 (P_in, P_out), OP4510,
+  10 kW SiC T-Type, LCL filter, NHR9410. Flecha "control" de OP4510 al
+  conversor.
+- Pendiente: visto bueno del autor e insertar como Fig. [F9] en
+  Experimental Setup.
