@@ -34,6 +34,9 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
   del paper directamente. Solo agregar `\upd{}` con el comentario y `\sug{}`
   con el texto propuesto; el autor aplica o responde. Se pueden borrar notas
   `\upd`/`\sug` ya resueltas.
+- Si el autor responde "aplicar" en un comentario azul, aplicar el cambio en
+  el texto, borrar el azul y sus `\upd`/`\sug`, y dejar el texto anterior en
+  `\old{}` cuando se reescribe un parrafo o una frase con contenido.
 - No modificar el codigo del autor (`code/*.m`, `RTOPP_D19.m`), los `.slx`
   ni los archivos Julia. La
   optimizacion (GN, FO) se deja como la tiene el autor: solo reportar

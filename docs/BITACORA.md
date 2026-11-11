@@ -275,6 +275,34 @@ responde. (Agregada a CLAUDE.md.)
   correccion por R_G. Si Julia uso eq:p_sw tal cual, el off-line peso la
   conmutacion a la mitad frente a la conduccion. Falta confirmar con el autor.
 
+- `MAIN_FINAL.tex` (2026-11-11, segunda ronda): el autor respondio cada nota
+  con un comentario azul (commit propio, tal cual). Aplicado en el texto, con
+  el texto anterior en `\old{}`: orden de contribuciones; LCL al final de la
+  Seccion II (sin la referencia a sec:rt); epsilon_sep; phi = "current
+  displacement angle"; I_cond en perdidas e I_nom solo para TDD (tambien en
+  T4 y en la Seccion RT); eq:p_sw igual al RT (2 f_1, magnitud, E_0 + E' i,
+  R_G); S4.1 "Off-Line Optimization Problem", Delta gamma_max sin valor y sin
+  citar IV-B; frase de restricciones duras (el RT sigue minimizando perdidas);
+  metodo de Julia en S4.1 (mismos tiempos, total ~45 min, M de 0.83 a 0.9);
+  observador = filtro de Kalman hasta el 13, 5 kHz, compensando el LCL (cita
+  nueva `kalman_filter`, 30 refs); S4.2 sin RT; S5 con OPAL-RT y Ts (sin peor
+  caso de ejecucion), OF definida, sin "now"; S5.3 con un solo cambio; S5.4
+  sin "regularizer" ni barrido; transitorio de re-siembra; intro de
+  resultados sin PLECS; subseccion Experimental Setup + Tabla de equipos
+  (ITECH IT6006C-800-25 x2, NHR 9410, OPAL-RT OP4510, Hioki PW6001);
+  PD-PWM/SV-GDPWM en Harmonic Compliance con TDD en [XX]; RT bajo el limite;
+  frecuencias y rizado en Loss Comparison; offset explicado (rizado +
+  datasheet sin DPT; hipotesis de SV-GDPWM a baja corriente, a revisar);
+  OPP -> RT-OPP en la Tabla de perdidas; conclusiones con 45 min y parrafo
+  RT (5 % de ahorro por compensar armonicos).
+- Decisiones del autor: "The optimizer drives" se deja; la sugerencia de
+  convergencia se quita hasta tener datos (comentada al final de resultados,
+  junto con el barrido de lambda_l); solo queda pendiente una subseccion RT
+  de compensacion de armonicos.
+- Pendientes nuevos: foto del montaje; P_in - P_out y donde se mide P_out;
+  confirmar Julia con f_1 y signo; TDD de PD-PWM/SV-GDPWM al rehacer la
+  Fig. 5; cifra unica de cambio de perdidas en RT; ensayo del 5 %.
+
 ### Pendientes
 
 
