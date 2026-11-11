@@ -447,3 +447,9 @@ responde. (Agregada a CLAUDE.md.)
   seccion... compensacion de armonicos") y el \upd "Pendiente (autor)" que
   ocupaba ese lugar.
 - `main_plan.tex`: F9 lista (1 col.), F10 nueva, S6.4 con contenido.
+- Respuestas del autor: la figura de compensacion es medicion experimental
+  en el prototipo; red con 8 % de quinto y septimo y 4 % de undecimo y
+  decimotercero; el 5 % de ahorro de perdidas es de otro ensayo (8 % de
+  quinto); un CHB011M12GM4T por fase. \sug y caption actualizados; queda
+  \upd para confirmar que la figura es a 5 kW (deducido de la corriente) y
+  el de rotulos en ingles / I_nom.
