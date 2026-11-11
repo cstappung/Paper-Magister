@@ -122,6 +122,12 @@ $\rightarrow$ evidencia.
 \end{tikzpicture}
 \end{center}
 
+\nota{Estado 2026-11-11: los cambios del campo \emph{Cambios} ya se
+aplicaron en \texttt{MAIN\_FINAL.tex} (con \texttt{\textbackslash old} para
+comparar), salvo los marcados como pendientes. Decisiones nuevas: $\varphi$ se
+llama ``current displacement angle''; $I_{cond}$ es la corriente que conduce y
+$I_{nom}$ solo normaliza el TDD; ``The optimizer drives'' se deja como está.}
+
 \noindent\textbf{Las frases que el paper tiene que dejar claras:}
 \begin{enumerate}[leftmargin=6mm]
 \item El margen de distorsión que abre la modulación multipolar no se gasta
@@ -180,8 +186,7 @@ T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\
 T3 & \texttt{tab:parametros}     & S4.1 & \listo Parámetros del sistema ($d=19$, 950~Hz) & 1 col.\\
 T4 & \texttt{tab:rt\_param}      & S5 & \listo Parámetros del RT-OPP & 1 col.\\
 T5 & \texttt{tab:comparacion}    & S6.3 & \listo Pérdidas totales en el punto nominal, modelo y medición & 1 col.\\
-T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos (fuente DC, red/emulador, OPAL-RT, analizador,
-                                         sondas, osciloscopio): pedir los datos al autor al pasar al paper} & 1 col.\\
+T6 & \texttt{tab:equipos}        & S6.0 & \listo Equipos del montaje & 1 col.\\
 \midrule
 A1 & \texttt{alg:rtopp}          & S5 & \listo Refinamiento RT del OPP & 1 col.\\
 \bottomrule
@@ -313,7 +318,7 @@ RT (S5.3), así S5.3 lo reusa sin cambios.
 \campo{Rol} Juntar los modelos en el diseño off-line y mostrar cómo se usa
 la solución.
 
-\bloque{S4.1}{Off-Line Pattern Design (antes ``Optimization Problem'')}
+\bloque{S4.1}{Off-Line Optimization Problem (antes ``Optimization Problem'')}
 \campo{Contenido}
 \begin{itemize}
 \item Problema por punto $(M,\varphi)$: mínimas pérdidas sujeto a
@@ -422,14 +427,15 @@ $(I_d,I_q)$, con el punto nominal $I_d=20$~A, $I_q=0$ $\Leftrightarrow$
 agregar la equivalencia del punto nominal (9.8~kW, sin redondear; en las
 contribuciones y el resumen se habla del prototipo de 10~kW).
 
-\bloque{S6.0}{(nueva) Experimental Setup}
+\bloque{S6.0}{Experimental Setup}
 \campo{Rol} Decir con qué se midió, breve.\\
 \campo{Contenido} Un párrafo corto: prototipo T-Type SiC de 10~kW, 750~V,
 con el LCL de T3; fuente DC y conexión AC; OPAL-RT OP4510; método y equipo
 de medición de pérdidas.\\
 \campo{Elementos} F9 (una sola foto del montaje), T6 (equipos).\\
-\pendiente{Foto: la arma el autor. Datos de T6 y de la medición: pedirlos
-al autor al pasar al paper.}
+\listo T6 con fuentes ITECH IT6006C-800-25 (2 en paralelo), emulador NHR 9410,
+OPAL-RT OP4510 y Hioki PW6001. \pendiente{Foto (la arma el autor) y confirmar
+$P_{in}-P_{out}$ y dónde se mide $P_{out}$.}
 
 \bloque{S6.1}{Optimized Angles and Pulse Pattern}
 \campo{Contenido} Patrón multipolar en $M=0.8660$; conmutaciones cerca de
@@ -474,12 +480,12 @@ hasta 14.4/37.7\pct{}.\\
 33/34\pct{}): se ve después. Offset mayor de SV-GDPWM; confirmar que se
 midió con el RT-OPP activo.}
 
-\bloque{S6.4}{(a futuro) Convergence of the Real-Time Optimizer}
-\pendiente{La escribe el autor más adelante. Debe juntar los resultados
-RT: barrido de $\lambda_\ell$ (desde S5.4), red distorsionada,
-convergencia desde la semilla, transitorios ante escalones de $M$ y
-$\varphi$ y costo por muestra. Hoy es una \texttt{\textbackslash sug} en el
-paper.}
+\bloque{S6.4}{(a futuro) Harmonic Compensation}
+\pendiente{La escribe el autor más adelante: ejemplo con red con fondo
+armónico y el ahorro de pérdidas por compensar (aprox.\ 5\pct{}). El barrido
+de $\lambda_\ell$ y la sugerencia de convergencia quedaron comentados (\%) al
+final de los resultados del paper. Convergencia, transitorios y costo por
+muestra no van por ahora.}
 
 %-------------------------------------------------------------------------
 \bloque{S7}{Conclusions}
@@ -542,7 +548,7 @@ pérdidas.\\
 \midrule
 LCL                          & S3.3 $\rightarrow$ S2.4 \\
 Multi-start y LUT            & párrafo inicial de S6 $\rightarrow$ S4.1, que pasa a
-                               llamarse ``Off-Line Pattern Design'' \\
+                               llamarse ``Off-Line Optimization Problem'' \\
 Plataforma y $T_s$           & párrafo inicial de S6 $\rightarrow$ párrafo inicial de S5 \\
 Re-siembra                   & S4.2 y S5.5 $\rightarrow$ solo S5.5 \\
 Barrido de $\lambda_\ell$    & S5.4 $\rightarrow$ S6.4 (a futuro) \\
