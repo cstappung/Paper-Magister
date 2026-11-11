@@ -393,3 +393,9 @@ responde. (Agregada a CLAUDE.md.)
 - Recuadros de las fotos con degradado radial: blanco al centro y el color
   del bloque mas fuerte en los bordes (gris para PW6001 y OP4510).
 - Figura 40 px mas alta (1150x1270) para separar mas el LCL de la red.
+
+### 2026-11-11 - Figura del montaje, borrador 8
+
+- Degradado con la forma del recuadro (no circular): fondo del color del
+  bloque y encima un rectangulo blanco difuminado (feGaussianBlur),
+  recortado al recuadro. Las esquinas ya no quedan mas oscuras.
