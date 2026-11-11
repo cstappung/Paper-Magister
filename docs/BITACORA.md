@@ -357,3 +357,15 @@ responde. (Agregada a CLAUDE.md.)
   conversor.
 - Pendiente: visto bueno del autor e insertar como Fig. [F9] en
   Experimental Setup.
+
+### 2026-11-11 - Figura del montaje, borrador 4
+
+- Pedido del autor: esquema al centro, foto del prototipo mas chica,
+  agregar el modulo SiC (CHB011M12GM4T, imagen del fabricante en
+  `fotos/modulo_sic.png`), colores mas intensos, lineas mas gruesas y mejores
+  simbolos. No insertar aun en `MAIN_FINAL.tex`.
+- Izquierda: ITECH (x2), prototipo (prueba sin fondo, recorte a mano),
+  LCL. Derecha: PW6001, OP4510 (flecha de control), modulo SiC, NHR9410.
+- MOSFET con canal en tres tramos, flecha y diodo; trazo 3 px; naranjo y
+  azul mas saturados; fotos con +25 % de saturacion.
+- Pendiente: el autor confirma si el prototipo queda sin fondo.
