@@ -4,8 +4,7 @@
 # Uso:  python3 tools/figura_setup/hacer_figura.py
 #       node tools/figura_setup/render.js
 #
-# Formato vertical: esquema trifasico al centro (piernas en columnas, salidas
-# rectas al LCL y puntos medios a tierra), con la potencia fluyendo
+# Formato vertical: esquema trifasico al centro (fases rectas hasta el LCL), con la potencia fluyendo
 # de arriba (fuentes DC) hacia abajo (red), y los equipos a ambos lados,
 # recortados sin fondo y unidos a su bloque con un cono del color del bloque.
 #
@@ -25,7 +24,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 FOTOS = os.path.join(AQUI, "fotos")
 SALIDA = os.path.join(AQUI, "..", "..", "figuras", "setup")
 
-W, H = 1180, 1270
+W, H = 1170, 1270
 FUENTE = "'Times New Roman', 'Liberation Serif', serif"
 TXT = 30
 GRIS = "#efefef"
@@ -223,7 +222,7 @@ def recuadro_equipo(x, y, w, titulo, equipos, gap=10, ancho=None,
 
 # ======================= esquema en (u, v) ==============================
 # El grupo transpone: x = X0 + v, y = Y0 + u.
-X0, Y0 = 385, 40
+X0, Y0 = 395, 40
 esq = []          # elementos del grupo (coordenadas u, v)
 txt = []          # textos ya en (x, y)
 
@@ -345,79 +344,81 @@ def caja_zona(nombre, u0, v0, u1, v1):
                f'stroke-dasharray="10 6"/>')
 
 
-def placas_u(u, v, ancho=16, sep=6):
-    """Placas de condensador para una rama a lo largo de u."""
-    L([(u - sep, v - ancho), (u - sep, v + ancho)], w=4.2)
-    L([(u + sep, v - ancho), (u + sep, v + ancho)], w=4.2)
-
-
-def tierra(u, v):
-    """Simbolo de tierra colgando hacia +u desde (u, v)."""
-    L([(u, v), (u + 10, v)])
-    for k, a in enumerate([14, 9, 4]):
-        L([(u + 10 + 6 * k, v - a), (u + 10 + 6 * k, v + a)], w=2.8)
-
-
 # --- geometria (u en el sentido del flujo, v transversal) ---------------
-# Piernas en columnas, una al lado de la otra (como el ejemplo): riel P
-# arriba, riel N abajo, cada salida baja recta al LCL y cada punto medio va
-# a su propio simbolo de tierra (no hay bus O).
-VP_, VN_ = 0, 432                        # bajadas de P (izq.) y N (der.)
+# Como el ejemplo clasico del T-Type: barras P (izq.) y N (der.), cada pierna
+# es una fila P - S1 - nodo - S4 - N, y cada fase es una columna recta que
+# parte en el punto O, pasa por su interruptor bidireccional (S2, S3), toca
+# el nodo de su pierna y baja derecho al LCL. Las fases saltan sobre las
+# filas de las otras piernas.
+vP, vN = 50, 380                         # barras P y N
+VO = [155, 215, 275]                     # columnas de las fases a, b, c
+VS1, VS4 = 95, 335                       # centro de S1 y S4 en cada fila
 UDC = [30, 90]                           # fuentes DC
-UPR, UNR = 215, 600                      # riel P y riel N
-UO = 360                                 # nodo de salida de cada pierna
-XL = [112, 242, 372]                     # columna S1/S4 de cada pierna
-VO = [x + 38 for x in XL]                # salidas a, b, c (rectas al LCL)
-VNEU = [x - 58 for x in XL]              # rama del punto medio (S2, S3)
-VR = VO                                  # columnas del LCL = salidas
-UL1, UC, UL2 = (835, 890), [965, 940, 915], (990, 1040)
+UCAP = 180                               # enlace DC (punto medio = O)
+UOB = 212                                # bus O que alimenta las 3 fases
+URF = [385, 555, 725]                    # filas de las piernas a, b, c
+VR = VO                                  # columnas del LCL = fases
+UL1, UC, UL2 = (835, 890), [915, 940, 965], (990, 1040)
 UG, USTAR = 1140, 1185
-VSTAR = VR[0] - 57                       # estrella de los C_f (a la izq.)
+VSTAR = VR[2] + 57
 
-# fuentes DC en paralelo
+# fuentes DC en paralelo y barras P, N
 for u in UDC:
-    fuente_dc(u, VP_, VN_)
-    P(u, VP_)
-    P(u, VN_)
-# bajada de P con el enlace DC (dos condensadores, punto medio a tierra)
-L([(UDC[0], VP_), (300 - 6, VP_)])
-placas_u(300, VP_)
-L([(300 + 6, VP_), (500 - 6, VP_)])
-placas_u(500, VP_)
-L([(500 + 6, VP_), (UNR, VP_)])
-L([(400, VP_), (400, VP_ - 22)])
-tierra(400, VP_ - 22)
-P(400, VP_)
-# bajada de N por la derecha
-L([(UDC[0], VN_), (UNR, VN_)])
-# rieles: P recto, N con saltos donde lo cruzan las salidas
-L([(UPR, VP_), (UPR, XL[2])])
-V_saltos(UNR, VP_, VN_, VO)
-P(UPR, VP_)
+    fuente_dc(u, vP, vN)
+    P(u, vP)
+    P(u, vN)
+L([(UDC[0], vP), (URF[2], vP)])
+L([(UDC[0], vN), (URF[2], vN)])
+# enlace DC con punto medio O
+vm = VO[1]
+L([(UCAP, vP), (UCAP, (vP + vm) / 2 - 6)])
+placas(UCAP, (vP + vm) / 2)
+L([(UCAP, (vP + vm) / 2 + 6), (UCAP, (vm + vN) / 2 - 6)])
+placas(UCAP, (vm + vN) / 2)
+L([(UCAP, (vm + vN) / 2 + 6), (UCAP, vN)])
+P(UCAP, vP)
+P(UCAP, vN)
+P(UCAP, vm)
+x, y = T(UCAP, vm)
+texto(x + 10, y - 8, "O", size=24, anchor="start", lista=txt)
+# bus O: del punto medio a las tres columnas
+L([(UCAP, vm), (UOB, vm)])
+L([(UOB, VO[0]), (UOB, VO[2])])
+P(UOB, vm)
 
-for k, x in enumerate(XL):
-    # S1 (P -> salida) y S4 (salida -> N), con drenador arriba
-    L([(UPR, x), (290 - 28, x)])
-    mosfet(290, x, rot=-90)
-    L([(290 + 28, x), (470 - 28, x)])
-    mosfet(470, x, rot=-90)
-    L([(470 + 28, x), (UNR, x)])
-    P(UPR, x)
-    P(UNR, x)
-    P(UO, x)
-    # rama del punto medio: S2 y S3 en antiserie hasta tierra
-    vn = VNEU[k]
-    L([(UO, x), (UO, vn), (420 - 28, vn)])
-    mosfet(420, vn, rot=-90)
-    L([(420 + 28, vn), (490 - 28, vn)])
-    mosfet(490, vn, rot=90)
-    L([(490 + 28, vn), (545, vn)])
-    tierra(545, vn)
-    # salida recta hasta el LCL
-    L([(UO, x), (UO, VO[k]), (UL1[0], VO[k])])
-    xx, yy = T(700, VO[k])
-    texto(xx + 8, yy, "abc"[k], size=24, italic=True, anchor="start",
+for k, uf in enumerate(URF):
+    # fila de la pierna: P - S1 - nodo - S4 - N
+    L([(uf, vP), (uf, VS1 - 28)])
+    mosfet(uf, VS1)
+    L([(uf, VS1 + 28), (uf, VS4 - 28)])
+    mosfet(uf, VS4)
+    L([(uf, VS4 + 28), (uf, vN)])
+    P(uf, vP)
+    P(uf, vN)
+    P(uf, VO[k])
+    # columna de la fase: O - S2 - S3 - nodo - LCL, con saltos sobre las
+    # filas de las otras piernas
+    v = VO[k]
+    u2, u3 = uf - 123, uf - 55           # centros de S2 y S3
+    L([(UOB, v), (u2 - 28, v)]) if k == 0 else L_saltos(
+        UOB, u2 - 28, v, [URF[j] for j in range(k)])
+    mosfet(u2, v, rot=-90)
+    L([(u2 + 28, v), (u3 - 28, v)])
+    mosfet(u3, v, rot=90)
+    L([(u3 + 28, v), (uf, v)])
+    L_saltos(uf, UL1[0], v, [URF[j] for j in range(k + 1, 3)])
+    xx, yy = T(792, v)
+    texto(xx - 8, yy, "abc"[k], size=24, italic=True, anchor="end",
           lista=txt)
+
+# rotulos de los interruptores (pierna a)
+x, y = T(URF[0], VS1)
+sub_txt(x - 14, y + 56, "S", "1", size=22, lista=txt)
+x, y = T(URF[0], VS4)
+sub_txt(x - 14, y + 56, "S", "4", size=22, lista=txt)
+for uu, n in [(URF[0] - 123, "2"), (URF[0] - 55, "3")]:
+    x, y = T(uu, VO[0])
+    sub_txt(x - 34, y + 8, "S", n, size=22, anchor="end", lista=txt)
 
 # LCL y red
 for k in range(3):
@@ -429,41 +430,38 @@ for k in range(3):
     L([(UG + 21, VR[k]), (USTAR, VR[k])])
     P(USTAR, VR[k])
 for k in range(3):
-    # C_f hacia la izquierda, hasta la estrella
     uc = UC[k]
     P(uc, VR[k])
-    vpl = VR[k] - 30
-    L([(uc, VR[k]), (uc, vpl + 6)])
+    vpl = VR[k] + 30
+    L([(uc, VR[k]), (uc, vpl - 6)])
     placas(uc, vpl, ancho=12)
-    V_saltos(uc, VSTAR, vpl - 6, [VR[j] for j in range(k)])
-L([(min(UC), VSTAR), (max(UC), VSTAR)])
+    V_saltos(uc, vpl + 6, VSTAR, [VR[j] for j in range(k + 1, 3)])
+L([(UC[0], VSTAR), (UC[2], VSTAR)])
 L([(USTAR, VR[0]), (USTAR, VR[2])])
 x, y = T((UL1[0] + UL1[1]) / 2, VR[0])
 sub_txt(x - 14, y + 8, "L", "1", size=24, anchor="end", lista=txt)
 x, y = T((UL2[0] + UL2[1]) / 2, VR[0])
 sub_txt(x - 14, y + 8, "L", "2", size=24, anchor="end", lista=txt)
-x, y = T(max(UC), VSTAR)
-sub_txt(x - 10, y + 34, "C", "f", size=24, anchor="start", lista=txt)
+x, y = T(UC[2], VR[2] + 30)
+sub_txt(x - 10, y + 44, "C", "f", size=24, lista=txt)
 
 # medicion de potencia (antes del LCL)
-P(150, VP_, 6.5, AZUL)
-x, y = T(150, VP_)
+P(135, vP, 6.5, AZUL)
+x, y = T(135, vP)
 sub_txt(x + 12, y + 8, "P", "in", size=24, color=AZUL, lista=txt)
-# P_out en las tres fases, a la entrada del LCL
 UPO = 808
 for k in range(3):
     P(UPO, VR[k], 6.5, AZUL)
-x, y = T(UPO, VR[0])
-sub_txt(x - 12, y - 6, "P", "out", size=24, color=AZUL, anchor="end",
-        lista=txt)
+x, y = T(UPO, VR[2])
+sub_txt(x + 12, y - 6, "P", "out", size=24, color=AZUL, lista=txt)
 
 # recuadros de cada bloque (en u, v); la pierna va despues del conversor
 # para quedar encima. Entre el LCL y la red queda un espacio.
 CAJAS = {
-    "dc":    (8, VP_ - 20, 115, VN_ + 20),
-    "conv":  (192, VP_ - 40, 628, VN_ + 20),
-    "pierna": (232, VNEU[2] - 32, 592, VO[2] + 14),
-    "lcl":   (815, VSTAR - 16, 1058, VR[2] + 34),
+    "dc":    (8, vP - 22, 115, vN + 22),
+    "conv":  (150, vP - 26, 768, vN + 22),
+    "pierna": (URF[2] - 162, vP - 14, URF[2] + 34, vN + 14),
+    "lcl":   (815, VR[0] - 34, 1058, VSTAR + 16),
     "red":   (1112, VR[0] - 34, 1205, VR[2] + 34),
 }
 for nombre, c in CAJAS.items():
@@ -478,8 +476,8 @@ def caja_xy(nombre):
 
 
 # recuadro gris del esquema (al centro)
-SX0, SY0 = X0 - 40, 20
-SX1, SY1 = X0 + 452, Y0 + 1225
+SX0, SY0 = X0 - 20, 20
+SX1, SY1 = X0 + 420, Y0 + 1225
 panel(SX0, SY0, SX1 - SX0, SY1 - SY0)
 conos = len(partes)      # aqui se insertan los conos, bajo el esquema
 add(f'<g transform="matrix(0 1 1 0 {X0} {Y0})">' + "".join(esq_fondo)
@@ -491,8 +489,8 @@ XI, XD, WC = 20, SX1 + 25, SX0 - 45      # columna izquierda y derecha
 # izquierda: fuentes DC, prototipo y filtro LCL
 f_dc = recuadro_equipo(XI, 20, WC, "IT6006C-800-25 (&#215;2)",
                        ["itech1", "itech2"], zona="dc")
-f_pr = recuadro_equipo(XI, 300, WC, "10 kW SiC T-Type", ["proto"],
-                       ancho=260, zona="conv")
+f_pr = recuadro_equipo(XI, 345, WC, "10 kW SiC T-Type", ["proto"],
+                       ancho=280, zona="conv")
 f_lc = recuadro_equipo(XI, 850, WC, "LCL filter", ["lcl"], zona="lcl")
 # derecha: analizador, controlador, modulo SiC y emulador de red
 f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
@@ -501,8 +499,8 @@ f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
                        "font-size='19'>out</tspan></tspan><tspan dy='-6'>)"
                        "</tspan>", ["hioki"])
 f_op = recuadro_equipo(XD, f_hi[1] + f_hi[3] + 16, WC, "OP4510", ["opal"])
-f_mo = recuadro_equipo(XD, 400, WC, "CHB011M12GM4T", ["modulo"],
-                       ancho=210, zona="pierna")
+f_mo = recuadro_equipo(XD, 560, WC, "CHB011M12GM4T", ["modulo"],
+                       ancho=230, zona="pierna")
 f_nh = recuadro_equipo(XD, 990, WC, "NHR9410", ["nhr"], zona="red")
 
 
