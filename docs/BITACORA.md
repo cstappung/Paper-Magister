@@ -237,6 +237,25 @@ responde. (Agregada a CLAUDE.md.)
   ancho fijo (se veia aplastada); bloque nuevo S6.0 "Experimental Setup" con
   F9 (foto + diagrama de conexiones) y T6 (equipos), pedido del autor.
 
+- `main_plan.tex` (2026-11-11): aplicados los comentarios azules del autor
+  (primero se subio su version tal cual). Cada bloque tiene ahora el campo
+  "Cambios" con lo acordado que falta llevar al paper (solo como \upd/\sug).
+  Decisiones: contribuciones en el orden del cuerpo; la (b) de S1 se descarta
+  (el aporte es que ya no hay enteros); Hessiano DP se mantiene; S2* y el
+  esqueleto de 8 secciones quedan a futuro; LCL sale de Loss Estimation
+  (propuesto S2.4, por confirmar); phi = desfase de la corriente del
+  conversor respecto de la fundamental (no "load angle"); un solo simbolo
+  I_cond; ajustar el modelo de conmutacion de S3 para que calce con el RT;
+  S4.1 pasa a "Off-Line Pattern Design" con multi-start y LUT, y
+  delta -> Delta gamma_max; re-siembra solo en S5.5; plataforma y Ts al
+  inicio de S5; barrido de lambda_l a S6.4 (a futuro); S6.0 breve con una
+  sola foto (la arma el autor) y T6 (pedir datos al autor); M = 0.87 si es
+  punto de tabla (paso 0.001 + punto extra 0.835); el OPP equivale a
+  1900 Hz y 2850/4050 Hz son portadoras, cada una la minima que cumple
+  IEEE 519; el off-line no restringe el rizado, solo el RT (53-97).
+  Por confirmar: destino del LCL y el "aprox 20 kW" del comentario de S6
+  (el paper dice 9.8 kW).
+
 ### Pendientes
 
 

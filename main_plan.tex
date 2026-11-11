@@ -10,13 +10,15 @@
 %     cambios: "mueve S3.3 a S4", "parte S5.4 en dos", etc.
 %   - Campos de cada bloque:
 %       Rol       -> por que esta en el paper (funcion argumental)
-%       Contenido -> que se dice, en orden
+%       Contenido -> que se dice, en orden (version acordada)
 %       Elementos -> ecuaciones / figuras / tablas que viven ahi
+%       Cambios   -> lo acordado que falta llevar al paper; en
+%                    MAIN_FINAL.tex entra solo como \upd/\sug
 %   - \pendiente{...} marca decisiones o contenido abierto.
 %   - \nota{...}      marca observaciones de estructura.
-%   - \upd{...} (rojo) comentario de la revision del hilo conductor y
-%     \sug{...} (verde) la sugerencia asociada. Se borran cuando se decide.
-%   - Figuras F1..F8, tablas T1..T5 y el Algoritmo A1 tienen su propio mapa
+%   - \upd{...} (rojo) comentario y \sug{...} (verde) sugerencia, solo
+%     cuando algo necesita la revision del autor.
+%   - Figuras F1..F9, tablas T1..T6 y el Algoritmo A1 tienen su propio mapa
 %     en la Seccion 3.
 %=========================================================================
 \documentclass[11pt,a4paper]{article}
@@ -49,7 +51,7 @@
 \newcommand{\pendiente}[1]{{\color{Warn}\textbf{[PENDIENTE]} #1}}
 \newcommand{\nota}[1]{{\color{Note}\textbf{[NOTA]} #1}}
 \newcommand{\listo}{{\color{Done}\textbf{[LISTA]}}\ }
-% Comentarios de la revision del hilo (rojo) y sugerencias (verde)
+% Comentarios para el autor (rojo) y sugerencias (verde)
 \newcommand{\upd}[1]{\par\smallskip\noindent{\color{red!75!black}\small
     \textbf{[COMENTARIO]} #1}\par}
 \newcommand{\sug}[1]{\par\noindent{\color{green!45!black}\small
@@ -80,16 +82,16 @@ for Grid-Connected T-Type Converters With TDD Compliance}
 \toprule
 Archivo destino    & \texttt{MAIN\_FINAL.tex} (un solo archivo) \\
 Formato            & IEEEtran; hoy con la opción \texttt{conference}
-                     \pendiente{pasar a \texttt{journal} cuando se defina la revista} \\
+                     \pendiente{\texttt{journal} y revista se ven después;
+                     ahora prima el contenido} \\
 Revista objetivo   & \pendiente{definir (TPEL / TIE / JESTPE...) y su límite de páginas} \\
 Idioma             & Inglés, estilo IEEE \\
 Estado             & Off-line completo; RT-OPP descrito; mediciones de
-                     pérdidas en el prototipo de 10~kW; faltan los resultados
-                     del RT-OPP (convergencia, transitorios, red distorsionada,
-                     costo) \\
+                     pérdidas en el prototipo de 10~kW; los resultados del
+                     RT-OPP (S6.4) quedan para después \\
 Secciones          & 7 (S1--S7) \\
-Figuras / tablas   & 8 figuras (F1--F8), 5 tablas (T1--T5), 1 algoritmo (A1);
-                     propuestas F9 (montaje) y T6 (equipos) \\
+Figuras / tablas   & 9 figuras (F1--F9), 6 tablas (T1--T6), 1 algoritmo (A1);
+                     F9 (foto del montaje) y T6 (equipos) por hacer \\
 Referencias        & 29, embebidas como \texttt{thebibliography}, orden de cita \\
 \bottomrule
 \end{tabularx}
@@ -109,11 +111,11 @@ $\rightarrow$ evidencia.
   a/.style={-{Latex[length=2mm]},thick,draw=IDblue!70}
 ]
 \node[b] (s1) at (0,0)       {\textbf{S1} Introducción\\T-Type SiC, OPP, tiempo real};
-\node[b] (s2) at (4.6,0)     {\textbf{S2} Formulación\\armónica multipolar};
-\node[b] (s3) at (9.2,0)     {\textbf{S3} Modelo de\\pérdidas + LCL};
-\node[b] (s4) at (13.8,0)    {\textbf{S4} Problema off-line\\+ esquema de control};
+\node[b] (s2) at (4.6,0)     {\textbf{S2} Formulación\\armónica multipolar + LCL};
+\node[b] (s3) at (9.2,0)     {\textbf{S3} Modelo de\\pérdidas};
+\node[b] (s4) at (13.8,0)    {\textbf{S4} Diseño off-line\\+ esquema de control};
 \node[b] (s5) at (13.8,-2.6) {\textbf{S5} RT-OPP\\(SQP, una iteración GN)};
-\node[b] (s6) at (9.2,-2.6)  {\textbf{S6} Resultados\\simulación + medición};
+\node[b] (s6) at (9.2,-2.6)  {\textbf{S6} Resultados\\montaje + simulación + medición};
 \node[b] (s7) at (4.6,-2.6)  {\textbf{S7} Conclusiones};
 \draw[a] (s1)--(s2); \draw[a] (s2)--(s3); \draw[a] (s3)--(s4);
 \draw[a] (s4)--(s5); \draw[a] (s5)--(s6); \draw[a] (s6)--(s7);
@@ -126,19 +128,12 @@ $\rightarrow$ evidencia.
       en bajar más el TDD: se \emph{reinvierte} en bajar pérdidas hasta el
       límite de IEEE~519 (off-line, S2--S4).
 \item Ese patrón deja de ser óptimo entre puntos de la tabla y con red
-      distorsionada; el RT-OPP lo refina en línea con costo acotado por
-      muestra y recupera el cumplimiento, partiendo de la tabla (S5).
+      distorsionada; el RT-OPP lo refina en línea minimizando distorsión y
+      pérdidas, con los límites como pesos adaptativos, y recupera el
+      cumplimiento con costo acotado por muestra (S5).
 \item La ganancia en pérdidas se ve en todo el rango de operación y se
       confirma con mediciones (S6).
 \end{enumerate}
-
-\upd{Frase 2: el RT minimiza una FO que combina distorsión y pérdidas
-(decisión del autor), y los límites entran como pesos adaptativos, no como
-restricciones duras. Eso explica que quede bajo el límite.}
-\sug{Frase 2: ``Ese patrón deja de ser óptimo entre puntos de la tabla y con
-red distorsionada; el RT-OPP lo refina en línea minimizando distorsión y
-pérdidas, con los límites como pesos adaptativos, y recupera el cumplimiento
-con costo acotado por muestra.''}
 
 %=========================================================================
 \section*{2. Mapa de secciones}
@@ -149,19 +144,19 @@ con costo acotado por muestra.''}
 \textbf{ID} & \textbf{Sección} & \textbf{Rol en el argumento} & \textbf{Ecs.} & \textbf{Fig./Tab.}\\
 \midrule
 S1 & Introduction                      & Contexto, brechas y contribuciones & -- & F1\\
-S2 & Multipolar Harmonic Formulation   & Convierte el OPP en un NLP continuo & fourier\_gamma, tdd, niveles & --\\
-S3 & Loss Estimation                   & Pérdidas en función de $\gv$; filtro & p\_con, t\_i, pcond\_final, p\_sw, fres & F2, F3, T1, T2\\
-S4 & OPP Implementation Scheme         & Problema off-line y lazo de control & opp\_propuesto & T3\\
+S2 & Multipolar Harmonic Formulation   & Convierte el OPP en un NLP continuo; filtro que pondera los armónicos & fourier\_gamma, tdd, niveles, fres & --\\
+S3 & Loss Estimation                   & Pérdidas en función de $\gv$ & p\_con, t\_i, pcond\_final, p\_sw & F2, F3, T1, T2\\
+S4 & OPP Implementation Scheme         & Diseño off-line (problema, multi-start, LUT) y lazo de control & opp\_propuesto & T3\\
 S5 & Real-Time Implementation          & Refinamiento en línea (SQP) & rt\_lin \dots\ rt\_theta & A1, T4\\
 S6 & Simulation and Experimental Results & Evidencia & -- & F4--F9, T5, T6\\
-S7 & Conclusions                       & Cierre y trabajo futuro & -- & --\\
+S7 & Conclusions                       & Cierre: off-line $\rightarrow$ RT $\rightarrow$ medición & -- & --\\
 \bottomrule
 \end{tabularx}}
 
 \vspace{1mm}
-\nota{La topología (T-Type + SiC) ya no es una sección propia: vive en el
-párrafo 2 de S1. F1 se ancla después de S1, pero se cita por primera vez en
-S3.1.}
+\nota{La topología (T-Type + SiC) vive en el párrafo 2 de S1; F1 se ancla
+después de S1 y se cita por primera vez en S3.1. F3 se ancla en S3.2 por
+diagramación (decisión del autor), aunque se describe en S4.2.}
 
 %=========================================================================
 \section*{3. Mapa de figuras, tablas y algoritmo}
@@ -173,19 +168,20 @@ S3.1.}
 F1 & \texttt{fig:ttype}          & tras S1 & \listo Topología T-Type y estados P/O/N & 2 col.\\
 F2 & \texttt{fig:patron\_opp}    & S3.1 & \listo Patrón multipolar $d=5$, pares $(\gamma_i,\gamma_{i+d})$ & 1 col.\\
 F3 & \texttt{fig:control}        & S3.2 & \listo Esquema de control v4 (rediseño del autor) & 2 col.\\
-F4 & \texttt{fig:patron\_pulsos} & S6.1 & Ángulos vs.\ $M$ y patrón \pendiente{verificar $d=19$; dependencia en $\varphi$} & 2 col.\\
+F4 & \texttt{fig:patron\_pulsos} & S6.1 & \listo Ángulos vs.\ $M$ y patrón ($d=19$); el texto dice que en $\varphi$ hay discontinuidades & 2 col.\\
 F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendiente{aún DPWM1 6450~Hz y $d=17$} & 2 col.\\
 F6 & \texttt{fig:perdidas}       & S6.3 & \listo Mapas de pérdidas del modelo en $(I_d,I_q)$: OPP, PD-PWM, SV-GDPWM & 2 col.\\
 F7 & \texttt{fig:comp\_gdpwm}    & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ SV-GDPWM & 2 col.\\
 F8 & \texttt{fig:comp\_pwm}      & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ PD-PWM & 2 col.\\
-F9 & \texttt{fig:setup}         & S6.0 & \pendiente{Foto del banco con los equipos numerados + diagrama de conexiones y puntos de medición} & 2 col.\\
+F9 & \texttt{fig:setup}          & S6.0 & \pendiente{Una sola foto del montaje; la arma el autor} & 2 col.\\
 \midrule
 T1 & \texttt{tab:estados\_cond}  & S3.1 & \listo Estados de conducción por pierna & 1 col.\\
 T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\\
 T3 & \texttt{tab:parametros}     & S4.1 & \listo Parámetros del sistema ($d=19$, 950~Hz) & 1 col.\\
 T4 & \texttt{tab:rt\_param}      & S5 & \listo Parámetros del RT-OPP & 1 col.\\
 T5 & \texttt{tab:comparacion}    & S6.3 & \listo Pérdidas totales en el punto nominal, modelo y medición & 1 col.\\
-T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos: fuente DC, red/emulador, OPAL-RT, analizador de potencia, sondas, osciloscopio} & 1 col.\\
+T6 & \texttt{tab:equipos}        & S6.0 & \pendiente{Equipos (fuente DC, red/emulador, OPAL-RT, analizador,
+                                         sondas, osciloscopio): pedir los datos al autor al pasar al paper} & 1 col.\\
 \midrule
 A1 & \texttt{alg:rtopp}          & S5 & \listo Refinamiento RT del OPP & 1 col.\\
 \bottomrule
@@ -193,8 +189,8 @@ A1 & \texttt{alg:rtopp}          & S5 & \listo Refinamiento RT del OPP & 1 col.\
 
 \vspace{1mm}
 \noindent\pendiente{Figuras citadas como \textbf{[X]} que aún no existen:
-barrido de $\lambda_\ell$ (S5.4), recuperación del cumplimiento con red
-distorsionada (S6.2) y convergencia del RT-OPP (S6.4 propuesta).}
+recuperación del cumplimiento con red distorsionada (S6.2); barrido de
+$\lambda_\ell$ y convergencia del RT-OPP (S6.4, a futuro).}
 
 %=========================================================================
 \section*{4. Detalle por bloque}
@@ -205,9 +201,10 @@ OPP multipolar para T-Type SiC que minimiza pérdidas sujeto a IEEE~519
 $\rightarrow$ modelos de pérdidas en ángulos virtuales y restricción de nivel
 lineal $\rightarrow$ reducciones medias de 36/34\pct{} (modelo) y 33/8\pct{}
 (medido, hasta 14\pct{}) frente a SV-GDPWM y PD-PWM.\\
-\pendiente{El texto principal aún no menciona el RT-OPP; hay una \texttt{\textbackslash sug}
-completa. El autor lo revisa al final.}
+\pendiente{Se reescribe al final, con el RT-OPP (hay una
+\texttt{\textbackslash sug} en el paper).}
 
+%-------------------------------------------------------------------------
 \bloque{S1}{Introduction}
 \campo{Rol} Instalar el problema, ubicar las dos brechas y declarar el aporte.\\
 \campo{Contenido}
@@ -225,38 +222,31 @@ completa. El autor lo revisa al final.}
       distorsionada (IEEE~519); tres familias en línea; Tsekouras
       $\Rightarrow$ \textbf{brecha 2}: ningún OPP multipolar con pérdidas se
       refina en línea.
-\item Contribuciones (4): modelo de pérdidas; formulación con restricción
-      lineal de nivel; RT-OPP con una iteración GN; validación experimental.
+\item Contribuciones (4), en el orden del cuerpo: formulación con
+      restricción lineal de nivel (sin variables enteras); modelo de
+      pérdidas; RT-OPP con una iteración GN y Hessiano definido positivo;
+      validación experimental.
 \end{itemize}
-\campo{Elementos} F1 (anclada aquí).
+\campo{Elementos} F1 (anclada aquí).\\
+\campo{Cambios}
+\begin{itemize}
+\item Invertir el orden de las contribuciones 1 y 2 (formulación antes que
+      pérdidas).
+\item Se mantiene ``Hessian positive definite by construction'' (se asume
+      que se cumple con los pesos elegidos).
+\end{itemize}
 
-\upd{(a) Las contribuciones van en orden inverso al cuerpo (pérdidas antes
-que formulación). (b) La contribución 2 no tiene brecha en S1: que
-\texttt{koukoula\_junction} mantiene una restricción entera de nivel aparece
-recién en S2.3. (c) Contribución 3: ``Hessian positive definite by
-construction'' solo vale si $\lambda_u>2\lambda_\ell c$.}
-\sug{(a) Orden: formulación, pérdidas, RT, validación experimental.
-(b) En P4, después de citar el ángulo virtual: ``\dots\ although the level
-constraint remains an integer one that must be reconstructed at every solver
-iteration \texttt{\textbackslash cite\{koukoula\_junction\}}.'' (c) ``whose Hessian is positive
-definite for a proximal weight above a bound given by the loss weight''.}
+%-------------------------------------------------------------------------
+\bloque{S2*}{(a futuro) System Description}
+\pendiente{Postergado por decisión del autor: no hay cambios estructurales
+grandes por ahora. La idea queda guardada: juntar topología (F1, T1), LCL,
+parámetros (T3) y cadena de control con observador (F3) en una sección
+propia antes de la formulación.}
 
-\bloque{S2*}{(nueva, propuesta) System Description}
-\upd{La revisión propone juntar en una sección propia todo lo que define el
-sistema y que hoy está repartido: topología (párrafo 2 de S1 y F1), estados
-de conducción (T1, en S3.1), filtro LCL (S3.3, hoy dentro de ``Loss
-Estimation''), parámetros (T3, en S4.1), y el esquema de control F3 con
-el observador (hoy F3 flota en S3.2 y se cita desde S3.1 para definir
-$\varphi$).}
-\sug{Contenido: T-Type SiC y estados P/O/N (F1, T1); filtro LCL y
-resonancia (\texttt{eq:fres}); parámetros (T3); cadena de control resumida:
-$dq$ $\rightarrow$ $M,\delta$; $\varphi$ desde $P^\star,Q^\star$; observador de
-armónicos; LUT $\rightarrow$ RT-OPP $\rightarrow$ generador (F3). Cierre:
-``These elements define the quantities ($g_n$, $\varphi$, $I$) on which the
-pattern design depends.'' La motivación de T-Type + SiC sigue en S1.}
-
+%-------------------------------------------------------------------------
 \bloque{S2}{Multipolar Harmonic Formulation}
-\campo{Rol} Convertir el OPP en un problema continuo y sin enteros.
+\campo{Rol} Convertir el OPP en un problema continuo y sin enteros, con los
+armónicos ponderados por el filtro.
 
 \bloque{S2.1}{Multipolar Modulation and Choice of Symmetry}
 \campo{Contenido} HWS frente a QWS (QWS bloquea las soluciones multipolares)
@@ -270,112 +260,109 @@ $\mathcal{N}=\{1,5,7,\dots,49\}$.\\
 
 \bloque{S2.3}{Linear Level Constraints}
 \campo{Contenido} Las dos desigualdades lineales que reemplazan
-$-1\le u_i\le 1$; separación mínima $\epsilon_{sep}$ en tiempo real.\\
-\campo{Elementos} \texttt{eq:niveles}.
+$-1\le u_i\le 1$; separación mínima $\epsilon_{sep}$ entre ángulos
+consecutivos, que evita saltos directos entre $-1$ y $1$.\\
+\campo{Elementos} \texttt{eq:niveles}.\\
+\campo{Cambios} Explicar para qué sirve $\epsilon_{sep}$:
+\sug{``A minimum separation $\epsilon_{sep}$ between consecutive angles
+prevents direct transitions between the levels $-1$ and $1$.''}
 
-\upd{S2.3: $\epsilon_{sep}=0.2^\circ$ se define como algo del RT, pero no
-aparece en S5.5 ni en T4 (el RT usa barrera y $\tau_B$).}
-\sug{Mover la frase de $\epsilon_{sep}$ a S5.5 (párrafo de ángulos) y
-agregarla a T4, o borrarla.}
+\bloque{S2.4}{(movida desde S3.3) LCL Filter}
+\campo{Contenido} Resonancia en el armónico 21; 19 y 23 los más
+restrictivos; $L_1=L_2$ y $C$ mínimo; de aquí sale $g_n$.\\
+\campo{Elementos} \texttt{eq:fres}.\\
+\campo{Cambios} Sacar el LCL de ``Loss Estimation'' (no es una pérdida) y
+borrar la referencia hacia adelante a \texttt{sec:rt}.
+\upd{Destino propuesto: al final de S2, porque $g_n$ entra en
+\texttt{eq:tdd}. Así S2.2 cita a S2.4 dentro de la misma sección. Si
+prefieres evitar también esa referencia, va como S2.2 y el ángulo virtual
+pasa a S2.3.}
 
+%-------------------------------------------------------------------------
 \bloque{S3}{Loss Estimation}
 \campo{Rol} Escribir las pérdidas como funciones cerradas y diferenciables
-de $\gv$.
+de $\gv$, con el mismo modelo que usa el RT.
 
 \bloque{S3.1}{Conduction Losses}
 \campo{Contenido} Estados P/O/N; potencia instantánea resistiva con
-$\varphi$; pares $(\gamma_i,\gamma_{i+d})$ como pulsos; descomposición
-($S_2+S_3$ todo el periodo, luego corrección por pulso); primitiva exacta $G$.\\
+$\varphi$ (desfase de la corriente del conversor respecto de la
+fundamental); pares $(\gamma_i,\gamma_{i+d})$ como pulsos; descomposición
+($S_2+S_3$ todo el periodo, luego corrección por pulso); primitiva exacta
+$G$.\\
 \campo{Elementos} \texttt{eq:p\_con}, \texttt{eq:t\_i},
-\texttt{eq:pcond\_final}, T1, F2.
-
-\upd{(a) $\varphi$ se define sin llamarlo ``load angle'' y apoyándose en F3,
-que aún no se presenta. (b) La corriente aparece como $I$ (S3.1),
-$I_{cond}$ ``corresponding to the modulation index'' (S3.2) e $I_{nom}$
-(S5); en conexión a red la corriente la fijan $P,Q$, no $M$.}
-\sug{(a) ``where $\varphi$, the load angle, is \dots''; si se crea S2*, F3 ya
-estará presentada. (b) Un solo símbolo de amplitud de corriente, definido en
-S2* o T3, y una frase en S4.1 que diga qué corriente usa cada punto
-$(M,\varphi)$ de la tabla.}
+\texttt{eq:pcond\_final}, T1, F2.\\
+\campo{Cambios}
+\begin{itemize}
+\item Definir $\varphi$ sin llamarlo ``load angle'':
+      \sug{``where $\varphi$ is the phase displacement of the converter
+      current with respect to its fundamental voltage''.}
+\item Usar $I_{cond}$ como único símbolo de la amplitud de corriente (hoy
+      aparecen $I$, $I_{cond}$ e $I_{nom}$).
+\end{itemize}
 
 \bloque{S3.2}{Switching Losses}
 \campo{Contenido} Tensión conmutada $V_{dc}/2$; ZVS por dirección de la
-corriente; un encendido por $\gamma_i$ y un apagado por $\gamma_{i+d}$.\\
+corriente; un encendido por $\gamma_i$ y un apagado por $\gamma_{i+d}$;
+mismo modelo que el RT ($2f_1$, $P_{sw,0}$ y corrección por $R_G$).\\
 \campo{Elementos} \texttt{eq:p\_sw}, T2; F3 anclada aquí.\\
-\nota{F3 (esquema de control) flota en S3.2 pero pertenece a S4.2.}
+\campo{Cambios} Ajustar \texttt{eq:p\_sw} para que calce con el modelo del
+RT (S5.3), así S5.3 lo reusa sin cambios.
+\pendiente{Confirmar los tres ajustes con el código
+(\texttt{RTOPP\_D19\_simple\_rip.m}) antes de proponer la ecuación.}
 
-\upd{F3 (esquema de control) está anclada aquí pero pertenece a S4.2 o a
-S2*.}
-\sug{Mover el bloque \texttt{figure*} de F3 a S2* (o al inicio de S4.2).}
-
-\bloque{S3.3}{LCL Filter}
-\campo{Contenido} Resonancia en el armónico 21; 19 y 23 los más
-restrictivos; $L_1=L_2$ y $C$ mínimo.\\
-\campo{Elementos} \texttt{eq:fres}.
-
-\upd{El LCL no es una pérdida: lo usan $g_n$ (S2.2, con referencia hacia
-adelante), el cálculo de $\varphi$ y $\mathbf{Q}$ (S5.2). También cita
-\texttt{Section\textasciitilde\textbackslash ref\{sec:rt\}} hacia adelante.}
-\sug{Mover S3.3 completo a S2*.}
-
+%-------------------------------------------------------------------------
 \bloque{S4}{OPP Implementation Scheme}
-\campo{Rol} Juntar los modelos en el problema off-line y mostrar cómo se usa
+\campo{Rol} Juntar los modelos en el diseño off-line y mostrar cómo se usa
 la solución.
 
-\bloque{S4.1}{Optimization Problem}
-\campo{Contenido} Problema por punto $(M,\varphi)$: mínimas pérdidas sujeto a
-fundamental, niveles, orden, TDD, límites individuales y continuidad en $M$.
-Contraste: off-line minimiza pérdidas con la distorsión como restricción; el
-RT minimiza distorsión con las pérdidas como término secundario.\\
+\bloque{S4.1}{Off-Line Pattern Design (antes ``Optimization Problem'')}
+\campo{Contenido}
+\begin{itemize}
+\item Problema por punto $(M,\varphi)$: mínimas pérdidas sujeto a
+      fundamental, niveles, orden, TDD, límites individuales y continuidad
+      en $M$ con cota $\Delta\gamma_{\max}$.
+\item Off-line, TDD y límites individuales son restricciones duras; en el
+      RT entran en la FO (hay \texttt{\textbackslash sug} en el paper).
+\item Procedimiento (traído desde S6): multi-start con 1000 semillas en
+      Julia/Ipopt y construcción de la LUT $(M,\varphi)$ de $9\times25$.
+\end{itemize}
 \campo{Elementos} \texttt{eq:opp\_propuesto}, T3.\\
-\pendiente{Cómo se impuso la continuidad en $\varphi$ en Julia.}
-
-\upd{(a) $\delta$ tiene dos significados: cota de continuidad en
-\texttt{eq:opp\_propuesto} (sin definir en el texto) y fase del bloque
-polar en S4.2. (b) El procedimiento de solución (1000 semillas, Ipopt, LUT
-$9\times25$) está en el párrafo inicial de S6, pero es método. (c) Punto 2
-del revisor: falta decir que aquí TDD y límites individuales son
-restricciones duras y en el RT van en la FO (hay \texttt{\textbackslash sug}
-en el paper).}
-\sug{(a) Renombrar la cota a $\Delta\gamma_{\max}$ y definirla en el párrafo
-que sigue a la ecuación. (b) Traer a S4.1 el procedimiento multi-start y la
-construcción de la LUT $(M,\varphi)$; título posible ``Off-Line Pattern
-Design''. (c) Aplicar la \texttt{\textbackslash sug} de S4.1 del paper.}
+\campo{Cambios} Renombrar la cota $\delta\rightarrow\Delta\gamma_{\max}$ y
+definirla tras la ecuación; traer el párrafo del método desde S6; cambiar
+el título.\\
+\pendiente{Cómo se impuso la continuidad en $\varphi$ en Julia; el
+párrafo de S6 aún describe la LUT de conferencia (1000 puntos, $d=17$,
+8~min) y el tiempo de ejecución está como [XX].}
 
 \bloque{S4.2}{Control and Pattern Generation}
 \campo{Contenido} LUT $\gv(M,\varphi)$; lazo $dq$ $\rightarrow$ $M$ y
 $\delta$; $\varphi$ desde $P^\star,Q^\star$ sin mediciones; observador de
-armónicos; RT-OPP; generador desplazado por $\delta$; continuidad y
-re-siembra con histéresis.\\
-\campo{Elementos} F3.
+armónicos (hay \texttt{\textbackslash sug} en el paper); RT-OPP; generador
+desplazado por $\delta$. Rango de $M$ estrecho porque solo se guardan los
+$M$ cerca del punto de operación.\\
+\campo{Elementos} F3.\\
+\campo{Cambios}
+\begin{itemize}
+\item Dejar solo LUT y cadena de control: sacar ``proximal term'' y la
+      re-siembra con histéresis (quedan en S5.5).
+\item Borrar ``now'' en ``The LUT, now addressed by both $M$ and
+      $\varphi$''.
+\item Explicar el rango de $M$:
+      \sug{``Only the modulation indices around the operating point are
+      stored, $M\in[0.835,0.9]$; a wider range could be stored but is not
+      needed in this application.''}
+\end{itemize}
 
-\upd{(a) S4.2 adelanta el RT (``proximal term'', re-siembra con
-histéresis) antes de S5; la re-siembra se explica 3 veces (S4.2, A1, S5.5) y
-la motivación del RT 4 veces (S1, S4, S4.2, S5). (b) La continuidad se
-argumenta solo en $M$; al re-sembrar en $\varphi$ los ángulos saltan y no se
-dice cómo se acota el transitorio. (c) ``The LUT, now addressed by both $M$
-and $\varphi$'' (S5) es resto de la versión de conferencia. (d) No se explica
-por qué $M$ tiene rango estrecho (0.835--0.9) y $\varphi$ completo.
-(e) Falta el observador (decisión del autor: agregarlo; hay
-\texttt{\textbackslash sug} en el paper).}
-\sug{(a) Dejar en S4.2 solo LUT y cadena de control; la re-siembra solo en
-S5.5. (b) Una frase en S5.5: cómo se evita o acota el transitorio al cambiar
-de celda en $\varphi$. (c) Borrar ``now''. (d) ``In a grid-connected
-converter, $M$ is set mostly by the grid voltage, whereas $\varphi$ spans the
-whole circle with $P^\star$ and $Q^\star$; the table is therefore dense in
-$\varphi$ and narrow in $M$.''}
-
+%-------------------------------------------------------------------------
 \bloque{S5}{Real-Time Implementation}
 \campo{Rol} Refinar el patrón en línea con costo acotado por muestra.\\
-\campo{Contenido} Por qué refinar (entre puntos de la tabla, red
-distorsionada); SQP con una iteración GN por actualización y warm start;
-restricciones como pesos adaptativos; la LUT da semilla y re-siembras.\\
-\campo{Elementos} A1, T4.
-
-\upd{La plataforma (OPAL-RT, $T_s=200~\mu$s) está en S6, pero es parte de
-la implementación. ``OF'' se usa antes de definirse.}
-\sug{Mover la frase de la plataforma y $T_s$ al párrafo inicial de S5;
-escribir ``objective function (OF)'' en su primer uso.}
+\campo{Contenido} Plataforma (OPAL-RT OP4510, $T_s=200~\mu$s); por qué
+refinar (entre puntos de la tabla, red distorsionada); SQP con una
+iteración GN por actualización y warm start; restricciones como pesos
+adaptativos; la LUT da semilla y re-siembras.\\
+\campo{Elementos} A1, T4.\\
+\campo{Cambios} Traer la frase de la plataforma y $T_s$ desde S6 al
+párrafo inicial; escribir ``objective function (OF)'' en su primer uso.
 
 \bloque{S5.1}{Linearized Harmonic Model}
 \campo{Contenido} $\mathbf{x}$ con los armónicos de $\mathcal{N}$; Jacobiano
@@ -385,173 +372,149 @@ exacto; el factor $1/n$ se cancela.\\
 \bloque{S5.2}{TDD Term}
 \campo{Contenido} Espectro de referencia $\mathbf{x}^\star$ (fundamental +
 fondo de red estimado por el observador); TDD con fondo; matriz $\mathbf{Q}$
-con pesos adaptativos; término de rizado 53--97.\\
+con pesos adaptativos; término de rizado 53--97 para que el rizado no crezca
+con el tiempo.\\
 \campo{Elementos} \texttt{eq:rt\_tdd}, \texttt{eq:rt\_Q}.
 
 \bloque{S5.3}{Loss Terms}
 \campo{Contenido} Conducción con signo ($t_i$) y conmutación en magnitud
-($e_i$); sus linealizaciones.\\
+($e_i$), con los mismos modelos de S3; sus linealizaciones.\\
 \campo{Elementos} \texttt{eq:rt\_T}, \texttt{eq:rt\_pcond}, \texttt{eq:rt\_BP},
-\texttt{eq:rt\_S}, \texttt{eq:rt\_psw}, \texttt{eq:rt\_BS}.
-
-\upd{Dice que los modelos de S3 se ``reusan'', pero el de conmutación cambia
-($2f_1$, $P_{sw,0}$, corrección por $R_G$).}
-\sug{``\dots\ are reused with three adjustments: \dots''; una frase por
-ajuste.}
+\texttt{eq:rt\_S}, \texttt{eq:rt\_psw}, \texttt{eq:rt\_BS}.\\
+\campo{Cambios} Con S3.2 ajustado, ``reused'' queda correcto; revisar que
+la notación ($I_{cond}$, $\varphi$) sea la misma de S3.
 
 \bloque{S5.4}{Local Quadratic Problem}
-\campo{Contenido} Función objetivo cuadrática; ecuaciones normales;
-$\mathbf{W}$ definida positiva si $\lambda_u>2\lambda_\ell c$; los residuos
-cuadráticos subponderan la conmutación (las pérdidas actúan como
-regularizador, $\lambda_\ell$ fija el nivel de TDD); costo computacional.\\
+\campo{Contenido} FO cuadrática que minimiza distorsión y pérdidas;
+ecuaciones normales; $\mathbf{W}$ definida positiva si
+$\lambda_u>2\lambda_\ell c$; criterio para elegir $\lambda_\ell$; costo
+computacional.\\
 \campo{Elementos} \texttt{eq:rt\_fo}, \texttt{eq:rt\_W}.\\
-\pendiente{Figura del barrido de $\lambda_\ell$ (Fig.~[X]); cifras de
-\texttt{RTOPP\_D19}, regenerar con \texttt{RTOPP\_D19\_simple\_rip}.}
-
-\upd{(a) Decisión del autor: no decir que las pérdidas solo actúan como
-regularizador (hay \texttt{\textbackslash sug} en el paper). (b) El barrido de
-$\lambda_\ell$ (Fig.~[X]) es un resultado. (c) Cita F6 (resultados) hacia
-adelante. (d) Tres cifras para el cambio de pérdidas en RT: $<0.3$\pct{}
-(S5.4), 0.4\pct{} (S6.2), 1\pct{} (\texttt{\textbackslash sug} de S6.4 y
-S7).}
-\sug{(b) Mover el barrido de $\lambda_\ell$ a la subsección de resultados RT
-y dejar aquí solo el criterio para elegir $\lambda_\ell$. (c) Quitar la cita
-a F6 o reemplazarla por la tabla de parámetros. (d) Unificar en una sola
-cifra.}
+\campo{Cambios}
+\begin{itemize}
+\item Reemplazar ``regularizer rather than a loss minimizer'' (hay
+      \texttt{\textbackslash sug} en el paper).
+\item Sacar el barrido de $\lambda_\ell$ (Fig.~[X]); va a S6.4.
+\item Quitar la cita a F6.
+\item Una sola cifra para el cambio de pérdidas en RT (hoy $<0.3$\pct{},
+      0.4\pct{} y 1\pct{}).
+\end{itemize}
+\pendiente{Qué cifra queda: regenerar con \texttt{RTOPP\_D19\_simple\_rip}
+(las actuales son de \texttt{RTOPP\_D19}).}
 
 \bloque{S5.5}{Constraint Handling}
 \campo{Contenido} Límites IEEE~519 y TDD como pesos con integrador
 logarítmico (lectura KKT); fundamental como igualdad + trim de Newton;
-barrera logarítmica sobre el poliedro de ángulos; re-siembras.\\
-\campo{Elementos} \texttt{eq:rt\_theta}.
+barrera logarítmica sobre el poliedro de ángulos; re-siembras (único lugar
+donde se explican).\\
+\campo{Elementos} \texttt{eq:rt\_theta}.\\
+\campo{Cambios} Al final del párrafo de re-siembras:
+\sug{``Re-seeding introduces a transient only when the operating point
+changes; since it happens rarely, it does not affect the current control
+loop.''}
 
-\upd{Falta el transitorio al re-sembrar en $\varphi$ (ver S4.2).}
-\sug{Una frase al final del párrafo de re-siembras.}
-
+%-------------------------------------------------------------------------
 \bloque{S6}{Simulation and Experimental Results}
 \campo{Rol} Mostrar que el diseño cumple y que la ganancia es real.\\
-\campo{Contenido (párrafo inicial)} Solución en Julia/Ipopt; verificación en
-PLECS; tabla RT $9\times25$; OPAL-RT OP4510 a 200~$\mu$s.\\
-\pendiente{Describe aún la LUT de conferencia (1000 puntos, $d=17$, 8~min);
-tiempo de ejecución [XX]; frase de PLECS frente a figuras ``sinplecs''.}
+\campo{Contenido (párrafo inicial)} Qué resultado viene de simulación
+(Julia, PLECS) y cuál del prototipo; rango de operación descrito en el plano
+$(I_d,I_q)$, con el punto nominal $I_d=20$~A, $I_q=0$ $\Leftrightarrow$
+9.8~kW.\\
+\campo{Cambios} Sacar el método (multi-start, LUT, OPAL-RT) a S4.1 y S5;
+agregar la equivalencia del punto nominal.
+\upd{En tu comentario escribiste ``9,8 kW. aprox 20 kW''. Dejé 9.8~kW
+(lo que dice el paper); confirma si el ``20'' era otra cosa.}
 
-\upd{(a) El párrafo inicial mezcla método (multi-start, LUT, OPAL) con
-resultados. (b) No se dice qué resultado es simulación, cuál HIL y cuál
-medición; falta el montaje experimental. (c) El rango de operación aparece
-de tres formas: potencia (F5), plano $(I_d,I_q)$ (F6--F8) y $M$ (F4).}
-\sug{(a) Mover el método a S4.1/S5. (b) Ver el bloque nuevo S6.0. (c) Una frase que
-relacione $|I|$, $P$ y $M$ (p.ej.\ el punto nominal $I_d=20$~A $\Leftrightarrow$
-9.8~kW).}
-
-\bloque{S6.0}{(nueva, propuesta) Experimental Setup}
-\campo{Rol} Decir con qué se obtuvo cada resultado y por qué la medición de
-pérdidas es confiable.\\
-\campo{Contenido}
-\begin{itemize}
-\item Prototipo T-Type SiC de 10~kW, 750~V (módulo CHB011M12GM4T) con el
-      filtro LCL de T3; conexión a red \textbf{[directa, transformador o
-      emulador de red]}.
-\item Alimentación DC \textbf{[fuente, rango]} y lado AC \textbf{[red,
-      emulador o carga]}.
-\item Control y modulación en OPAL-RT OP4510: RT-OPP a $T_s=200~\mu$s y
-      generación de pulsos \textbf{[FPGA, resolución]}.
-\item Medición de pérdidas: \textbf{[analizador de potencia, precisión]},
-      método \textbf{[$P_{in}-P_{out}$ o calorimétrico]}, sondas de tensión y
-      corriente, osciloscopio.
-\item Qué resultado viene de cada plataforma: simulación (Julia, PLECS),
-      HIL (OPAL-RT) y prototipo.
-\end{itemize}
-\campo{Elementos} F9 (foto + diagrama de conexiones), T6 (equipos).
-\upd{Hoy el paper no describe el montaje. De esto dependen dos preguntas del
-revisor: qué incluye la pérdida medida y si la precisión alcanza para las
-diferencias de 0.4--0.5~W a carga ligera.}
-\sug{F9 en dos paneles: (a) foto del banco con los equipos numerados;
-(b) diagrama de conexiones con los puntos donde se miden $P_{in}$ y
-$P_{out}$. T6 con columnas Equipo | Modelo | Uso | Precisión. Párrafo:
-``The experimental setup is shown in Fig.~[F9] and the equipment is listed
-in Table~[T6]. The 10~kW SiC T-Type prototype is supplied by [DC source] and
-connected to [grid/emulator] through the LCL filter of Table~III. The
-modulation and the RT-OPP run on an OPAL-RT OP4510 with $T_s=200~\mu$s. The
-losses are obtained as [the difference between the DC input power and the AC
-output power] measured by [power analyzer], whose accuracy of [XX] amounts to
-[XX]~W at the nominal point.''}
+\bloque{S6.0}{(nueva) Experimental Setup}
+\campo{Rol} Decir con qué se midió, breve.\\
+\campo{Contenido} Un párrafo corto: prototipo T-Type SiC de 10~kW, 750~V,
+con el LCL de T3; fuente DC y conexión AC; OPAL-RT OP4510; método y equipo
+de medición de pérdidas.\\
+\campo{Elementos} F9 (una sola foto del montaje), T6 (equipos).\\
+\pendiente{Foto: la arma el autor. Datos de T6 y de la medición: pedirlos
+al autor al pasar al paper.}
 
 \bloque{S6.1}{Optimized Angles and Pulse Pattern}
 \campo{Contenido} Patrón multipolar en $M=0.8660$; conmutaciones cerca de
-los cruces por cero; trayectorias continuas en $M$.\\
-\campo{Elementos} F4.
+los cruces por cero; trayectorias continuas en $M$; en $\varphi$ los
+ángulos tienen discontinuidades.\\
+\campo{Elementos} F4.\\
+\campo{Cambios} Una frase sobre las discontinuidades en $\varphi$.
 
 \bloque{S6.2}{Harmonic Compliance}
 \campo{Contenido} TDD en el límite en todo el rango; espectro dentro de los
-límites individuales; RT-OPP: 1.7\pct{} en un punto de la tabla y
-recuperación del cumplimiento en 13~ms con fondo armónico.\\
+límites individuales; RT-OPP: 1.7\pct{} en un punto de la tabla
+($M=0.87$) y recuperación del cumplimiento en 13~ms con fondo armónico; por
+qué el RT queda bajo el límite.\\
 \campo{Elementos} F5.\\
+\campo{Cambios} Aplicar la \texttt{\textbackslash sug} de S6.2 del paper
+(límites en la FO, no como restricción dura).\\
 \pendiente{F5 y su párrafo comparan con DPWM1 y $d=17$; cifra del 9\pct{}
 sin ensayo definido.}
 
-\upd{(a) Punto 2 del revisor: falta explicar por qué el RT queda bajo el
-límite (hay \texttt{\textbackslash sug} en el paper). (b) $M=0.87$ no cae en la
-grilla de 9 índices entre 0.835 y 0.9 (paso $\approx0.0081$), pero se le
-llama ``table point''.}
-\sug{(a) Aplicar la \texttt{\textbackslash sug} de S6.2 del paper. (b) Verificar
-la grilla y usar un nodo real (p.ej.\ $M=0.8756$) o no llamarlo ``table
-point''. Separar en dos subsecciones: cumplimiento off-line y resultados RT.}
-
 \bloque{S6.3}{Loss Comparison}
-\campo{Contenido} Benchmarks PD-PWM 2850~Hz y SV-GDPWM 4050~Hz (mínimo $m_f$
-que cumple IEEE~519); mapas del modelo en $(I_d,I_q)$; modelo vs.\
-medición en 8 puntos; tres efectos que explican la brecha frente a PD-PWM
-(offset no modelado, carga ligera, rizado); mejora hasta 14.4/37.7\pct{}.\\
+\campo{Contenido} Benchmarks PD-PWM y SV-GDPWM con portadoras de 2850 y
+4050~Hz, cada una la mínima que cumple IEEE~519; el OPP conmuta cada
+dispositivo a 950~Hz (1900~Hz equivalentes); mapas del modelo en
+$(I_d,I_q)$; modelo vs.\ medición en 8 puntos; tres efectos que explican la
+brecha frente a PD-PWM (offset no modelado, carga ligera, rizado); mejora
+hasta 14.4/37.7\pct{}.\\
 \campo{Elementos} F6, F7, F8, T5.\\
-\pendiente{Montaje y método de medición; efectos no modelados [XX]; offset
-mayor de SV-GDPWM; confirmar que se midió con el RT-OPP activo.}
+\campo{Cambios}
+\begin{itemize}
+\item Conectar el rizado:
+      \sug{``The off-line problem does not constrain the ripple; only the
+      RT-OPP includes harmonics up to the 97th, so that the ripple does not
+      grow over time.''}
+\item Justificar la comparación:
+      \sug{``The OPP switches each device at 950~Hz, equivalent to
+      1900~Hz, whereas 2850 and 4050~Hz are the carrier frequencies of
+      PD-PWM and SV-GDPWM. Each benchmark uses the lowest carrier that
+      complies with IEEE~519, so all strategies are compared at equal
+      compliance.''}
+\end{itemize}
+\pendiente{Medias frente a reducciones punto a punto (34/36\pct{} vs.\
+33/34\pct{}): se ve después. Offset mayor de SV-GDPWM; confirmar que se
+midió con el RT-OPP activo.}
 
-\upd{(a) Las medias 6.8/10.1/10.3~W dan reducciones de 33/34\pct{}; el texto
-dice 34/36\pct{}, que es la media de las reducciones punto a punto. (b) El
-rizado aparece suelto en tres lugares: restricción off-line comentada,
-término $\lambda_r$ del RT y brecha medida. (c) Pregunta probable: ¿es justo
-comparar 950~Hz por dispositivo con portadoras de 2850 y 4050~Hz?}
-\sug{(a) ``mean of the point-wise reductions''. (b) Una frase que conecte:
-el off-line no restringe el rizado, el RT lo penaliza con $\lambda_r$, y el
-rizado residual explica parte de la brecha medida. (c) Una frase con la
-frecuencia de conmutación promedio por dispositivo de cada benchmark. Llevar
-S6.3 al final de S6, después de los resultados RT.}
+\bloque{S6.4}{(a futuro) Convergence of the Real-Time Optimizer}
+\pendiente{La escribe el autor más adelante. Debe juntar los resultados
+RT: barrido de $\lambda_\ell$ (desde S5.4), red distorsionada,
+convergencia desde la semilla, transitorios ante escalones de $M$ y
+$\varphi$ y costo por muestra. Hoy es una \texttt{\textbackslash sug} en el
+paper.}
 
-\bloque{S6.4}{(propuesta) Convergence of the Real-Time Optimizer}
-\campo{Contenido} Hoy es una \texttt{\textbackslash sug}: convergencia desde
-la semilla, punto entre celdas, red distorsionada, semilla perturbada.\\
-\pendiente{Faltan figuras y datos; incluye transitorios ante escalones de
-$M$ y $\varphi$ y costo por muestra.}
-
-\upd{Debe juntar todos los resultados RT.}
-\sug{Contenido: barrido de $\lambda_\ell$ (desde S5.4), cumplimiento RT y red
-distorsionada (desde S6.2), convergencia, transitorios ante escalones de $M$ y
-$\varphi$, costo por muestra.}
-
+%-------------------------------------------------------------------------
 \bloque{S7}{Conclusions}
-\campo{Contenido} Formulación continua y modelos de pérdidas; cifras de la
+\campo{Contenido} En el orden del cuerpo: formulación continua y modelos de
+pérdidas (off-line) $\rightarrow$ RT-OPP $\rightarrow$ cifras de la
 comparación (modelo y medición); el margen de distorsión convertido en
 pérdidas.\\
-\pendiente{Párrafo del RT-OPP (hay \texttt{\textbackslash sug}); frase de
-trabajo futuro.}
-
-\upd{(a) ``The optimizer drives the current distortion to the regulatory
-limit'' choca con el RT (punto 2). (b) ``the 1000-point LUT \dots\ under
-8~min'' es de la versión de conferencia. (c) Decisión del autor: el RT sí se
-validó; ya no va como trabajo futuro (notas quitadas del paper).}
-\sug{(a) ``The off-line optimizer drives \dots''. (b) Actualizar con la LUT
-$(M,\varphi)$ y $d=19$. Orden del cierre: off-line $\rightarrow$ RT
-$\rightarrow$ medición, igual que el cuerpo.}
+\campo{Cambios}
+\begin{itemize}
+\item ``The optimizer drives'' $\rightarrow$ ``The off-line optimizer
+      drives'' (hay \texttt{\textbackslash sug} en el paper).
+\item Reemplazar ``the 1000-point LUT \dots\ under 8~min'' por la LUT
+      $(M,\varphi)$ con $d=19$.
+\item Párrafo del RT-OPP (hay \texttt{\textbackslash sug}); el RT ya no va
+      como trabajo futuro.
+\end{itemize}
 
 %=========================================================================
 \section*{5. Decisiones abiertas}
 
 \begin{itemize}
 \item \pendiente{Revista objetivo, límite de páginas y clase
-      \texttt{journal}; biografías de autores con foto.}
-\item \pendiente{Resultados del RT-OPP (S6.4) y figuras [X] de S5.4 y S6.2.}
+      \texttt{journal}; biografías de autores con foto (después).}
+\item \pendiente{Abstract, al final.}
+\item \pendiente{S6.4 resultados RT y figura [X] de S6.2 (a futuro, el autor).}
+\item \pendiente{S2* System Description (a futuro).}
 \item \pendiente{F5 con los benchmarks y $d$ actuales.}
-\item \pendiente{Párrafo inicial de S6 con la LUT $(M,\varphi)$ y $d=19$.}
+\item \pendiente{F9 (foto) y datos de T6 y de la medición.}
+\item \pendiente{Destino del LCL (S2.4 o S2.2) y la cifra del 20~kW
+      (comentarios rojos de S2.4 y S6).}
+\item \pendiente{Medias frente a reducciones punto a punto; offset mayor de
+      SV-GDPWM.}
 \item \pendiente{Bug de signo en \texttt{P\_loss} del código (afecta solo
       el valor reportado).}
 \item \pendiente{Referencias candidatas (\texttt{docs/REFERENCIAS.md}).}
@@ -561,56 +524,59 @@ $\rightarrow$ medición, igual que el cuerpo.}
 \section*{6. Retroalimentación del hilo conductor}
 
 \noindent Resumen de la revisión (detalle con líneas en
-\texttt{docs/REVISION\_HILO.md}). Nada de esto está aplicado aún al paper.
+\texttt{docs/REVISION\_HILO.md}). Lo acordado está en el campo
+\emph{Cambios} de cada bloque; aún no está aplicado al paper.
 
 \subsection*{6.1 Decisiones del autor sobre los puntos de severidad alta}
 \begin{enumerate}[leftmargin=6mm]
 \item \textbf{RT y pérdidas:} el RT sí minimiza pérdidas en línea. Se
       mantienen título y contribuciones; se cambia la frase de S5.4 que dice
       que las pérdidas solo actúan como regularizador.
-\item \textbf{TDD 1.7\pct{} en RT frente a 5\pct{} off-line:} explicar que
-      el off-line impone TDD y límites como restricciones duras y el RT los
-      lleva en la FO, así que con el peso elegido no queda en el límite
-      (S4.1, S6.2, S7).
+\item \textbf{TDD 1.7\pct{} en RT frente a 5\pct{} off-line:} el off-line
+      impone TDD y límites como restricciones duras y el RT los lleva en la
+      FO, así que con el peso elegido no queda en el límite (S4.1, S6.2, S7).
 \item \textbf{Validación del RT:} sí se validó; se quita como trabajo futuro
       de las conclusiones.
-\item \textbf{Observador:} se agrega su descripción (S4.2 o S2*).
+\item \textbf{Observador:} se agrega su descripción en S4.2.
 \end{enumerate}
-\noindent Los demás hallazgos están como comentarios rojos con su
-sugerencia verde en cada bloque de la Sección 4.
 
-\subsection*{6.3 Esqueleto propuesto por la revisión}
+\subsection*{6.2 Cambios de estructura acordados}
 \noindent\begin{tabularx}{\textwidth}{lX}
 \toprule
-\textbf{Nuevo} & \textbf{Contenido (IDs actuales)}\\
+\textbf{Qué} & \textbf{De $\rightarrow$ a}\\
 \midrule
-S1 & Introduction; contribuciones en el orden del cuerpo \\
-S2 & \emph{System Description} (nueva): topología + F1 + T1, LCL (S3.3),
-     T3, F3 con la cadena de control y el observador \\
-S3 & Formulación (S2 actual), sin $\epsilon_{sep}$ \\
-S4 & Pérdidas (S3.1--S3.2 actual) \\
-S5 & \emph{Off-Line Pattern Design}: S4.1 + multi-start + LUT
-     $(M,\varphi)$ $9\times25$ + continuidad en $M$ y $\varphi$ \\
-S6 & RT-OPP (S5 actual), con la cadena LUT$\rightarrow$semilla, observador,
-     plataforma y $T_s$; re-siembra solo en S5.5; sin barrido de
-     $\lambda_\ell$ \\
-S7 & Results: 7.1 montaje; 7.2 ángulos (S6.1); 7.3 cumplimiento off-line;
-     7.4 resultados RT (cumplimiento RT, barrido de $\lambda_\ell$,
-     convergencia, transitorios, costo); 7.5 pérdidas (S6.3) \\
-S8 & Conclusions: off-line $\rightarrow$ RT $\rightarrow$ medición \\
+LCL                          & S3.3 $\rightarrow$ S2.4 (por confirmar) \\
+Multi-start y LUT            & párrafo inicial de S6 $\rightarrow$ S4.1, que pasa a
+                               llamarse ``Off-Line Pattern Design'' \\
+Plataforma y $T_s$           & párrafo inicial de S6 $\rightarrow$ párrafo inicial de S5 \\
+Re-siembra                   & S4.2 y S5.5 $\rightarrow$ solo S5.5 \\
+Barrido de $\lambda_\ell$    & S5.4 $\rightarrow$ S6.4 (a futuro) \\
+Montaje experimental         & nuevo bloque S6.0 (breve, F9 + T6) \\
+Contribuciones               & orden: formulación, pérdidas, RT, validación \\
 \bottomrule
 \end{tabularx}
 
-\subsection*{6.4 Preguntas probables del revisor}
+\vspace{1mm}
+\noindent\nota{El esqueleto de 8 secciones que propuso la revisión (con
+System Description y Results reordenados) queda guardado en
+\texttt{docs/REVISION\_HILO.md}, sección C, para una versión futura.}
+
+\subsection*{6.3 Preguntas probables del revisor y respuesta prevista}
 \begin{enumerate}[leftmargin=6mm]
-\item Si el RT baja la TDD a 1.7\pct{} sin cambiar pérdidas, ¿qué restricción
-      está activa off-line?
-\item ¿Se midió con el RT activo? ¿Dónde está la validación experimental del
-      RT?
-\item ¿Cómo funciona el observador y qué parte de los 13~ms le corresponde?
-\item ¿Cómo se evitan los transitorios al re-sembrar en $\varphi$?
-\item ¿Es justo comparar 950~Hz por dispositivo con portadoras de 2850 y
-      4050~Hz?
+\item \emph{Si el RT baja la TDD a 1.7\pct{} sin cambiar pérdidas, ¿qué
+      restricción está activa off-line?} Off-line los límites son
+      restricciones duras; en el RT van en la FO (S4.1, S6.2).
+\item \emph{¿Se midió con el RT activo?} \pendiente{confirmar al escribir
+      S6.0.}
+\item \emph{¿Cómo funciona el observador y qué parte de los 13~ms le
+      corresponde?} Párrafo nuevo en S4.2; la parte de los 13~ms
+      \pendiente{falta el dato}.
+\item \emph{¿Cómo se evitan los transitorios al re-sembrar en $\varphi$?}
+      Solo aparecen al cambiar de punto de operación y no afectan al lazo
+      (S5.5).
+\item \emph{¿Es justo comparar 950~Hz por dispositivo con portadoras de 2850
+      y 4050~Hz?} El OPP equivale a 1900~Hz; las otras son portadoras, y
+      cada benchmark usa la mínima que cumple IEEE~519 (S6.3).
 \end{enumerate}
 
 %=========================================================================
