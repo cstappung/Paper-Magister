@@ -379,3 +379,11 @@ responde. (Agregada a CLAUDE.md.)
   zona y la foto. PW6001 y OP4510 quedan en gris (no son zona del esquema).
 - CHB011M12GM4T es un modulo T-Type (una pierna, segun Wolfspeed): se
   resalta la pierna c y el cono va a la foto del modulo.
+
+### 2026-11-11 - Figura del montaje, borrador 6
+
+- Un color por bloque (zona, foto y cono): DC rojo, conversor naranjo,
+  pierna/modulo morado, LCL verde, red turquesa. PW6001 y OP4510 en gris.
+- Espacio entre el recuadro del LCL y el de la red.
+- P_out marcado en las tres fases a la entrada del LCL; rotulos a, b, c
+  sobre el codo de cada fase.

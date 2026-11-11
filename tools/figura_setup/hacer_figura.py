@@ -6,7 +6,7 @@
 #
 # Formato vertical: esquema trifasico al centro, con la potencia fluyendo
 # de arriba (fuentes DC) hacia abajo (red), y los equipos a ambos lados,
-# recortados sin fondo y unidos a su bloque con lineas naranjas.
+# recortados sin fondo y unidos a su bloque con un cono del color del bloque.
 #
 # El esquema se dibuja en coordenadas (u, v): u avanza en el sentido del
 # flujo de potencia y v es transversal. Un grupo SVG lo transpone a (x, y)
@@ -31,8 +31,15 @@ GRIS = "#efefef"
 BORDE = "#333333"
 NARANJO = "#ec7a12"
 AZUL = "#0b4fd6"
-FONDO_N = "#fde6cc"      # relleno de los recuadros naranjos (como el ejemplo)
-CONO_N = "#f5a95a"       # cono que une la zona del esquema con su foto
+# un color por bloque: (borde, relleno, cono). El recuadro de la zona en el
+# esquema, la foto y el cono que las une llevan el mismo color.
+COLORES = {
+    "dc":     ("#d23c3c", "#fbe0e0", "#ef9a9a"),   # fuentes DC
+    "conv":   ("#ec7a12", "#fde6cc", "#f5a95a"),   # conversor T-Type
+    "pierna": ("#8a3fb5", "#eedff7", "#c59ddd"),   # una pierna = un modulo
+    "lcl":    ("#23944a", "#daf1e1", "#8fd1a2"),   # filtro LCL
+    "red":    ("#0f8a8f", "#d4eff0", "#84cdd0"),   # red / emulador
+}
 LW = 3.0
 
 # --- equipos recortados: (archivo, poligono del contorno en px de la foto)
@@ -130,11 +137,17 @@ def imagen(b64, x, y, w, h, png=True, rx=0):
         f'width="{w}" height="{h}" preserveAspectRatio="none"{clip}/>')
 
 
-def panel(x, y, w, h, naranjo=False):
-    est = (f'stroke="{NARANJO}" stroke-width="3.4" stroke-dasharray="10 6"'
-           if naranjo else f'stroke="{BORDE}" stroke-width="1.6"')
+def panel(x, y, w, h, zona=None):
+    """Recuadro gris, o con el color de la zona si es la foto de un bloque
+    del esquema."""
+    if zona:
+        borde, fondo, _ = COLORES[zona]
+        est = (f'stroke="{borde}" stroke-width="3.4" '
+               f'stroke-dasharray="10 6"')
+    else:
+        fondo, est = GRIS, f'stroke="{BORDE}" stroke-width="1.6"'
     add(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="14" '
-        f'fill="{FONDO_N if naranjo else GRIS}" {est}/>')
+        f'fill="{fondo}" {est}/>')
 
 
 def texto(x, y, s, size=TXT, anchor="middle", italic=False, color="#000",
@@ -163,7 +176,7 @@ def linea_xy(pts, color="#000", w=LW, dash=None, flecha=False):
 
 
 def recuadro_equipo(x, y, w, titulo, equipos, gap=10, ancho=None,
-                    naranjo=True):
+                    zona=None):
     """Recuadro gris con el titulo arriba y uno o mas equipos recortados
     apilados y centrados (por defecto al ancho del recuadro menos el
     margen)."""
@@ -172,7 +185,7 @@ def recuadro_equipo(x, y, w, titulo, equipos, gap=10, ancho=None,
     wi = ancho or w - 2 * pad
     imgs = [recorte(c, wi) for c in equipos]
     h = ht + sum(a for _, a in imgs) + gap * (len(imgs) - 1) + pad
-    panel(x, y, w, h, naranjo=naranjo)
+    panel(x, y, w, h, zona=zona)
     texto(x + w / 2, y + 31, titulo)
     yy = y + ht
     for (b64, a), c in zip(imgs, equipos):
@@ -296,12 +309,13 @@ def fuente_ac(u, v, r=21):
                f'stroke-width="2.6"/>')
 
 
-def caja_naranja(u0, v0, u1, v1):
+def caja_zona(nombre, u0, v0, u1, v1):
+    borde, fondo, _ = COLORES[nombre]
     esq_fondo.append(f'<rect x="{u0}" y="{v0}" width="{u1-u0}" '
-                     f'height="{v1-v0}" rx="8" fill="{FONDO_N}" '
-                     f'fill-opacity="0.75"/>')
+                     f'height="{v1-v0}" rx="8" fill="{fondo}" '
+                     f'fill-opacity="0.85"/>')
     esq.append(f'<rect x="{u0}" y="{v0}" width="{u1-u0}" height="{v1-v0}" '
-               f'rx="8" fill="none" stroke="{NARANJO}" stroke-width="3.4" '
+               f'rx="8" fill="none" stroke="{borde}" stroke-width="3.4" '
                f'stroke-dasharray="10 6"/>')
 
 
@@ -313,8 +327,8 @@ UDC = [30, 90]                           # fuentes DC
 UCAP = 195
 UD = [800, 775, 750]                     # bajadas al LCL (a, b, c)
 VR = [95, 195, 295]                      # columnas del LCL (a, b, c)
-UL1, UC, UL2 = (835, 890), [915, 940, 965], (995, 1050)
-UG, USTAR = 1105, 1150
+UL1, UC, UL2 = (835, 890), [915, 940, 965], (990, 1040)
+UG, USTAR = 1100, 1145
 VSTAR = 352
 
 # fuentes DC en paralelo y enlace DC
@@ -379,7 +393,7 @@ for k in range(3):
     L([(UG + 21, VR[k]), (USTAR, VR[k])])
     P(USTAR, VR[k])
     x, y = T(UD[k], VR[k])
-    texto(x - 10, y + 26, "abc"[k], size=24, italic=True, anchor="end",
+    texto(x - 8, y - 8, "abc"[k], size=24, italic=True, anchor="end",
           lista=txt)
 for k in range(3):
     uc = UC[k]
@@ -401,20 +415,24 @@ sub_txt(x - 10, y + 44, "C", "f", size=24, lista=txt)
 P(140, vN, 6.5, AZUL)
 x, y = T(140, vN)
 sub_txt(x + 12, y + 8, "P", "in", size=24, color=AZUL, lista=txt)
-P(UD[2], VR[2], 6.5, AZUL)
-x, y = T(UD[2], VR[2])
-sub_txt(x + 12, y - 4, "P", "out", size=24, color=AZUL, lista=txt)
+# P_out en las tres fases, a la entrada del LCL
+UPO = 808
+for k in range(3):
+    P(UPO, VR[k], 6.5, AZUL)
+x, y = T(UPO, VR[2])
+sub_txt(x + 12, y - 2, "P", "out", size=24, color=AZUL, lista=txt)
 
-# recuadros naranjos de cada bloque (en u, v)
+# recuadros de cada bloque (en u, v); la pierna va despues del conversor
+# para quedar encima. Entre el LCL y la red queda un espacio.
 CAJAS = {
-    "pierna": (US[2] - 127, vP - 22, US[2] + 51, vN + 8),
     "dc":    (8, 48, 115, vN + 22),
     "conv":  (180, VT[0] - 12, 720, vN + 22),
-    "lcl":   (815, VR[0] - 34, 1075, VSTAR + 16),
-    "red":   (1075, VR[0] - 34, 1170, VR[2] + 34),
+    "pierna": (US[2] - 127, vP - 22, US[2] + 51, vN + 8),
+    "lcl":   (815, VR[0] - 34, 1058, VSTAR + 16),
+    "red":   (1072, VR[0] - 34, 1165, VR[2] + 34),
 }
-for c in CAJAS.values():
-    caja_naranja(*c)
+for nombre, c in CAJAS.items():
+    caja_zona(nombre, *c)
 
 
 def caja_xy(nombre):
@@ -437,25 +455,24 @@ partes.extend(txt)
 XI, XD, WC = 20, SX1 + 25, SX0 - 45      # columna izquierda y derecha
 # izquierda: fuentes DC, prototipo y filtro LCL
 f_dc = recuadro_equipo(XI, 20, WC, "IT6006C-800-25 (&#215;2)",
-                       ["itech1", "itech2"])
+                       ["itech1", "itech2"], zona="dc")
 f_pr = recuadro_equipo(XI, 345, WC, "10 kW SiC T-Type", ["proto"],
-                       ancho=280)
-f_lc = recuadro_equipo(XI, 850, WC, "LCL filter", ["lcl"])
+                       ancho=280, zona="conv")
+f_lc = recuadro_equipo(XI, 850, WC, "LCL filter", ["lcl"], zona="lcl")
 # derecha: analizador, controlador, modulo SiC y emulador de red
 f_hi = recuadro_equipo(XD, 20, WC, f"PW6001 (<tspan fill='{AZUL}' "
                        "font-style='italic'>P<tspan dy='6' font-size='19'>"
                        "in</tspan><tspan dy='-6'>, P</tspan><tspan dy='6' "
                        "font-size='19'>out</tspan></tspan><tspan dy='-6'>)"
-                       "</tspan>", ["hioki"], naranjo=False)
-f_op = recuadro_equipo(XD, f_hi[1] + f_hi[3] + 16, WC, "OP4510", ["opal"],
-                       naranjo=False)
+                       "</tspan>", ["hioki"])
+f_op = recuadro_equipo(XD, f_hi[1] + f_hi[3] + 16, WC, "OP4510", ["opal"])
 f_mo = recuadro_equipo(XD, 470, WC, "CHB011M12GM4T", ["modulo"],
-                       ancho=230)
-f_nh = recuadro_equipo(XD, 950, WC, "NHR9410", ["nhr"])
+                       ancho=230, zona="pierna")
+f_nh = recuadro_equipo(XD, 950, WC, "NHR9410", ["nhr"], zona="red")
 
 
 def cono(caja, foto, lado):
-    """Cono naranjo translucido (como el ejemplo) entre el borde de la zona
+    """Cono translucido, del color del bloque, (como el ejemplo) entre el borde de la zona
     del esquema y el borde de su foto. lado: 'i' foto a la izquierda, 'd' a
     la derecha. Se inserta bajo el esquema y bajo los recuadros."""
     x0, y0, x1, y1 = caja_xy(caja)
@@ -464,7 +481,7 @@ def cono(caja, foto, lado):
     xf = fx + fw if lado == "i" else fx
     pts = [(xb, y0), (xf, fy + 8), (xf, fy + fh - 8), (xb, y1)]
     d = "M " + " L ".join(f"{a:.1f} {b:.1f}" for a, b in pts) + " Z"
-    partes.insert(conos, f'<path d="{d}" fill="{CONO_N}" '
+    partes.insert(conos, f'<path d="{d}" fill="{COLORES[caja][2]}" '
                   f'fill-opacity="0.45" stroke="none"/>')
 
 
