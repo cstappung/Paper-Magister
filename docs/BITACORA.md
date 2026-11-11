@@ -233,6 +233,10 @@ responde. (Agregada a CLAUDE.md.)
   comentario rojo + sugerencia verde; bloque propuesto S2* "System
   Description"; seccion 6.1 con estas decisiones.
 
+- `main_plan.tex` (2026-11-11): tabla del mapa de secciones con columnas de
+  ancho fijo (se veia aplastada); bloque nuevo S6.0 "Experimental Setup" con
+  F9 (foto + diagrama de conexiones) y T6 (equipos), pedido del autor.
+
 ### Pendientes
 
 
