@@ -369,3 +369,13 @@ responde. (Agregada a CLAUDE.md.)
 - MOSFET con canal en tres tramos, flecha y diodo; trazo 3 px; naranjo y
   azul mas saturados; fotos con +25 % de saturacion.
 - Pendiente: el autor confirma si el prototipo queda sin fondo.
+
+### 2026-11-11 - Figura del montaje, borrador 5
+
+- Prototipo de vuelta como foto rectangular (sin recorte), mas completa.
+- Fuentes DC: circulo con simbolo de continua y polaridad en los bornes.
+- Zonas resaltadas como en el ejemplo: recuadros naranjos con relleno
+  claro, fotos asociadas con el mismo estilo y un cono translucido entre la
+  zona y la foto. PW6001 y OP4510 quedan en gris (no son zona del esquema).
+- CHB011M12GM4T es un modulo T-Type (una pierna, segun Wolfspeed): se
+  resalta la pierna c y el cono va a la foto del modulo.
