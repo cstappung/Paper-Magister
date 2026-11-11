@@ -401,3 +401,5 @@ responde. (Agregada a CLAUDE.md.)
   recortado al recuadro. Las esquinas ya no quedan mas oscuras.
 - Borrador 9: borde mas suave (color a mitad entre el relleno claro y el
   del cono), franja de 12 px y difuminado de 8 px: mas blanco al centro.
+- Borrador 10: degradado lento (blanco desde 48 px del borde y difuminado
+  de 34 px), el blanco solo se ve al centro.
