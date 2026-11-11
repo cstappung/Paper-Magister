@@ -335,3 +335,11 @@ responde. (Agregada a CLAUDE.md.)
   `tools/figura_setup/fotos/` (y el ejemplo de referencia). Salida en
   `figuras/setup/`. Aun no se incluye en `MAIN_FINAL.tex`: se itera con el
   autor.
+- Figura del montaje, borrador 2 (2026-11-11): esquema trifasico (dos
+  fuentes DC en paralelo, enlace DC con punto medio O, tres piernas T-Type
+  con MOSFET y diodo de cuerpo, LCL trifasico con C_f en estrella, tres
+  fuentes AC de red en estrella) y seis fotos (fuentes DC, prototipo, LCL
+  arriba; Hioki, OPAL-RT, NHR abajo) unidas con lineas naranjas punteadas.
+  Respuestas del autor: emulador conectado directo; no detallar las senales
+  del OPAL-RT (solo "control"); dejar por ahora las etiquetas del lab y las
+  IP; cuidar el espacio.
