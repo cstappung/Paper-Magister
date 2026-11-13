@@ -560,3 +560,10 @@ responde. (Agregada a CLAUDE.md.)
   sin mencionarlo: \sug con 13.23 -> 12.40 W y 6.3 % en Harmonic
   Compensation y en conclusiones. (3) El rizado lo enviara de simulacion:
   \upd pendiente en Loss Comparison.
+- Rizado de simulacion del autor (modelo lineal del LCL, L1 = 1 mH, patron
+  offline): punto nominal OPP 5.66 A rms (32.1 A pp) vs PWM 3.00 A rms
+  (14.8 A pp), razon 1.89; en el disco 10-20 A la razon va de 1.6 a 2.3
+  (media 1.9, mayor en diagonales). Laboratorio sobre 2 kHz: OPP 4.75 A,
+  PWM 3.17 A (razon 1.5). El autor prefiere el rms al pico. Agregado a la
+  \sug del parrafo de la brecha; \upd: sumar la cifra medida si es de la
+  corriente del conversor.
