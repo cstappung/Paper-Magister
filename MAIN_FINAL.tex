@@ -795,6 +795,8 @@ and the result is kept as the warm start of the next iteration. Convergence is t
 within one call, which bounds the computation per control period $T_s$.
 The optimizer is implemented as a MATLAB Function block and executed on an
 OPAL-RT OP4510 with $T_s=200~\mu$s.
+\upd{Pendiente (autor): tiempo de ejecucion medido del optimizador en el
+OP4510 frente a $T_s = 200~\mu$s; agregarlo aqui y en el abstract.}
 The harmonic limits are not projected onto
 the linearized model; they enter the objective function (OF) as weights
 that adapt to the exact spectrum of the applied pattern. The LUT, addressed
@@ -1558,8 +1560,7 @@ obtained in under 8~min \dots}
 The off-line patterns were complemented with a real-time optimizer that
 performs one Gauss--Newton iteration per update. Starting from the table, it
 restores compliance with the individual IEEE~519 limits within one
-fundamental period, both between table entries and under grid background
-distortion, while it keeps minimizing the losses: at 5~kW, compensating a
+fundamental period under grid background distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the measured losses
 by 6.3\pct{}.
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
