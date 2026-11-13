@@ -1428,11 +1428,12 @@ the OPP and 7.0~W for SV-GDPWM, and its difference between strategies
 explains the gaps between model and measurement. The main one is the
 current ripple. The model assumes a sinusoidal current, whereas the OPP
 switches each device at 950~Hz, equivalent to a carrier of 1900~Hz against
-the 2850~Hz of PWM, and therefore carries a larger ripple.
-Fig.~\ref{fig:fft_comparacion}(b) reflects it in the grid current, where
-the components of the RT-OPP above $n = 50$ exceed those of PWM; in the
-converter current, which flows through the devices, the filter attenuates
-them much less. The ripple raises the RMS current and the current at the
+the 2850~Hz of PWM, and therefore carries a larger ripple. In simulation,
+the RMS ripple of the converter current at the nominal point is 5.66~A for
+the OPP and 3.00~A for PWM, 1.9 times larger, and this ratio remains between
+1.6 and 2.3 over the operating range. The measurements reflect it in the
+grid current: in Fig.~\ref{fig:fft_comparacion}(b), the components of the
+RT-OPP above $n = 50$ exceed those of PWM. The ripple raises the RMS current and the current at the
 switching instants, and with them both loss terms. The off-line problem
 does not constrain it; only the real-time optimizer includes harmonics up
 to the 97th, so that it does not grow over time. As a result, the offset of
@@ -1452,10 +1453,11 @@ that of the OPP, the measured reduction with respect to SV-GDPWM is even
 larger than predicted. Characterizing the switching energies of the module
 with DPT would confirm this explanation, and is left for future work
 together with the inclusion of the current ripple in the loss model.''}
-\upd{Pendiente: el autor enviara el rizado de la corriente del conversor
-de simulacion (OPP vs PWM); agregar aqui la cifra, por ejemplo ``in
-simulation, the converter-current ripple of the OPP is XX\pct{} larger
-than that of PWM''.}
+\upd{Agregada a la \texttt{\textbackslash sug} de arriba la cifra del rizado
+rms de simulacion (5.66 vs 3.00~A, razon 1.6--2.3). Si los 4.75 y 3.17~A
+sobre 2~kHz del laboratorio son de la corriente del conversor, se puede
+agregar despues de ``\dots\ over the operating range'': ``On the prototype,
+the measured ripple is 4.75~A for the RT-OPP and 3.17~A for PWM.''}
 \old{\dots\ where the datasheet switching energies are least
 representative; since this offset exceeds that of the OPP, the measured
 reduction with respect to SV-GDPWM remains close to the model. Including
