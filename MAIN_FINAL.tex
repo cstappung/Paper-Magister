@@ -116,7 +116,7 @@ angles, so far unavailable for this topology, and the integer level constraint
 is replaced by linear inequalities, yielding a continuous nonlinear problem.
 Over the operating range, the loss model predicts mean reductions of the
 total losses of 36\pct{} with respect to SV-GDPWM at 4050~Hz and 34\pct{} with
-respect to PD-PWM at 2850~Hz, and measurements on a 10~kW prototype yield
+respect to PWM at 2850~Hz, and measurements on a 10~kW prototype yield
 33\pct{} and 8\pct{} (up to 14\pct{}), respectively.
 \upd{Agregar el refinamiento en linea (SQP de una iteracion GN por
 actualizacion con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
@@ -136,7 +136,7 @@ angle, and are
 refined online by a sequential quadratic program that performs one
 Gauss--Newton iteration per update. Over the operating range, the loss model
 predicts mean reductions of the total losses of 36\pct{} with respect to
-SV-GDPWM at 4050~Hz and 34\pct{} with respect to PD-PWM at 2850~Hz, and
+SV-GDPWM at 4050~Hz and 34\pct{} with respect to PWM at 2850~Hz, and
 measurements on a 10~kW prototype yield 33\pct{} and 8\pct{} (up to 14\pct{}), respectively.
 The online stage restores compliance
 with the individual harmonic limits within one fundamental period,
@@ -1318,9 +1318,6 @@ That unused margin is what the proposed formulation converts into the loss
 reduction reported below.}
 \old{\dots\ while PWM and DPWM1 leave most of it unused, at 0.25\pct{}
 and 1.15\pct{}: \dots}
-\upd{Aqui queda ``PWM'', como pediste, pero el resto del paper dice PD-PWM
-(se define en Loss Comparison, en la tabla y en las conclusiones). Si
-prefieres PWM en todo el paper, dime y lo cambio en todas partes.}
 
 Unlike the off-line problem, where the TDD and the individual limits are
 hard constraints, the real-time stage includes them in the OF, and the
@@ -1342,8 +1339,8 @@ a secondary term, so it settles below the limit: \dots}
 
 \subsection{Loss Comparison}
 
-Two carrier-based strategies are used as benchmarks: phase-disposition PWM
-(PD-PWM) at 2850~Hz and the space-vector generalized discontinuous PWM
+Two carrier-based strategies are used as benchmarks: phase-disposition
+pulse-width modulation (PWM) at 2850~Hz and the space-vector generalized discontinuous PWM
 (SV-GDPWM) \cite{hava_gdpwm} at 4050~Hz, which clamps each phase to P or N
 around the peak of its current. In both cases $m_f$ was restricted to odd
 multiples of three, so that neither even nor triplen harmonics are
@@ -1365,7 +1362,7 @@ with $I_q$, which changes the modulation index and the current
 displacement angle. The OPP
 exhibits the lowest total losses at every operating point
 (Fig.~\ref{fig:perdidas}(l)), with a mean value of 6.8~W against 10.1~W for
-PD-PWM and 10.3~W for SV-GDPWM. The gain comes mainly from switching: the
+PWM and 10.3~W for SV-GDPWM. The gain comes mainly from switching: the
 switching losses of the OPP remain around 3~W over the whole range
 (Fig.~\ref{fig:perdidas}(e)), whereas those of the carriers grow with the
 current and exceed 10~W at full current (Fig.~\ref{fig:perdidas}(f),(g)).
@@ -1373,7 +1370,7 @@ In conduction the three strategies are closer
 (Fig.~\ref{fig:perdidas}(a)--(c)). The OPP is the lowest over most of the
 range, except in four narrow bands of current angle where SV-GDPWM, clamped
 to P or N around the current peak, conducts through a single device for
-longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PD-PWM is
+longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PWM is
 never the lowest-loss strategy.
 
 Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
@@ -1382,64 +1379,53 @@ refined online by the real-time optimizer (Section~\ref{subsec:setup}).
 The OPP yields the
 lowest measured losses at every point. Against SV-GDPWM, the measured
 reduction, 33.4\pct{} on average and between 29.3 and 37.7\pct{}, agrees
-with the 36.0\pct{} predicted by the model. Against PD-PWM, it is
+with the 36.0\pct{} predicted by the model. Against PWM, it is
 8.4\pct{} on average and reaches 14.4\pct{} at $I_d = 15$~A, below the
 33.9\pct{} predicted.
 
 Three effects explain this gap. First, the measured losses exceed the model
 by an offset due to effects that the model does not include: mainly the
 current ripple and the switching energies, which are taken from the
-datasheet instead of double-pulse tests (DPT) on the prototype. For PD-PWM
+datasheet instead of double-pulse tests (DPT) on the prototype. For PWM
 this offset is nearly constant, between 4.3 and 6.5~W.
 An offset common to two strategies keeps their absolute difference but
 enlarges the reference, and therefore lowers the relative reduction: with
-the offset of PD-PWM added to both, the model would predict 20\pct{}
+the offset of PWM added to both, the model would predict 20\pct{}
 instead of 34\pct{}. Second, this effect is strongest at light load, where
 the offset is comparable to or larger than the modeled losses: at
-$I_q = -10$~A, PD-PWM dissipates 3.9~W in the model and 10.2~W in the
+$I_q = -10$~A, PWM dissipates 3.9~W in the model and 10.2~W in the
 measurement, and the reduction falls from 40.0 to 4.8\pct{}, with a
 measured difference of only 0.5~W. Third, the model assumes a sinusoidal
 current, whereas the OPP, switching at 950~Hz per device, carries a larger
 current ripple, which adds losses that the model does not capture. The
 off-line problem does not constrain this ripple; only the real-time
 optimizer includes harmonics up to the 97th, so that the ripple does not
-grow over time. Accordingly, the offset of the OPP exceeds that of PD-PWM
+grow over time. Accordingly, the offset of the OPP exceeds that of PWM
 by 1.9~W on average, which reduces the mean measured difference from 3.3 to
 1.4~W. SV-GDPWM shows the largest offset, 11.0~W on average. Like the OPP,
-and unlike PD-PWM, it concentrates its switching events away from the
-current peak, at low currents, where the datasheet switching energies are
-least representative; since this offset exceeds that of the OPP, the
-measured reduction with respect to SV-GDPWM remains close to the model.
-Including the current ripple in the loss model and characterizing the
-switching energies of the module with DPT are left for future work.
-\sug{Reemplazar desde ``SV-GDPWM shows the largest offset'' hasta el final
-del parrafo por: ``SV-GDPWM shows the largest offset, 11.0~W on average.
-The switching energies taken from the datasheet may not represent the
-module under the actual operating conditions, and SV-GDPWM, with the
-highest carrier frequency, magnifies any error in them; since this offset
-exceeds that of the OPP, the measured reduction with respect to SV-GDPWM
-remains close to the model. Characterizing the switching energies of the
-module with DPT would confirm this explanation, and is left for future
-work together with the inclusion of the current ripple in the loss
-model.''}
+and unlike PWM, it concentrates its switching events away from the current
+peak, at low currents, where the datasheet switching energies are least
+representative and probably underestimate the actual ones, and its higher
+carrier frequency magnifies this error. Since this offset exceeds that of
+the OPP, the measured reduction with respect to SV-GDPWM remains close to
+the model. Characterizing the switching energies of the module with DPT
+would confirm this explanation, and is left for future work together with
+the inclusion of the current ripple in the loss model.
+\old{\dots\ where the datasheet switching energies are least
+representative; since this offset exceeds that of the OPP, the measured
+reduction with respect to SV-GDPWM remains close to the model. Including
+the current ripple in the loss model and characterizing the switching
+energies of the module with DPT are left for future work.}
 \old{First, the measured losses exceed the model by an offset due to effects
 that the model does not include \textbf{[XX]}, which for PD-PWM is nearly
 constant, between 4.3 and 6.5~W. [\dots] Accordingly, the offset of the OPP
 exceeds that of PD-PWM by 1.9~W on average, which reduces the mean measured
 difference from 3.3 to 1.4~W. Including the current ripple in the loss model
 is left for future work.}
-\upd{Dos dudas sobre tu comentario: (1) el offset es medicion menos
-modelo y es positivo, asi que el modelo \emph{subestima} las perdidas; si
-la causa es el datasheet, sus energias serian bajas, no altas. Por eso la
-\texttt{\textbackslash sug} no dice el sentido del error. (2) SV-GDPWM
-tiene la portadora mas alta (4050~Hz), pero con el enclavamiento deja de
-conmutar cerca de un tercio del periodo, asi que su numero de conmutaciones
-queda cerca del de PD-PWM; por eso dice ``highest carrier frequency'' y no
-``more switching events''. Confirmar.}
 
 Even so, the improvement is consistent: at the same harmonic compliance,
 the OPP refined in real time reduces the losses at every measured point, by
-up to 14.4\pct{} with respect to PD-PWM and up to 37.7\pct{} with respect to
+up to 14.4\pct{} with respect to PWM and up to 37.7\pct{} with respect to
 SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 
 \begin{figure*}[!t]
@@ -1460,7 +1446,7 @@ SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
-    \caption{Total losses of the OPP and PD-PWM: model (a)--(d) and
+    \caption{Total losses of the OPP and PWM: model (a)--(d) and
     measurements (e)--(h).}
     \label{fig:comp_pwm}
 \end{figure*}
@@ -1479,7 +1465,7 @@ SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
         Strategy & Model & Meas. & Model & Meas. \\
         \midrule
         RT-OPP, $d=19$     & 12.7 & 19.6 & --   & --   \\
-        PD-PWM, 2850~Hz    & 17.4 & 21.7 & 26.8 & 9.7  \\
+        PWM, 2850~Hz    & 17.4 & 21.7 & 26.8 & 9.7  \\
         SV-GDPWM, 4050~Hz  & 17.6 & 28.8 & 27.7 & 32.2 \\
         \bottomrule
     \end{tabular*}
@@ -1565,11 +1551,11 @@ by 4.8\pct{}.
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
 meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
-4050~Hz and 34\pct{} with respect to PD-PWM at 2850~Hz according to the loss
+4050~Hz and 34\pct{} with respect to PWM at 2850~Hz according to the loss
 model. The gain comes mainly from switching, and the OPP also conducts less
 over most of the range. Measurements on a 10~kW grid-connected T-Type
 prototype confirm the reduction with respect to SV-GDPWM, 33\pct{} on average,
-whereas with respect to PD-PWM it is smaller, 8\pct{} on average and up to
+whereas with respect to PWM it is smaller, 8\pct{} on average and up to
 14\pct{}, since the measured losses include effects that the model neglects,
 such as the current ripple, and these weigh most at light load. The
 off-line optimizer drives the current distortion to the regulatory limit and
