@@ -588,3 +588,18 @@ responde. (Agregada a CLAUDE.md.)
   observador; modelo 36/34 %, medido 42/11 % (hasta 19 %), brecha por el
   rizado; compensacion TDD 29.5 -> 3.9 % en un periodo. Sin tiempo de
   ejecucion (no hay dato). Abstract anterior en \old.
+
+### 2026-11-13 - Revision de lectura de corrido
+
+- Huecos senalados al autor: tiempo de ejecucion RT sin dato; "between
+  table entries" en conclusiones sin resultado que lo respalde; origen del
+  0.4 %; referencia a Experimental Setup en Loss Comparison (el autor lo ve
+  despues); titulo "Simulation and Experimental Results" (se deja).
+- Aplicado por pedido del autor: Fig. fft_comparacion es simulada (caption y
+  texto, y el parrafo del rizado ya no dice "measurements"); regla
+  OPP = patron off-line de la tabla, RT-OPP = refinado en linea, definida al
+  inicio de resultados y aplicada en Loss Comparison y captions (la
+  simulacion del rizado usa el patron de tabla, queda OPP); se quito la
+  repeticion de 950 Hz / 1900 Hz en el parrafo del rizado.
+- Pendiente: los paneles de las Figs. comp_* dicen "OPP, D = 19" (deberia ser
+  RT-OPP y d minuscula) y la Fig. de perdidas modeladas tambien dice OPP.
