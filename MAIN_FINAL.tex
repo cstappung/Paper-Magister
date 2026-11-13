@@ -1159,7 +1159,9 @@ affect the current control loop.
 
 This section first describes the experimental setup and then presents the
 optimized patterns, their harmonic compliance, the losses and an example of
-harmonic compensation. The modeled
+harmonic compensation. In what follows, OPP denotes the off-line pattern
+of the table and RT-OPP the pattern refined online by the real-time
+optimizer of Section~\ref{sec:rt}. The modeled
 losses are computed with the analytical models of
 Section~\ref{sec:perdidas} and the parameters of Table~\ref{tab:parametros},
 and the measured losses are obtained on the prototype at eight operating
@@ -1276,15 +1278,16 @@ $M=0.91$ (la LUT dice 0.83--0.9).}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=0.95\textwidth]{figuras/fft_comparacion_rt/fft_comparacion_rt.png}
-    \caption{(a) Current TDD versus delivered power, against the 5\pct{} limit;
+    \caption{Simulation results: (a) current TDD versus delivered power,
+    against the 5\pct{} limit;
     (b) harmonic spectrum of the grid current at the nominal point, against the
     limits of IEEE~519 (shaded staircase).}
     \label{fig:fft_comparacion}
 \end{figure*}
 \subsection{Harmonic Compliance}
 
-Fig.~\ref{fig:fft_comparacion}(a) shows the current TDD over the power
-sweep. All three strategies remain well below the 5\pct{} limit: the RT-OPP
+Fig.~\ref{fig:fft_comparacion}(a) shows the simulated current TDD over
+the power sweep. All three strategies remain well below the 5\pct{} limit: the RT-OPP
 between 1.1 and 2.0\pct{}, PWM at about 1.2\pct{} and SV-GDPWM between 0.6
 and 0.9\pct{}. For the carriers, compliance is decided by the individual
 limits, and the carrier frequency needed to satisfy them collapses the
@@ -1345,31 +1348,31 @@ $P_{out} = 9.8$~kW, corresponds to $I_d = 20$~A and $I_q = 0$.
 Fig.~\ref{fig:perdidas} shows the losses given by the model over that
 range. They grow with the current amplitude and, for a given amplitude,
 with $I_q$, which changes the modulation index and the current
-displacement angle. The OPP
+displacement angle. The RT-OPP
 exhibits the lowest total losses at every operating point
 (Fig.~\ref{fig:perdidas}(l)), with a mean value of 6.8~W against 10.1~W for
 PWM and 10.3~W for SV-GDPWM. The gain comes mainly from switching: the
-switching losses of the OPP remain around 3~W over the whole range
+switching losses of the RT-OPP remain around 3~W over the whole range
 (Fig.~\ref{fig:perdidas}(e)), whereas those of the carriers grow with the
 current and exceed 10~W at full current (Fig.~\ref{fig:perdidas}(f),(g)).
 In conduction the three strategies are closer
-(Fig.~\ref{fig:perdidas}(a)--(c)). The OPP is the lowest over most of the
+(Fig.~\ref{fig:perdidas}(a)--(c)). The RT-OPP is the lowest over most of the
 range, except in four narrow bands of current angle where SV-GDPWM, clamped
 to P or N around the current peak, conducts through a single device for
 longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PWM is
 never the lowest-loss strategy.
 
 Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
-measurements on the 10~kW prototype at eight operating points, with the OPP
-refined online by the real-time optimizer (Section~\ref{subsec:setup}).
-The OPP yields the
+measurements on the 10~kW prototype at eight operating points, with the RT-OPP
+(Section~\ref{subsec:setup}).
+The RT-OPP yields the
 lowest measured losses at every point. Against SV-GDPWM, the
 measured reduction is 41.9\pct{} on average, against the 36.0\pct{}
 predicted by the model, and it exceeds the prediction at seven of the
 eight points, reaching 47.9\pct{} at $I_d = 10$~A and $I_q = 0$, where the
 model predicts 36.2\pct{}. Against PWM, it is 11.4\pct{} on average and
 reaches 18.8\pct{} at $I_d = 15$~A, where the model predicts 30.7\pct{};
-in absolute terms, the OPP saves 2.5~W at that point, against 3.7~W
+in absolute terms, the RT-OPP saves 2.5~W at that point, against 3.7~W
 predicted.
 \old{Against SV-GDPWM, the measured reduction, 33.4\pct{} on average and
 between 29.3 and 37.7\pct{}, agrees with the 36.0\pct{} predicted by the
@@ -1380,21 +1383,21 @@ The measured losses exceed the model by an offset due to effects that
 the model does not include, mainly the current ripple and the switching
 energies, which are taken from the datasheet instead of double-pulse tests
 (DPT) on the prototype. This offset is 1.5~W on average for PWM, 3.4~W for
-the OPP and 7.0~W for SV-GDPWM, and its difference between strategies
+the RT-OPP and 7.0~W for SV-GDPWM, and its difference between strategies
 explains the gaps between model and measurement. The main one is the
-current ripple. The model assumes a sinusoidal current, whereas the OPP
-switches each device at 950~Hz, equivalent to a carrier of 1900~Hz against
-the 2850~Hz of PWM, and therefore carries a larger ripple. In simulation,
+current ripple. The model assumes a sinusoidal current, whereas the OPP,
+with a lower equivalent carrier frequency than PWM, carries a larger
+ripple. In simulation,
 the RMS ripple of the converter current at the nominal point is 5.66~A for
 the OPP and 3.00~A for PWM, 1.9 times larger, and this ratio remains between
 1.6 and 2.3 over the operating range. On the prototype, the measured
-ripple above 2~kHz is 4.75~A for the RT-OPP and 3.17~A for PWM. The measurements reflect it in the
-grid current: in Fig.~\ref{fig:fft_comparacion}(b), the components of the
+ripple above 2~kHz is 4.75~A for the RT-OPP and 3.17~A for PWM. The simulated grid current also
+reflects it: in Fig.~\ref{fig:fft_comparacion}(b), the components of the
 RT-OPP above $n = 50$ exceed those of PWM. The ripple raises the RMS current and the current at the
 switching instants, and with them both loss terms. The off-line problem
 does not constrain it; only the real-time optimizer includes harmonics up
 to the 97th, so that it does not grow over time. As a result, the offset of
-the OPP exceeds that of PWM by 1.9~W on average, which reduces the mean
+the RT-OPP exceeds that of PWM by 1.9~W on average, which reduces the mean
 difference from the 3.3~W of the model to the 1.4~W measured. In addition,
 an offset common to both strategies keeps their absolute difference but
 enlarges the reference, and therefore lowers the relative reduction. This
@@ -1406,7 +1409,7 @@ the OPP, and unlike PWM, it concentrates its switching events away from the
 current peak, at low currents, where the datasheet switching energies are
 least representative and probably underestimate the actual ones, and its
 higher carrier frequency magnifies this error. Since this offset exceeds
-that of the OPP, the measured reduction with respect to SV-GDPWM is even
+that of the RT-OPP, the measured reduction with respect to SV-GDPWM is even
 larger than predicted. Characterizing the switching energies of the module
 with DPT would confirm this explanation, and is left for future work
 together with the inclusion of the current ripple in the loss model.
@@ -1424,7 +1427,7 @@ difference from 3.3 to 1.4~W. Including the current ripple in the loss model
 is left for future work.}
 
 Even so, the improvement is consistent: at the same harmonic compliance,
-the OPP refined in real time reduces the losses at every measured point, by
+the RT-OPP reduces the losses at every measured point, by
 up to 18.8\pct{} with respect to PWM and up to 47.9\pct{} with respect to
 SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 
@@ -1439,14 +1442,14 @@ SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
-    \caption{Total losses of the OPP and SV-GDPWM: model (a)--(d) and
+    \caption{Total losses of the RT-OPP and SV-GDPWM: model (a)--(d) and
     measurements (e)--(h).}
     \label{fig:comp_gdpwm}
 \end{figure*}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
-    \caption{Total losses of the OPP and PWM: model (a)--(d) and
+    \caption{Total losses of the RT-OPP and PWM: model (a)--(d) and
     measurements (e)--(h).}
     \label{fig:comp_pwm}
 \end{figure*}
