@@ -339,6 +339,8 @@ normalizes the TDD and the individual limits.''}
 ``\% of $I_L$'' en el eje; con la frase de arriba quedan consistentes sin
 rehacerlas.}
 
+\textcolor{blue}{Comentario: gracias, pero prefiero actualizar las figuras. Ya lo hice por si acaso.}
+
 \subsection{Linear Level Constraints}
 Even when the virtual angle is used, the model in \cite{koukoula_junction}
 retains an integer level constraint, $-1 \leq u_i \leq 1$, which requires the
@@ -1111,6 +1113,8 @@ al final de la Seccion de resultados.]}
 0.4\pct{} en Harmonic Compliance), regenerada con
 \texttt{RTOPP\_D19\_simple\_rip}.}
 
+\textcolor{blue}{Explicame mejor a que te refieres aqui que falta o hay que cambiear, y dejame una sugerencia si quieres que cambie algo}
+
 As for the computational cost, $\mathbf{Q}$ is diagonal and $\mathbf{B}_t$,
 $\mathbf{B}_e$ consist of two diagonal blocks. Therefore
 $\mathbf{B}_t^T\mathbf{B}_t$ and $\mathbf{B}_e^T\mathbf{B}_e$ only populate
@@ -1192,9 +1196,14 @@ points.
 \sug{Primera frase: ``This section first describes the experimental setup
 and then presents the optimized patterns, their harmonic compliance, the
 losses and an example of harmonic compensation.''}
+
+\textcolor{blue}{Comentario: aplica la sigerencia.}
+
 \old{El parrafo anterior describia el metodo (Julia, multi-start, LUT de
 conferencia, PLECS, OPAL-RT); paso a la Seccion~\ref{sec:implementacion} y a
 la Seccion~\ref{sec:rt}, y la frase de PLECS se quito.}
+
+
 
 \subsection{Experimental Setup}
 \label{subsec:setup}
@@ -1206,10 +1215,8 @@ emulator through the LCL filter of Table~\ref{tab:parametros}. The
 modulation and the real-time optimizer run on the OPAL-RT OP4510. The
 losses are obtained as the difference between the DC input power and the AC
 output power at the converter terminals, before the LCL filter, both
-measured with the power analyzer, so they exclude the filter losses.
-\sug{Agregar al final del parrafo: ``Each phase leg is built with one
-CHB011M12GM4T T-Type module, and the colored areas of Fig.~\ref{fig:setup}
-relate each part of the schematic to the corresponding equipment.''}
+measured with the power analyzer, so they exclude the filter losses. Each phase leg is built with one
+CHB011M12GM4T T-Type module.
 
 \begin{figure}[!t]
     \centering
@@ -1304,7 +1311,7 @@ of the table; (b) pattern at $M = 0.87$ and $\varphi = 0^\circ$; (c)
 number of switching events per $15^\circ$ of grid angle; (d) switching
 angles as a function of $M$ at $\varphi = 0^\circ$. Solid and dotted lines
 mark the peaks and the zero crossings of the current.''}
-\textcolor{blue}{Comentario: Si aqui tengo pendiente mejroar esa foto.}
+\textcolor{blue}{Comentario: OK aplica tus cambios, y el termino que predoima debe ser  current displacement angle por sobre Current Phase, pero para esta imagen lo dejare como esta de moento, en la fig 5 (a) y (c).}
 
 % Cuatro paneles (a)-(d) dentro del mismo PNG, con los rotulos quemados;
 % va a dos columnas para que los pulsos se distingan.
@@ -1355,6 +1362,8 @@ several of them close to 90\pct{} of the limit, set by the margin $\rho$ of
 Table~\ref{tab:rt_param}, with the residual content displaced above that
 order.''}
 
+\textcolor{blue}{Comentario APlicar, pero prefiero que diga PWM y no PD-PWM}
+
 Unlike the off-line problem, where the TDD and the individual limits are
 hard constraints, the real-time stage includes them in the OF, and the
 adaptive weights of Section~\ref{subsec:rt_con} grow only when a limit is
@@ -1378,6 +1387,8 @@ the grid voltage carries background harmonics, the table pattern alone
 violates the individual limits, and the optimizer restores compliance
 within about one fundamental period, as measured in
 Section~\ref{subsec:compensacion}.''}
+\textcolor{blue}{Comentario: Ok, aplicalo, pero deja el 0.4\% de perdidas que se mantiene}
+
 \upd{La \texttt{\textbackslash sug} quita las cifras de simulacion de
 \texttt{RTOPP\_D19} (1.7\pct{}, factor 5.7, 13~ms y la Fig.~[X]); la TDD
 sale de la figura medida. El [XX] es el mismo pendiente de Local Quadratic
@@ -1388,6 +1399,8 @@ a secondary term, so it settles below the limit: \dots}
 \upd{Tolerancia a fondo armonico de red ($\sim$9\pct{} de la fundamental por
 armonico individual): definir el ensayo (barrido por armonico, criterio de
 cumplimiento, punto de operacion) antes de agregar la cifra al texto.}
+
+\textcolor{blue}{Comentario: De momento voy a omitir lo que tiene que ver con la tolerancia a cada armonico.}
 
 \subsection{Loss Comparison}
 
@@ -1472,6 +1485,8 @@ conmutacion a baja corriente, donde el datasheet es menos fiable) es una
 hipotesis mia, coherente con que el OPP tambien conmuta cerca de los cruces
 por cero. Una prueba DPT la confirmaria.}
 
+\textcolor{blue}{Comentario: ok mensinalo para justicar el offset, pero inclinate mas como que las estimaciones del datasheet pueden estar falladas y que tal vez se estan sobre estimando perdidas, que en el caso de la SV-GDPWM se magnifican por la alta cantidad de switches. y que la prueba de DPT podria confirmar}
+
 Even so, the improvement is consistent: at the same harmonic compliance,
 the OPP refined in real time reduces the losses at every measured point, by
 up to 14.4\pct{} with respect to PD-PWM and up to 37.7\pct{} with respect to
@@ -1554,6 +1569,8 @@ reduction of 4.8\pct{}.''}
 \upd{Confirmar que ``Loss1'' de la tabla es $P_{in}-P_{out}$ del analizador,
 como el resto de las mediciones de perdidas.}
 
+\textcolor{blue}{Comentario: aplicalo, y si es lo mismo Loss1. tambien quiero que no ponfgas lo del rms de la corriente, eso no importa, solo ve el tema de las perdidas, la baja del armonioco y el ahorro de perdidas.}
+
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
@@ -1605,6 +1622,8 @@ fifth harmonic of 8\pct{} in the grid voltage reduces the losses by
 8\pct{} in the grid voltage reduces the RMS current by 8.5\pct{} and the
 measured losses by 4.8\pct{}.''}
 
+\textcolor{blue}{COmentario: aplicalo, pero son hablar del RMS de la corriente.}
+
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
 meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
@@ -1629,6 +1648,7 @@ frequency rather than a specification. The real-time stage then lowers the
 distortion to about one third of the limit at almost no cost in losses,
 which leaves room for grid background harmonics.''}
 
+\textcolor{blue}{Comentario: Aplicar}
 
 % ----------------------------- Bibliografia -----------------------------
 \upd{Bibliografia: candidatas en \texttt{docs/REFERENCIAS.md}. La mas
@@ -1640,6 +1660,7 @@ diferencia porque minimiza distorsion, no perdidas. Despues, las versiones
 revista de Koukoula (TIA 2025 y TPEL 2025), que reemplazan a
 \texttt{koukoula\_ecce23} y \texttt{koukoula\_junction}.}
 
+\textcolor{blue}{Comentario: al final vere las bibliografias que falten}
 
 \begin{thebibliography}{30}
 
