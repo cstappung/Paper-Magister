@@ -457,3 +457,34 @@ responde. (Agregada a CLAUDE.md.)
   \upd). Pide ocultar los textos en gris: se activa
   `\renewcommand{\old}[1]{}` en el preambulo (los 10 \old siguen en el
   .tex; comentar esa linea para volver a verlos).
+
+### 2026-11-13 - Version del autor (PDF de 14 paginas) y revision de pendientes
+
+- El autor pego su `MAIN_FINAL.tex` y mando el PDF (el zip solo traia el PDF).
+  Diferencias con el repo: aplico el parrafo de Harmonic Compensation y borro
+  el \upd de rotulos; figuras nuevas `figuras/fft_comparacion_rt/` (con
+  RT-OPP) y `figuras/ondas_compensacion/` (en ingles); la del montaje la usa
+  en `figuras/setup-export/setup-export.png`. Commit propio con su version;
+  las dos figuras nuevas se extrajeron sin perdida del PDF (pdfimages).
+- La figura del montaje del PDF la exporto el autor con otro programa y los
+  subindices salen separados ("P in", "S 2"). `tools/figura_setup` ahora
+  escribe en `figuras/setup-export/` (svg, png x4, pdf) con Chromium; se le
+  manda ese PNG para reemplazar el suyo.
+- Se borraron carpetas que el .tex ya no usa: `figuras/setup`,
+  `figuras/compensacion_armonicos`, `figuras/fft_comparacion`.
+- Notas resueltas y borradas: \upd de la figura FFT (RT-OPP ya esta; la red
+  distorsionada es fig:compensacion), \upd de Conclusions sobre la cifra del
+  5 %.
+- Notas nuevas:
+  - S6.2: con la figura nueva el RT-OPP queda en 1.1-2.0 % de TDD, PD-PWM
+    ~1.2 %, SV-GDPWM 0.6-0.9 % (leido del grafico). El parrafo decia que el
+    OPP opera en el 5 %. \sug con el parrafo reescrito; \sug para cambiar
+    la Fig. [X] por la referencia a S6.4. Leyenda "PWM 2850 Hz" -> PD-PWM.
+  - Conclusions: "drives the current distortion to the regulatory limit"
+    choca con la figura nueva (\upd, el autor habia pedido mantener la
+    frase; se le avisa por el dato nuevo).
+  - S6.1: la Fig. del patron tiene cuatro paneles y el texto/caption
+    describen dos; \sug de texto y caption. (d) llega a M = 0.91.
+  - eq:tdd: \sug "I_nom takes the place of I_L" para que los ejes "% of I_L"
+    de las figuras queden consistentes.
+  - Intro de resultados: \sug para nombrar la compensacion.

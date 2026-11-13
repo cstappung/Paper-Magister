@@ -325,6 +325,12 @@ to grid current, evaluated at harmonic $n$ (Section~\ref{sec:filtro}), and
 $\mathcal{N}=\{1,5,7,11,\dots,49\}$ is the set of odd, non-triplen orders
 below the 50th: triplen harmonics do not flow in the line currents of the
 three-wire connection, and IEEE~519 bounds the distortion up to the 50th order.
+\sug{Agregar al final del parrafo: ``The rated current $I_{nom}$ takes the
+place of the maximum demand load current $I_L$ with which IEEE~519
+normalizes the TDD and the individual limits.''}
+\upd{Las Figs.~\ref{fig:fft_comparacion}(b) y~\ref{fig:compensacion} usan
+``\% of $I_L$'' en el eje; con la frase de arriba quedan consistentes sin
+rehacerlas.}
 
 \subsection{Linear Level Constraints}
 Even when the virtual angle is used, the model in \cite{koukoula_junction}
@@ -1176,6 +1182,9 @@ losses are computed with the analytical models of
 Section~\ref{sec:perdidas} and the parameters of Table~\ref{tab:parametros},
 and the measured losses are obtained on the prototype at eight operating
 points.
+\sug{Primera frase: ``This section first describes the experimental setup
+and then presents the optimized patterns, their harmonic compliance, the
+losses and an example of harmonic compensation.''}
 \old{El parrafo anterior describia el metodo (Julia, multi-start, LUT de
 conferencia, PLECS, OPAL-RT); paso a la Seccion~\ref{sec:implementacion} y a
 la Seccion~\ref{sec:rt}, y la frase de PLECS se quito.}
@@ -1259,16 +1268,37 @@ peaks, which is where each event costs more energy.
 Fig.~\ref{fig:patron_pulsos}(a) traces the angles across the modulation index.
 Every trajectory is continuous, so the LUT can be swept without introducing a
 current transient.
-\upd{Plan S6.1: la Fig.~\ref{fig:patron_pulsos} ya es $d=19$ y se deja
-asi; falta una frase sobre $\varphi$.}
-\sug{Agregar al final del parrafo: ``Along $\varphi$, in contrast, the
-optimal angles exhibit discontinuities.''}
+\upd{La Fig.~\ref{fig:patron_pulsos} tiene cuatro paneles ((a) patron
+para cada $\varphi$, (b) patron en $M=0.87$, $\varphi=0^\circ$, (c)
+conmutaciones cada $15^\circ$, (d) angulos vs.\ $M$ en $\varphi=0^\circ$),
+pero el texto y el caption describen dos ((a) angulos vs.\ $M$, (b) patron
+en $M=0.8660$). Si la figura queda asi, usar las dos \texttt{\textbackslash
+sug} de abajo. En la figura: (d) llega a $M=0.91$ (la LUT dice 0.83--0.9);
+el eje de (a) y (c) dice ``Current phase'' (en el paper, current
+displacement angle); $\mu$ no esta definido en el texto. Confirmar que (a)
+y (c) son a $M=0.87$.}
+\sug{Reemplazar el parrafo por: ``Fig.~\ref{fig:patron_pulsos}(b) shows
+the pattern obtained for $M = 0.87$ and $\varphi = 0^\circ$ with $d = 19$
+pulses per half-cycle. Its multipolar nature is evident: level $-1$ pulses
+appear in the positive half-cycle and level $+1$ pulses in the negative
+one. The effect of minimizing \eqref{eq:p_sw} is also apparent: the
+switching events cluster near the zero crossings of the current and spread
+out around its peaks, which is where each event costs more energy.
+Figs.~\ref{fig:patron_pulsos}(a) and~(c) show that this holds for every
+$\varphi$ of the table, with the events following the zero crossings of
+the current. Fig.~\ref{fig:patron_pulsos}(d) traces the angles across the
+modulation index. Every trajectory is continuous, so the LUT can be swept
+along $M$ without introducing a current transient. Along $\varphi$, in
+contrast, the optimal angles exhibit discontinuities.''}
+\sug{Caption: ``(a) Pulse pattern over the grid angle for each $\varphi$
+of the table; (b) pattern at $M = 0.87$ and $\varphi = 0^\circ$; (c)
+number of switching events per $15^\circ$ of grid angle; (d) switching
+angles as a function of $M$ at $\varphi = 0^\circ$. Solid and dotted lines
+mark the peaks and the zero crossings of the current.''}
 \textcolor{blue}{Comentario: Si aqui tengo pendiente mejroar esa foto.}
 
-% Los dos paneles vienen dentro del mismo PNG y no traen rotulos (a)/(b)
-% quemados, por eso el texto los llama "upper/lower panel" y no Fig. 4a/4b.
-% La imagen tiene relacion de aspecto 6:1; a una columna quedaria de 1.4 cm de
-% alto y los pulsos serian indistinguibles, por eso va a dos columnas.
+% Cuatro paneles (a)-(d) dentro del mismo PNG, con los rotulos quemados;
+% va a dos columnas para que los pulsos se distingan.
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\textwidth]{figuras/Vis_lut/G_raster_sw.png}
@@ -1282,8 +1312,6 @@ optimal angles exhibit discontinuities.''}
     (b) harmonic spectrum of the grid current at the nominal point, against the
     limits of IEEE~519 (shaded staircase).}
     \label{fig:fft_comparacion}
-    \upd{Agregar la curva / barras del RT-OPP, y un caso con red
-    distorsionada donde la LUT sola viola los limites y el RT-OPP cumple.}
 \end{figure*}
 \subsection{Harmonic Compliance}
 
@@ -1299,9 +1327,24 @@ every component of the OPP remains within its bound up to $n = 50$, several of
 them sitting on the limit, with the residual content displaced above that order.
 \old{\dots\ while PWM and DPWM1 leave most of it unused, at 0.25\pct{}
 and 1.15\pct{}: \dots}
-\upd{Pendiente: la Fig.~\ref{fig:fft_comparacion} aun es la de DPWM1 a
-6450~Hz y $d=17$; al actualizarla, poner las TDD de PD-PWM y SV-GDPWM en los
-[XX].}
+\upd{Con la figura nueva el parrafo no calza: el RT-OPP queda entre 1.1 y
+2.0\pct{} de TDD (no en el 5\pct{}), PD-PWM en $\approx$1.2\pct{} y
+SV-GDPWM entre 0.6 y 0.9\pct{} (leido del grafico; confirmar). En la
+leyenda de (b) dice ``PWM 2850~Hz'': cambiar a PD-PWM.}
+\sug{Reemplazar el parrafo por: ``Fig.~\ref{fig:fft_comparacion}(a) shows
+the current TDD over the power sweep. All three strategies remain well below
+the 5\pct{} limit: the RT-OPP between 1.1 and 2.0\pct{}, PD-PWM at about
+1.2\pct{} and SV-GDPWM between 0.6 and 0.9\pct{}. For the carriers,
+compliance is decided by the individual limits, and the carrier frequency
+needed to satisfy them collapses the aggregate distortion far below what is
+permitted. The off-line patterns, in contrast, sit at the 5\pct{} limit,
+and the real-time stage lowers the TDD at almost no cost in losses, as
+discussed below, which leaves a margin for grid background distortion. The
+spectra at the nominal point (Fig.~\ref{fig:fft_comparacion}(b)) confirm
+that every component of the RT-OPP remains within its bound up to $n = 50$,
+several of them close to 90\pct{} of the limit, set by the margin $\rho$ of
+Table~\ref{tab:rt_param}, with the residual content displaced above that
+order.''}
 
 Unlike the off-line problem, where the TDD and the individual limits are
 hard constraints, the real-time stage includes them in the OF, and the
@@ -1314,6 +1357,10 @@ those of the table pattern. When the grid voltage carries background
 harmonics, the table pattern alone violates the individual limits, by a
 factor of 5.7 for a fifth harmonic of 4\pct{} and a seventh of 3\pct{}, and
 the optimizer restores compliance within 13~ms (Fig.~\textbf{[X]}).
+\sug{Ultima frase: ``When the grid voltage carries background harmonics,
+the table pattern alone violates the individual limits, and the optimizer
+restores compliance within about one fundamental period, as measured in
+Section~\ref{subsec:compensacion}.'' (asi no hace falta la Fig.~[X]).}
 \old{In real time, the optimizer minimizes the distortion with the losses as
 a secondary term, so it settles below the limit: \dots}
 
@@ -1526,8 +1573,6 @@ fundamental period, both between table entries and under grid background
 distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the losses by
 5\pct{}.
-\upd{Esta cifra va tambien en la \sug{} de la
-Seccion~\ref{subsec:compensacion}; mantenerlas iguales.}
 
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
@@ -1542,6 +1587,10 @@ such as the current ripple, and these weigh most at light load. The optimizer dr
 limit and no further, converting the resulting margin into a loss reduction that
 a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification.
+\upd{Con la Fig.~\ref{fig:fft_comparacion}(a) nueva, el RT-OPP queda en
+1.1--2.0\pct{} de TDD: ``drives the current distortion to the regulatory
+limit'' vale para el problema off-line, no para lo medido. Revisar junto con
+el primer parrafo de Harmonic Compliance.}
 
 
 % ----------------------------- Bibliografia -----------------------------
