@@ -1391,6 +1391,8 @@ measured reduction is 41.9\pct{} on average, between 34.2 and
 is 11.4\pct{} on average and reaches 18.8\pct{} at $I_d = 15$~A, below
 the 33.9\pct{} predicted.''}
 
+\textcolor{blue}{comentario: mira esta bien mensionar que es mas o menos que el modelo, pero ponlo de una mejora manera, tal ve compara ese 18.8 con ese exacto punto en simulacion, porque si lo dices con el 33, para que estuviera muy mal el modelo pero no es asi, lo mismo para sv-gdpwm.}
+
 Three effects explain this gap. First, the measured losses exceed the model
 by an offset due to effects that the model does not include: mainly the
 current ripple and the switching energies, which are taken from the
@@ -1458,6 +1460,8 @@ rms de simulacion (5.66 vs 3.00~A, razon 1.6--2.3). Si los 4.75 y 3.17~A
 sobre 2~kHz del laboratorio son de la corriente del conversor, se puede
 agregar despues de ``\dots\ over the operating range'': ``On the prototype,
 the measured ripple is 4.75~A for the RT-OPP and 3.17~A for PWM.''}
+
+\textcolor{blue}{Comentario: aplicar}
 \old{\dots\ where the datasheet switching energies are least
 representative; since this offset exceeds that of the OPP, the measured
 reduction with respect to SV-GDPWM remains close to the model. Including
@@ -1524,6 +1528,8 @@ up to 47.9\pct{} with respect to SV-GDPWM.''}
 \sug{Tabla~\ref{tab:comparacion}, columna ``Meas.'' con las figuras
 nuevas: RT-OPP 15.6~W; PWM 17.7~W y 11.9\pct{}; SV-GDPWM 24.8~W y
 37.4\pct{}. Las columnas del modelo no cambian.}
+
+\textcolor{blue}{Comentario: aplicar cambios}
 %\begin{figure}[!t]
 %    \centering
 %    \includegraphics[width=\linewidth]{figuras/perdidas_barras_LCL/perdidas_barras_LCL.png}
@@ -1603,6 +1609,7 @@ distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the measured losses
 by 4.8\pct{}.
 \sug{Cambiar ``by 4.8\pct{}'' por ``by 6.3\pct{}''.}
+\textcolor{blue}{Comentario: aplicar}
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
 meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
@@ -1626,6 +1633,9 @@ reduction with respect to SV-GDPWM, 42\pct{} on average, whereas with
 respect to PWM it is smaller, 11\pct{} on average and up to 19\pct{},
 mainly because the OPP, switching at a lower frequency, carries a larger
 current ripple, which the model neglects.''}
+
+
+\textcolor{blue}{Comentario: si aplicalo, pero intenta decir que es como trabajo futuro mejorar esas cosas del riple, y di que es pos las simplificaciones del modelo tambine}
 \old{The optimizer drives the current distortion to the regulatory limit and
 no further, \dots}
 % ----------------------------- Bibliografia -----------------------------
