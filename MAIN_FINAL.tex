@@ -56,15 +56,22 @@
 % Notas de actualizacion para la version revista (texto rojo bajo el parrafo).
 \newcommand{\upd}[1]{\par\smallskip\noindent{\color{red}\footnotesize
     \textbf{[ACTUALIZAR]} #1}\par\smallskip}
-%\renewcommand{\upd}[1]{}      % <- descomentar para ocultar todas las notas
+\renewcommand{\upd}[1]{}       % <- comentar para volver a mostrar las notas rojas
 \newcommand{\sug}[1]{\par\smallskip\noindent{\color{green!45!black}\footnotesize
     \textbf{[SUGERENCIA]} #1}\par\smallskip}
-%\renewcommand{\sug}[1]{}      % <- descomentar para ocultar las sugerencias
+\renewcommand{\sug}[1]{}       % <- comentar para volver a mostrar las sugerencias
 \newcommand{\old}[1]{\par\smallskip\noindent{\color{gray}\footnotesize
     \textbf{[ANTES]} #1}\par\smallskip}
 \renewcommand{\old}[1]{}       % <- comentar para volver a mostrar el texto anterior
+% Comentarios del autor (azul). Usar \com{...} en vez de \textcolor{blue}{...}
+% para poder ocultarlos con la linea siguiente.
+\newcommand{\com}[1]{\par\smallskip\noindent{\color{blue}#1}\par\smallskip}
+\renewcommand{\com}[1]{}       % <- comentar para volver a mostrar los comentarios azules
 
 \graphicspath{{Figures/}}
+% Una figura a dos columnas por pagina: reparte las figuras de resultados.
+% Las figure* van con [t] (sin !) para que se respete este limite.
+\setcounter{dbltopnumber}{1}
 
 %=========================================================================
 \begin{document}
@@ -261,7 +268,7 @@ The contributions of this work are the following:
 % perdidas; se ancla aqui para que flote a la pagina siguiente al titulo.
 % A una columna los rotulos S1..S4 quedan ilegibles (la figura tiene relacion de
 % aspecto 3.5:1 con tres paneles), por eso va a dos columnas.
-\begin{figure*}[!t]
+\begin{figure*}[t]
     \centering
     \includegraphics[width=0.95\textwidth]{Figures/Topologia_T_Type.pdf}
     \caption{Three-level T-Type topology and per-leg conduction states: P, O and
@@ -479,12 +486,13 @@ In each transition only the device that switches under voltage contributes
 losses, so it is enough to account for those events: one turn-on per $\gamma_i$
 and one turn-off per $\gamma_{i+d}$. Since the phase current is sinusoidal, the switched current is proportional to $\sin(\gamma_i-\varphi)$ at turn-on and to $\sin(\gamma_{i+d}-\pi-\varphi)$ at
 turn-off (Fig.~\ref{fig:patron_opp}), so that the switching power becomes
-\begin{equation}
+% multline: en una linea se salia 1.7 cm de la columna
+\begin{multline}
     P_{sw} = P_{sw,0} + 2f_1\,I_{cond}\sum_{i=1}^{d}
-        \Big( E_{on}\big|\sin(\gamma_i-\varphi)\big|
+        \Big( E_{on}\big|\sin(\gamma_i-\varphi)\big| \\
             + E_{off}\big|\sin(\gamma_{i+d}-\pi-\varphi)\big|\Big)
     \label{eq:p_sw}
-\end{equation}
+\end{multline}
 where $f_1$ is the fundamental frequency and the factor 2 accounts for the
 two half-cycles. The switching energies are fitted from the datasheet of the
 SiC module at the blocking voltage as $E_0+E'i$ and corrected for the gate
@@ -507,7 +515,7 @@ differentiable in $\gv$.}
 %$\sin(\gamma_{i+d})$ is negative and the subtraction accumulates positive
 %contributions, consistent with the physics of the process.
 
-\begin{figure*}[!t]
+\begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figuras/esquema_control_OPP_v4/esquema_control_OPP_v4.png}
   \caption{Implementation scheme: $dq$ current control, polar conversion of the
@@ -634,7 +642,7 @@ according to the scheme of Fig.~\ref{fig:control}.
 
 \begin{comment}
 % requiere: \usetikzlibrary{arrows.meta}
-\begin{figure*}[!t]
+\begin{figure*}[t]
 \centering
 \resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
@@ -1093,6 +1101,26 @@ loss terms require $\mathcal{O}(d)$ operations. The dominant cost of the OF
 is $\mathbf{J}^T\mathbf{Q}\mathbf{J}$, with $\mathcal{O}(N_h d^2)$
 operations.
 
+% Figuras de resultados adelantadas en el fuente para que floten una por
+% pagina junto a su texto (una figure* aparece en la pagina siguiente).
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{figuras/setup-export/setup-export.png}
+    \caption{Experimental setup.}
+    \label{fig:setup}
+    \upd{Reemplazar en Overleaf \texttt{setup-export.png} por el del repo:
+    en la exportacion actual los subindices salen separados (P in, S 2).}
+\end{figure}
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figuras/Vis_lut/G_raster_sw.png}
+    \caption{(a) Pulse pattern over the grid angle for each $\varphi$ of the
+    table; (b) pattern at $M = 0.87$ and $\varphi = 0^\circ$; (c) number of
+    switching events per $15^\circ$ of grid angle; (d) switching angles as a
+    function of $M$ at $\varphi = 0^\circ$. Solid and dotted lines mark the
+    peaks and the zero crossings of the current.}
+    \label{fig:patron_pulsos}
+\end{figure*}
 \subsection{Constraint Handling}
 \label{subsec:rt_con}
 
@@ -1155,6 +1183,15 @@ when the operating point changes; since this happens rarely, it does not
 affect the current control loop.
 
 % ============================ S7 ========================================
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figuras/fft_comparacion_rt/fft_comparacion_rt.png}
+    \caption{Simulation results: (a) current TDD versus delivered power,
+    against the 5\pct{} limit;
+    (b) harmonic spectrum of the grid current at the nominal point, against the
+    limits of IEEE~519 (shaded staircase).}
+    \label{fig:fft_comparacion}
+\end{figure*}
 \section{Simulation and Experimental Results}
 
 This section first describes the experimental setup and then presents the
@@ -1185,14 +1222,6 @@ output power at the converter terminals, before the LCL filter, both
 measured with the power analyzer, so they exclude the filter losses. Each phase leg is built with one
 CHB011M12GM4T T-Type module.
 
-\begin{figure}[!t]
-    \centering
-    \includegraphics[width=\columnwidth]{figuras/setup-export/setup-export.png}
-    \caption{Experimental setup.}
-    \label{fig:setup}
-    \upd{Reemplazar en Overleaf \texttt{setup-export.png} por el del repo:
-    en la exportacion actual los subindices salen separados (P in, S 2).}
-\end{figure}
 
 \begin{table}[!t]
     \centering
@@ -1240,6 +1269,14 @@ CHB011M12GM4T T-Type module.
 %    \label{fig:ic}
 %\end{figure}
 
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
+    \caption{Modeled losses in the $(I_d,I_q)$ plane: conduction (a)--(c),
+    switching (e)--(g) and total (i)--(k); lowest-loss strategy (d), (h), (l).}
+    \label{fig:perdidas}
+    \com{En realidad esto es RT-OPP, solo que lo coombre OPP a secas, faltaria actualizar la imagen}
+\end{figure*}
 \subsection{Optimized Angles and Pulse Pattern}
 
 Fig.~\ref{fig:patron_pulsos}(b) shows the pattern obtained for $M = 0.87$
@@ -1265,24 +1302,18 @@ $M=0.91$ (la LUT dice 0.83--0.9).}
 
 % Cuatro paneles (a)-(d) dentro del mismo PNG, con los rotulos quemados;
 % va a dos columnas para que los pulsos se distingan.
-\begin{figure*}[!t]
+\begin{figure*}[t]
     \centering
-    \includegraphics[width=\textwidth]{figuras/Vis_lut/G_raster_sw.png}
-    \caption{(a) Pulse pattern over the grid angle for each $\varphi$ of the
-    table; (b) pattern at $M = 0.87$ and $\varphi = 0^\circ$; (c) number of
-    switching events per $15^\circ$ of grid angle; (d) switching angles as a
-    function of $M$ at $\varphi = 0^\circ$. Solid and dotted lines mark the
-    peaks and the zero crossings of the current.}
-    \label{fig:patron_pulsos}
-\end{figure*}
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=0.95\textwidth]{figuras/fft_comparacion_rt/fft_comparacion_rt.png}
-    \caption{Simulation results: (a) current TDD versus delivered power,
-    against the 5\pct{} limit;
-    (b) harmonic spectrum of the grid current at the nominal point, against the
-    limits of IEEE~519 (shaded staircase).}
-    \label{fig:fft_comparacion}
+    \includegraphics[width=\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
+    \caption{Total losses of the RT-OPP and SV-GDPWM: model (a)--(d) and
+    measurements (e)--(h).}
+    \label{fig:comp_gdpwm}
+    % dos figuras en un mismo flotante para que compartan pagina
+    \vspace{2mm}
+    \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
+    \caption{Total losses of the RT-OPP and PWM: model (a)--(d) and
+    measurements (e)--(h).}
+    \label{fig:comp_pwm}
 \end{figure*}
 \subsection{Harmonic Compliance}
 
@@ -1362,6 +1393,16 @@ to P or N around the current peak, conducts through a single device for
 longer (Table~\ref{tab:estados_cond}, Fig.~\ref{fig:perdidas}(d)). PWM is
 never the lowest-loss strategy.
 
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
+    \caption{Measured harmonic compensation with the RT-OPP at 5~kW, with
+    fifth and seventh harmonics of 8\pct{} and eleventh and thirteenth of
+    4\pct{} in the grid voltage. Top: grid voltage, grid current and
+    converter voltage, with the compensation enabled at $t = 0.3$~s.
+    Bottom: grid current spectrum without and with compensation.}
+    \label{fig:compensacion}
+\end{figure*}
 Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
 measurements on the 10~kW prototype at eight operating points, with the RT-OPP
 (Section~\ref{subsec:setup}).
@@ -1431,28 +1472,6 @@ the RT-OPP reduces the losses at every measured point, by
 up to 18.8\pct{} with respect to PWM and up to 47.9\pct{} with respect to
 SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figuras/resumen_3x4_gdpwm/resumen_3x4_gdpwm.png}
-    \caption{Modeled losses in the $(I_d,I_q)$ plane: conduction (a)--(c),
-    switching (e)--(g) and total (i)--(k); lowest-loss strategy (d), (h), (l).}
-    \label{fig:perdidas}
-    \textcolor{blue}{En realidad esto es RT-OPP, solo que lo coombre OPP a secas, faltaria actualizar la imagen}
-\end{figure*}
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=\linewidth]{figuras/comparacion_opp_gdpwm_sinplecs/comparacion_opp_gdpwm_sinplecs.png}
-    \caption{Total losses of the RT-OPP and SV-GDPWM: model (a)--(d) and
-    measurements (e)--(h).}
-    \label{fig:comp_gdpwm}
-\end{figure*}
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=\linewidth]{figuras/comparacion_opp_pwm_sinplecs/comparacion_opp_pwm_sinplecs.png}
-    \caption{Total losses of the RT-OPP and PWM: model (a)--(d) and
-    measurements (e)--(h).}
-    \label{fig:comp_pwm}
-\end{figure*}
 \begin{table}[!t]
     \centering
     \caption{Total losses at the nominal operating point ($I_d = 20$~A,
@@ -1506,16 +1525,6 @@ measured losses from 13.23 to 12.40~W, a reduction of 6.3\pct{}.
 \old{In a separate test at 5~kW with a fifth harmonic of 8\pct{} in the grid
 voltage, enabling the compensation reduced the measured losses by
 5\pct{}.}
-\begin{figure*}[!t]
-    \centering
-    \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
-    \caption{Measured harmonic compensation with the RT-OPP at 5~kW, with
-    fifth and seventh harmonics of 8\pct{} and eleventh and thirteenth of
-    4\pct{} in the grid voltage. Top: grid voltage, grid current and
-    converter voltage, with the compensation enabled at $t = 0.3$~s.
-    Bottom: grid current spectrum without and with compensation.}
-    \label{fig:compensacion}
-\end{figure*}
 % Guardado para esa subseccion (no se compila):
 % - Barrido de lambda_l, sacado de Local Quadratic Problem: "Fig.~[X] sweeps
 %   $\lambda_\ell$ at $M=0.87$ and $\varphi=-15^\circ$: the steady-state TDD
@@ -1589,7 +1598,7 @@ diferencia porque minimiza distorsion, no perdidas. Despues, las versiones
 revista de Koukoula (TIA 2025 y TPEL 2025), que reemplazan a
 \texttt{koukoula\_ecce23} y \texttt{koukoula\_junction}.}
 
-\textcolor{blue}{Comentario: al final vere las bibliografias que falten}
+\com{Comentario: al final vere las bibliografias que falten}
 
 \begin{thebibliography}{30}
 
