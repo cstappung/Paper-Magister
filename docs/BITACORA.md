@@ -554,3 +554,9 @@ responde. (Agregada a CLAUDE.md.)
   frase para Experimental Setup); si el ensayo de compensacion (17.23 /
   16.40 W) lleva la misma correccion (seria 6.3 % de ahorro); pedir una
   cifra medida del rizado si existe.
+- Autor: (1) la correccion de 4.0 W es un tema de sondas y NO se menciona
+  en el paper (evitar preguntas); se borraron la \upd y la \sug de
+  Experimental Setup. (2) El ensayo de compensacion tambien lleva los 4 W,
+  sin mencionarlo: \sug con 13.23 -> 12.40 W y 6.3 % en Harmonic
+  Compensation y en conclusiones. (3) El rizado lo enviara de simulacion:
+  \upd pendiente en Loss Comparison.

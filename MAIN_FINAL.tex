@@ -1199,13 +1199,6 @@ losses are obtained as the difference between the DC input power and the AC
 output power at the converter terminals, before the LCL filter, both
 measured with the power analyzer, so they exclude the filter losses. Each phase leg is built with one
 CHB011M12GM4T T-Type module.
-\upd{Las perdidas medidas de las tres estrategias bajaron exactamente
-4.0~W en los ocho puntos. Un revisor va a preguntar que se corrigio:
-decirlo aqui (por ejemplo consumo de drivers y fuentes auxiliares, u
-offset del analizador).}
-\sug{Agregar despues de ``\dots\ exclude the filter losses.'': ``A
-constant 4.0~W, corresponding to \textbf{[the gate drivers and auxiliary
-supplies]}, is subtracted from all measurements.''}
 
 \begin{figure}[!t]
     \centering
@@ -1459,9 +1452,10 @@ that of the OPP, the measured reduction with respect to SV-GDPWM is even
 larger than predicted. Characterizing the switching energies of the module
 with DPT would confirm this explanation, and is left for future work
 together with the inclusion of the current ripple in the loss model.''}
-\upd{Si tienes medido el rizado de la corriente del conversor (por ejemplo
-su valor RMS o el THD de la corriente del conversor) para OPP y PWM, una
-cifra aqui haria mucho mas fuerte el argumento del rizado.}
+\upd{Pendiente: el autor enviara el rizado de la corriente del conversor
+de simulacion (OPP vs PWM); agregar aqui la cifra, por ejemplo ``in
+simulation, the converter-current ripple of the OPP is XX\pct{} larger
+than that of PWM''.}
 \old{\dots\ where the datasheet switching energies are least
 representative; since this offset exceeds that of the OPP, the measured
 reduction with respect to SV-GDPWM remains close to the model. Including
@@ -1557,11 +1551,8 @@ measured losses from 17.23 to 16.40~W, a reduction of 4.8\pct{}.
 \old{In a separate test at 5~kW with a fifth harmonic of 8\pct{} in the grid
 voltage, enabling the compensation reduced the measured losses by
 5\pct{}.}
-\upd{Revisar si las perdidas de este ensayo (17.23 y 16.40~W) llevan la
-misma correccion de 4.0~W. A 5~kW ($I_d=10$~A) el OPP mide 7.7~W en la
-Fig.~\ref{fig:comp_pwm}, y 16.4~W es mas del doble. Si se restan los
-4.0~W, el ahorro pasa de 4.8 a 6.3\pct{} (0.83~W de 13.23~W), y habria
-que cambiarlo tambien en las conclusiones.}
+\sug{Reemplazar ``from 17.23 to 16.40~W, a reduction of 4.8\pct{}'' por:
+``from 13.23 to 12.40~W, a reduction of 6.3\pct{}''.}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
@@ -1609,6 +1600,7 @@ fundamental period, both between table entries and under grid background
 distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the measured losses
 by 4.8\pct{}.
+\sug{Cambiar ``by 4.8\pct{}'' por ``by 6.3\pct{}''.}
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
 meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
