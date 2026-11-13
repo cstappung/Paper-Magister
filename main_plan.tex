@@ -204,10 +204,13 @@ $\lambda_\ell$ y convergencia del RT-OPP (S6.4, a futuro).}
 \campo{Contenido} Problema (baja $f_{sw}$ degrada la corriente) $\rightarrow$
 OPP multipolar para T-Type SiC que minimiza pérdidas sujeto a IEEE~519
 $\rightarrow$ modelos de pérdidas en ángulos virtuales y restricción de nivel
-lineal $\rightarrow$ reducciones medias de 36/34\pct{} (modelo) y 33/8\pct{}
-(medido, hasta 14\pct{}) frente a SV-GDPWM y PD-PWM.\\
-\pendiente{Se reescribe al final, con el RT-OPP (hay una
-\texttt{\textbackslash sug} en el paper).}
+lineal $\rightarrow$ LUT $(M,\varphi)$ refinada en linea por SQP (una
+iteracion GN cada 200~$\mu$s, pesos adaptativos, observador armonico)
+$\rightarrow$ reducciones medias de 36/34\pct{} (modelo) y 42/11\pct{}
+(medido, hasta 19\pct{}) frente a SV-GDPWM y PWM, brecha con PWM por el
+rizado $\rightarrow$ compensacion medida, TDD de 29.5 a 3.9\pct{} en un
+periodo.\\
+\listo{} Reescrito con el RT-OPP (2026-11-13).
 
 %-------------------------------------------------------------------------
 \bloque{S1}{Introduction}
@@ -512,7 +515,7 @@ pérdidas.\\
 \begin{itemize}
 \item \pendiente{Revista objetivo, límite de páginas y clase
       \texttt{journal}; biografías de autores con foto (después).}
-\item \pendiente{Abstract, al final.}
+\item \listo Abstract reescrito con el RT-OPP y las mediciones corregidas.
 \item \listo S6.2 reescrita con la F5 nueva (sin cifras de simulación salvo el 0.4\pct{}).
 \item \pendiente{Subir al repo las Figs. F5 y F10 que el autor rehízo en Overleaf (ejes en $I_{nom}$).}
 \item \pendiente{S2* System Description (a futuro).}

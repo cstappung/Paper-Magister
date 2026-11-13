@@ -582,3 +582,9 @@ responde. (Agregada a CLAUDE.md.)
   al modelo en 7 de 8 puntos).
 - Siguen pendientes las \sug del abstract y de la frase de cierre (hasta
   18.8 y 47.9 %).
+- Autor: aplicar directo. Resultados de perdidas con la comparacion punto a
+  punto y frase de cierre con 18.8 / 47.9 %. Abstract reescrito y aplicado
+  (232 palabras): RT-OPP con SQP/GN cada 200 us, pesos adaptativos y
+  observador; modelo 36/34 %, medido 42/11 % (hasta 19 %), brecha por el
+  rizado; compensacion TDD 29.5 -> 3.9 % en un periodo. Sin tiempo de
+  ejecucion (no hay dato). Abstract anterior en \old.
