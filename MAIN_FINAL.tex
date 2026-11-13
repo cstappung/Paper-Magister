@@ -100,6 +100,9 @@ Grid-Connected T-Type Converters With TDD Compliance
 
 
 \maketitle
+\upd{Pendiente general: elegir la revista (TPEL, TIE, JESTPE\dots) y su
+limite de paginas, y pasar a la clase \texttt{journal} de IEEEtran
+(autores, biografias con foto).}
 
 % ------------------------------ Abstract --------------------------------
 \begin{abstract}
@@ -142,6 +145,10 @@ individual order, \textbf{[executing within XX~$\mu$s per sample on the
 real-time target]}.}
 
 \textcolor{blue}{Comentario: Esto lo revisare al final}
+\upd{Para cuando se revise: la \texttt{\textbackslash sug} del abstract
+usa dos cifras aun sin respaldo, la tolerancia de 9\pct{} (ver la nota en
+Harmonic Compliance) y el tiempo de ejecucion [XX~$\mu$s]; y conviene
+nombrar la compensacion medida (TDD de 29.5 a 3.9\pct{}).}
 
 \end{abstract}
 
@@ -1209,6 +1216,8 @@ relate each part of the schematic to the corresponding equipment.''}
     \includegraphics[width=\columnwidth]{figuras/setup-export/setup-export.png}
     \caption{Experimental setup.}
     \label{fig:setup}
+    \upd{Reemplazar en Overleaf \texttt{setup-export.png} por el del repo:
+    en la exportacion actual los subindices salen separados (P in, S 2).}
 \end{figure}
 
 \begin{table}[!t]
@@ -1357,10 +1366,22 @@ those of the table pattern. When the grid voltage carries background
 harmonics, the table pattern alone violates the individual limits, by a
 factor of 5.7 for a fifth harmonic of 4\pct{} and a seventh of 3\pct{}, and
 the optimizer restores compliance within 13~ms (Fig.~\textbf{[X]}).
-\sug{Ultima frase: ``When the grid voltage carries background harmonics,
-the table pattern alone violates the individual limits, and the optimizer
-restores compliance within about one fundamental period, as measured in
-Section~\ref{subsec:compensacion}.'' (asi no hace falta la Fig.~[X]).}
+\sug{Reemplazar el parrafo por: ``Unlike the off-line problem, where the
+TDD and the individual limits are hard constraints, the real-time stage
+includes them in the OF, and the adaptive weights of
+Section~\ref{subsec:rt_con} grow only when a limit is exceeded. The pattern
+therefore settles where the distortion and loss terms balance, at about one
+third of the limit for the chosen $\lambda_\ell$
+(Fig.~\ref{fig:fft_comparacion}(a)), while the losses estimated by the
+model stay within \textbf{[XX]}\pct{} of those of the table pattern. When
+the grid voltage carries background harmonics, the table pattern alone
+violates the individual limits, and the optimizer restores compliance
+within about one fundamental period, as measured in
+Section~\ref{subsec:compensacion}.''}
+\upd{La \texttt{\textbackslash sug} quita las cifras de simulacion de
+\texttt{RTOPP\_D19} (1.7\pct{}, factor 5.7, 13~ms y la Fig.~[X]); la TDD
+sale de la figura medida. El [XX] es el mismo pendiente de Local Quadratic
+Problem (regenerar con \texttt{RTOPP\_D19\_simple\_rip}).}
 \old{In real time, the optimizer minimizes the distortion with the losses as
 a secondary term, so it settles below the limit: \dots}
 
@@ -1525,6 +1546,13 @@ component up to $n = 50$ is within its IEEE~519 limit; the components above
 $n = 50$, outside the scope of the standard, are not affected. In a separate
 test at 5~kW with a fifth harmonic of 8\pct{} in the grid voltage,
 enabling the compensation reduced the measured losses by 5\pct{}.
+\sug{Reemplazar la ultima frase por: ``In a separate test at 5~kW with a
+fifth harmonic of 8\pct{} in the grid voltage, the compensation reduced the
+fifth-harmonic current from 3.90 to 1.43~A and the RMS current from 9.84 to
+9.00~A; the measured losses fell accordingly from 17.23 to 16.40~W, a
+reduction of 4.8\pct{}.''}
+\upd{Confirmar que ``Loss1'' de la tabla es $P_{in}-P_{out}$ del analizador,
+como el resto de las mediciones de perdidas.}
 
 \begin{figure*}[!t]
     \centering
@@ -1573,6 +1601,9 @@ fundamental period, both between table entries and under grid background
 distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the losses by
 5\pct{}.
+\sug{Final de la frase: ``\dots: at 5~kW, compensating a fifth harmonic of
+8\pct{} in the grid voltage reduces the RMS current by 8.5\pct{} and the
+measured losses by 4.8\pct{}.''}
 
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
@@ -1589,8 +1620,14 @@ a carrier-based scheme cannot access, since its harmonic performance is a
 by-product of the carrier frequency rather than a specification.
 \upd{Con la Fig.~\ref{fig:fft_comparacion}(a) nueva, el RT-OPP queda en
 1.1--2.0\pct{} de TDD: ``drives the current distortion to the regulatory
-limit'' vale para el problema off-line, no para lo medido. Revisar junto con
-el primer parrafo de Harmonic Compliance.}
+limit'' vale para el problema off-line, no para lo medido.}
+\sug{Reemplazar la ultima frase por: ``The off-line optimizer drives the
+current distortion to the regulatory limit and no further, converting the
+resulting margin into a loss reduction that a carrier-based scheme cannot
+access, since its harmonic performance is a by-product of the carrier
+frequency rather than a specification. The real-time stage then lowers the
+distortion to about one third of the limit at almost no cost in losses,
+which leaves room for grid background harmonics.''}
 
 
 % ----------------------------- Bibliografia -----------------------------
