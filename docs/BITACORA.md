@@ -616,3 +616,6 @@ responde. (Agregada a CLAUDE.md.)
   en p8), fft p9, perdidas p10, las dos comparaciones en un solo flotante
   (p11, con sus dos captions y labels), compensacion p12 junto a su texto.
 - eq:p_sw pasada a multline: se salia 48 pt de la columna (unico overfull).
+- Conclusiones: se quito "between table entries" (sin resultado que lo
+  respalde). Tiempo de ejecucion RT: trabajo pendiente del autor (\upd en
+  la Seccion V, oculta).
