@@ -173,13 +173,13 @@ diagramación (decisión del autor), aunque se describe en S4.2.}
 F1 & \texttt{fig:ttype}          & tras S1 & \listo Topología T-Type y estados P/O/N & 2 col.\\
 F2 & \texttt{fig:patron\_opp}    & S3.1 & \listo Patrón multipolar $d=5$, pares $(\gamma_i,\gamma_{i+d})$ & 1 col.\\
 F3 & \texttt{fig:control}        & S3.2 & \listo Esquema de control v4 (rediseño del autor) & 2 col.\\
-F4 & \texttt{fig:patron\_pulsos} & S6.1 & \listo Ángulos vs.\ $M$ y patrón ($d=19$); el texto dice que en $\varphi$ hay discontinuidades & 2 col.\\
-F5 & \texttt{fig:fft\_comparacion} & S6.2 & TDD vs.\ potencia y espectro \pendiente{aún DPWM1 6450~Hz y $d=17$} & 2 col.\\
+F4 & \texttt{fig:patron\_pulsos} & S6.1 & Cuatro paneles (patrón vs.\ $\varphi$, patrón, conmutaciones, ángulos vs.\ $M$) \pendiente{texto y caption describen dos paneles; hay \texttt{\textbackslash sug}} & 2 col.\\
+F5 & \texttt{fig:fft\_comparacion} & S6.2 & \listo TDD vs.\ potencia y espectro: RT-OPP, PD-PWM, SV-GDPWM (\texttt{fft\_comparacion\_rt}) \pendiente{leyenda ``PWM''; texto de S6.2} & 2 col.\\
 F6 & \texttt{fig:perdidas}       & S6.3 & \listo Mapas de pérdidas del modelo en $(I_d,I_q)$: OPP, PD-PWM, SV-GDPWM & 2 col.\\
 F7 & \texttt{fig:comp\_gdpwm}    & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ SV-GDPWM & 2 col.\\
 F8 & \texttt{fig:comp\_pwm}      & S6.3 & \listo Modelo vs.\ medición, OPP vs.\ PD-PWM & 2 col.\\
-F9 & \texttt{fig:setup}          & S6.0 & \listo Montaje: esquema trifásico al centro y equipos a los lados (\texttt{tools/figura\_setup}) & 1 col.\\
-F10 & \texttt{fig:compensacion}  & S6.4 & Compensación de armónicos (5~kW, 8\pct{} de quinto) \pendiente{rótulos en español; rehacer en inglés} & 2 col.\\
+F9 & \texttt{fig:setup}          & S6.0 & \listo Montaje: esquema trifásico al centro y equipos a los lados (\texttt{tools/figura\_setup}, sale en \texttt{figuras/setup-export}) & 1 col.\\
+F10 & \texttt{fig:compensacion}  & S6.4 & \listo Compensación de armónicos medida (5~kW; 8\pct{} de 5.º y 7.º, 4\pct{} de 11.º y 13.º), en inglés (\texttt{ondas\_compensacion}) & 2 col.\\
 \midrule
 T1 & \texttt{tab:estados\_cond}  & S3.1 & \listo Estados de conducción por pierna & 1 col.\\
 T2 & \texttt{tab:transiciones\_zvs} & S3.2 & \listo Transiciones y ZVS & 1 col.\\
@@ -487,7 +487,7 @@ sug}).\\
 \campo{Elementos} F10.\\
 Medición experimental; red con 8\pct{} de quinto y séptimo y 4\pct{} de
 undécimo y decimotercero. El 5\pct{} de pérdidas es de otro ensayo (solo
-8\pct{} de quinto). \pendiente{Rehacer F10 en inglés y con $I_{nom}$. El barrido de $\lambda_\ell$ y la
+8\pct{} de quinto). \listo F10 en inglés y texto aplicado. \pendiente{El barrido de $\lambda_\ell$ y la
 sugerencia de convergencia siguen comentados (\%).}
 
 %-------------------------------------------------------------------------
@@ -513,9 +513,9 @@ pérdidas.\\
 \item \pendiente{Revista objetivo, límite de páginas y clase
       \texttt{journal}; biografías de autores con foto (después).}
 \item \pendiente{Abstract, al final.}
-\item \pendiente{F10 en inglés; figura [X] de S6.2 (a futuro, el autor).}
+\item \pendiente{S6.2: reescribir el primer párrafo con la F5 nueva (RT-OPP en 1.1--2.0\pct{} de TDD) y cambiar la Fig.~[X] por la referencia a S6.4 (hay \texttt{\textbackslash sug}).}
 \item \pendiente{S2* System Description (a futuro).}
-\item \pendiente{F5 con los benchmarks y $d$ actuales.}
+\item \pendiente{F4: texto y caption para los cuatro paneles (hay \texttt{\textbackslash sug}).}
 \item \pendiente{Medias frente a reducciones punto a punto; offset mayor de
       SV-GDPWM.}
 \item \pendiente{Bug de signo en \texttt{P\_loss} del código (afecta solo

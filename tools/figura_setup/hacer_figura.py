@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageFilter
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 FOTOS = os.path.join(AQUI, "fotos")
-SALIDA = os.path.join(AQUI, "..", "..", "figuras", "setup")
+SALIDA = os.path.join(AQUI, "..", "..", "figuras", "setup-export")
 
 W, H = 1170, 1270
 FUENTE = "'Times New Roman', 'Liberation Serif', serif"
