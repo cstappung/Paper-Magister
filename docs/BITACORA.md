@@ -567,3 +567,18 @@ responde. (Agregada a CLAUDE.md.)
   PWM 3.17 A (razon 1.5). El autor prefiere el rms al pico. Agregado a la
   \sug del parrafo de la brecha; \upd: sumar la cifra medida si es de la
   corriente del conversor.
+
+### 2026-11-13 - Comentarios azules sobre perdidas corregidas
+
+- Aplicado: parrafo de la brecha centrado en el rizado (con rizado rms de
+  simulacion y el medido sobre 2 kHz, 4.75 vs 3.17 A), tabla del punto
+  nominal con las mediciones nuevas, compensacion 13.23 -> 12.40 W (6.3 %)
+  en el texto y en conclusiones, y conclusiones con 42/11/19 % y trabajo
+  futuro (rizado y energias medidas en el modelo, rizado restringido en el
+  problema off-line). Texto anterior en \old.
+- Nueva \sug de resultados de perdidas: comparar punto a punto con el modelo
+  (vs PWM: 18.8 % medido contra 30.7 % del modelo en Id = 15 A, 2.5 contra
+  3.7 W; vs SV-GDPWM: 47.9 % contra 36.2 % en Id = 10 A, la medicion supera
+  al modelo en 7 de 8 puntos).
+- Siguen pendientes las \sug del abstract y de la frase de cierre (hasta
+  18.8 y 47.9 %).
