@@ -532,3 +532,25 @@ responde. (Agregada a CLAUDE.md.)
   como confirmacion y trabajo futuro. (2) "PWM" en todo el paper en vez de
   PD-PWM: definicion "phase-disposition pulse-width modulation (PWM)" en
   Loss Comparison; los \old conservan PD-PWM.
+
+### 2026-11-13 - Perdidas medidas corregidas (PDF Revista 4)
+
+- El autor corrigio las perdidas medidas: en las Figs. comp_gdpwm y
+  comp_pwm las tres estrategias bajan exactamente 4.0 W en los ocho puntos;
+  el modelo no cambia. Tambien rehizo fft_comparacion_rt y
+  ondas_compensacion con el eje en % de I_nom (y "PWM" en la leyenda). Las
+  cuatro figuras se extrajeron sin perdida del PDF (commit propio). El PDF
+  se compilo con el .tex anterior a los PR #45/#46 (texto sin cambios del
+  autor).
+- Cifras nuevas (leidas de las figuras): reduccion medida vs SV-GDPWM
+  41.9 % (34.2-47.9), sobre el 36.0 % del modelo; vs PWM 11.4 % (max 18.8 %
+  en Id = 15 A). Offsets medicion-modelo: PWM 1.5 W (0.3-2.5), OPP 3.4 W
+  (2.4-5.4), SV-GDPWM 7.0 W (5.9-8.8). OPP - PWM = 1.9 W = brecha 3.3 ->
+  1.4 W. Punto nominal medido: OPP 15.6, PWM 17.7 (11.9 %), SV-GDPWM 24.8
+  (37.4 %). Iq = -10 A: PWM 6.2 W medido, reduccion 8.0 %.
+- \sug en abstract, Loss Comparison (resultados, parrafo de la brecha
+  centrado en el rizado del OPP con la Fig. fft(b) como evidencia, cierre),
+  tabla y conclusiones. \upd: que es la correccion de 4.0 W (con \sug de
+  frase para Experimental Setup); si el ensayo de compensacion (17.23 /
+  16.40 W) lleva la misma correccion (seria 6.3 % de ahorro); pedir una
+  cifra medida del rizado si existe.
