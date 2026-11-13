@@ -1197,7 +1197,7 @@ relate each part of the schematic to the corresponding equipment.''}
 
 \begin{figure}[!t]
     \centering
-    \includegraphics[width=\columnwidth]{figuras/setup/setup.pdf}
+    \includegraphics[width=\columnwidth]{figuras/setup-export/setup-export.png}
     \caption{Experimental setup.}
     \label{fig:setup}
 \end{figure}
@@ -1277,7 +1277,7 @@ optimal angles exhibit discontinuities.''}
 \end{figure*}
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=0.95\textwidth]{figuras/fft_comparacion/fft_comparacionexport_flat.png}
+    \includegraphics[width=0.95\textwidth]{figuras/fft_comparacion_rt/fft_comparacion_rt.png}
     \caption{(a) Current TDD versus delivered power, against the 5\pct{} limit;
     (b) harmonic spectrum of the grid current at the nominal point, against the
     limits of IEEE~519 (shaded staircase).}
@@ -1464,7 +1464,7 @@ SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
 \subsection{Harmonic Compensation}
 \label{subsec:compensacion}
 
-\sug{Fig.~\ref{fig:compensacion} shows a measurement on the prototype
+Fig.~\ref{fig:compensacion} shows a measurement on the prototype
 with the RT-OPP at 5~kW, with fifth and seventh harmonics of 8\pct{} and
 eleventh and thirteenth harmonics of 4\pct{} in the grid voltage. Until
 $t = 0.3$~s the compensation is disabled, and the grid harmonics drive
@@ -1477,16 +1477,11 @@ current becomes nearly sinusoidal, the TDD falls to 3.9\pct{} and every
 component up to $n = 50$ is within its IEEE~519 limit; the components above
 $n = 50$, outside the scope of the standard, are not affected. In a separate
 test at 5~kW with a fifth harmonic of 8\pct{} in the grid voltage,
-enabling the compensation reduced the measured losses by 5\pct{}.}
-\upd{Figura con rotulos en espanol: rehacerla en ingles (Voltage [V],
-Current [A], Time [s], Compensation enabled, Harmonic order $n$, Magnitude
-[\% of $I_{nom}$], Uncompensated, Compensated, IEEE~519 limit). El eje usa
-$I_L$; en el paper la TDD se define con $I_{nom}$. Mandar el PDF original
-si existe (ahora va el PNG).}
+enabling the compensation reduced the measured losses by 5\pct{}.
 
 \begin{figure*}[!t]
     \centering
-    \includegraphics[width=\textwidth]{figuras/compensacion_armonicos/compensacion_armonicos.png}
+    \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
     \caption{Measured harmonic compensation with the RT-OPP at 5~kW, with
     fifth and seventh harmonics of 8\pct{} and eleventh and thirteenth of
     4\pct{} in the grid voltage. Top: grid voltage, grid current and
