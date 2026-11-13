@@ -24,8 +24,8 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
 - Respuestas al autor en espanol, directas. El paper en ingles, estilo IEEE.
 - Comentarios en `.tex` y codigo: espanol sin tildes.
 - Notas en el `.tex`: `\upd{}` rojo (que actualizar), `\sug{}` verde (texto
-  sugerido), `\textcolor{blue}{Comentario: ...}` son comentarios del autor
-  para Claude. `\old{}` gris muestra el texto anterior bajo un parrafo
+  sugerido), `\com{Comentario: ...}` (antes `\textcolor{blue}{...}`) son
+  comentarios del autor para Claude. `\old{}` gris muestra el texto anterior bajo un parrafo
   reescrito, para que el autor compare; se borra cuando lo decide. Al aplicar un comentario azul, borrar el comentario y las
   notas `\upd`/`\sug` asociadas; dejar los azules que dicen "pendiente".
 - Las sugerencias deben ser texto listo para pegar y decir exactamente donde
@@ -41,8 +41,19 @@ Bitacora de cambios y pendientes: `docs/BITACORA.md` (mantenerla al dia).
   ni los archivos Julia. La
   optimizacion (GN, FO) se deja como la tiene el autor: solo reportar
   diferencias que cambien el resultado.
-- No hay LaTeX en el entorno: no se compila aqui; revisar braces y labels a
-  mano (script rapido en Python).
+- LaTeX no viene instalado, pero se puede instalar con apt (unos minutos):
+  `apt-get update && apt-get install -y --no-install-recommends
+  texlive-latex-base texlive-latex-recommended texlive-latex-extra
+  texlive-fonts-recommended texlive-science texlive-pictures lmodern`.
+  Compilar en el scratchpad (no subir el PDF) para revisar layout de
+  figuras y overfull; si no, revisar braces y labels con Python.
+- Visibilidad de notas en el preambulo de `MAIN_FINAL.tex`: lineas
+  `\renewcommand{\upd|\sug|\old|\com}[1]{}` (comentar una para mostrar
+  esas notas). Los comentarios azules del autor van con `\com{...}`; si el
+  autor pega `\textcolor{blue}{...}`, convertirlos a `\com`.
+- Figuras: una `figure*` por pagina (`dbltopnumber` = 1, `[t]` sin `!`);
+  las de resultados estan adelantadas en el fuente para caer junto a su
+  texto. Si cambia el texto, recompilar y revisar que sigan repartidas.
 
 ## Archivos
 

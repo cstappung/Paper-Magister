@@ -603,3 +603,16 @@ responde. (Agregada a CLAUDE.md.)
   repeticion de 950 Hz / 1900 Hz en el parrafo del rizado.
 - Pendiente: los paneles de las Figs. comp_* dicen "OPP, D = 19" (deberia ser
   RT-OPP y d minuscula) y la Fig. de perdidas modeladas tambien dice OPP.
+
+### 2026-11-13 - Notas ocultas y reparto de figuras
+
+- Preambulo: \upd, \sug, \old y \com (nuevo, comentarios azules) ocultos;
+  comentar la linea correspondiente para verlos. Los dos azules que quedaban
+  se pasaron a \com.
+- Se instalo LaTeX en el entorno (apt) y se compilo: 14 paginas. Antes,
+  Figs. 5-6 y 7-8 compartian pagina y la Fig. 10 caia despues de las
+  conclusiones. Ahora: dbltopnumber = 1 y figure* con [t]; Figs. setup y
+  patrones adelantadas al final de la Seccion V (setup cae en p7, patrones
+  en p8), fft p9, perdidas p10, las dos comparaciones en un solo flotante
+  (p11, con sus dos captions y labels), compensacion p12 junto a su texto.
+- eq:p_sw pasada a multline: se salia 48 pt de la columna (unico overfull).
