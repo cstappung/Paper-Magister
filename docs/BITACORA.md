@@ -488,3 +488,17 @@ responde. (Agregada a CLAUDE.md.)
   - eq:tdd: \sug "I_nom takes the place of I_L" para que los ejes "% of I_L"
     de las figuras queden consistentes.
   - Intro de resultados: \sug para nombrar la compensacion.
+- Pedido del autor: sugerencias en verde para las contradicciones con la
+  figura de TDD y los valores desactualizados, y dejar los pendientes como
+  \upd en el .tex (el contesta en azul).
+  - Harmonic Compliance, segundo parrafo: \sug completa sin las cifras de
+    simulacion de RTOPP_D19 (1.7 %, factor 5.7, 13 ms, Fig. [X]); TDD de la
+    figura medida y referencia a S6.4; [XX] de perdidas pendiente.
+  - Harmonic Compensation y Conclusions: datos de la tabla del autor
+    (5 kW, 8 % de quinto): I5 3.90 -> 1.43 A, Irms 9.84 -> 9.00 A (-8.5 %),
+    perdidas 17.23 -> 16.40 W (-4.8 %). \upd para confirmar que "Loss1" es
+    P_in - P_out del analizador.
+  - Conclusions, ultima frase: \sug "The off-line optimizer drives..." mas
+    una frase sobre el RT-OPP en ~1/3 del limite.
+  - \upd nuevos: revista y clase journal (tras \maketitle), cifras sin
+    respaldo de la \sug del abstract, reemplazar setup-export.png en Overleaf.
