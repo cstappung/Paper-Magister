@@ -525,3 +525,10 @@ responde. (Agregada a CLAUDE.md.)
   cuando se rehaga (Current phase, M = 0.91).
 - Azules que quedan (pendientes): abstract al final, figura de perdidas
   (RT-OPP), bibliografia al final.
+- Autor: (1) aplicar directo el offset de SV-GDPWM; esta de acuerdo en que
+  el modelo subestima, sobre todo por conmutar a baja corriente. Texto:
+  energias del datasheet poco representativas a baja corriente y
+  probablemente subestimadas, magnificadas por la portadora mas alta; DPT
+  como confirmacion y trabajo futuro. (2) "PWM" en todo el paper en vez de
+  PD-PWM: definicion "phase-disposition pulse-width modulation (PWM)" en
+  Loss Comparison; los \old conservan PD-PWM.
