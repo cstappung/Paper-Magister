@@ -502,3 +502,26 @@ responde. (Agregada a CLAUDE.md.)
     una frase sobre el RT-OPP en ~1/3 del limite.
   - \upd nuevos: revista y clase journal (tras \maketitle), cifras sin
     respaldo de la \sug del abstract, reemplazar setup-export.png en Overleaf.
+
+### 2026-11-13 - Comentarios azules del autor aplicados
+
+- Commit propio con la version del autor (sus azules y la frase del modulo
+  por fase aplicada).
+- Aplicado: intro de resultados (nombra la compensacion); S6.1 texto y
+  caption de cuatro paneles (\old con lo anterior); Harmonic Compliance
+  parrafo 1 con "PWM" en vez de PD-PWM (pedido del autor) y parrafo 2 sin
+  cifras de simulacion pero con el 0.4 % (el autor lo mantiene); Harmonic
+  Compensation y Conclusions con I5 3.90 -> 1.43 A y perdidas 17.23 ->
+  16.40 W (-4.8 %), sin la corriente RMS; ultima frase de conclusiones con
+  "off-line optimizer" y la frase del RT.
+- Borrados (resueltos): \sug/\upd de I_nom vs I_L (el autor rehizo las
+  figuras en Overleaf; faltan en el repo), \upd del 0.4 % en Local
+  Quadratic Problem, \upd de la tolerancia de 9 % (se omite por ahora; se
+  saco tambien de la \sug del abstract), \upd de Loss1 (confirmado).
+- Nuevo: \sug del offset de SV-GDPWM apoyada en el datasheet y DPT; \upd con
+  dos dudas (el modelo subestima, no sobreestima; SV-GDPWM tiene la
+  portadora mas alta pero no necesariamente mas conmutaciones). \upd sobre
+  PWM vs PD-PWM en el resto del paper. \upd de la Fig. de patrones para
+  cuando se rehaga (Current phase, M = 0.91).
+- Azules que quedan (pendientes): abstract al final, figura de perdidas
+  (RT-OPP), bibliografia al final.
