@@ -107,50 +107,33 @@ limite de paginas, y pasar a la clase \texttt{journal} de IEEEtran
 % ------------------------------ Abstract --------------------------------
 \begin{abstract}
 In grid-connected converters operating at low switching frequency,
-carrier-based modulation schemes degrade the quality of the injected current.
-This paper presents a multipolar optimal pulse pattern (OPP) formulation for a
-three-level SiC T-Type inverter that directly minimizes the converter losses
-subject to the total demand distortion (TDD) limit of the IEEE~519 standard.
-Conduction and switching loss models are derived as a function of the virtual
-angles, so far unavailable for this topology, and the integer level constraint
-is replaced by linear inequalities, yielding a continuous nonlinear problem.
-Over the operating range, the loss model predicts mean reductions of the
-total losses of 36\pct{} with respect to SV-GDPWM at 4050~Hz and 34\pct{} with
-respect to PWM at 2850~Hz, and measurements on a 10~kW prototype yield
-33\pct{} and 8\pct{} (up to 14\pct{}), respectively.
-\sug{Con las perdidas medidas corregidas: ``\dots\ and measurements on a
-10~kW prototype yield 42\pct{} and 11\pct{} (up to 19\pct{}),
-respectively.''}
-\upd{Agregar el refinamiento en linea (SQP de una iteracion GN por
-actualizacion con warm start desde la LUT $(M,\varphi)$), el cumplimiento de
-IEEE~519 con fondo armonico de red y la validacion en tiempo real (plataforma,
-tiempo de ejecucion).}
-\sug{In grid-connected converters operating at low switching frequency,
 carrier-based modulation degrades the quality of the injected current. This
 paper presents a multipolar optimal pulse pattern (OPP) for a three-level SiC
 T-Type inverter that minimizes the converter losses subject to the current
-distortion limits of IEEE~519, together with an online refinement that keeps
-the pattern compliant during operation. Conduction and switching loss models
-are derived as functions of the virtual angles, and the integer level
-constraint is replaced by linear inequalities, which turns the off-line design
-into a continuous nonlinear program. The resulting patterns are stored in a
-lookup table indexed by the modulation index and the current displacement
-angle, and are
-refined online by a sequential quadratic program that performs one
-Gauss--Newton iteration per update. Over the operating range, the loss model
-predicts mean reductions of the total losses of 36\pct{} with respect to
-SV-GDPWM at 4050~Hz and 34\pct{} with respect to PWM at 2850~Hz, and
-measurements on a 10~kW prototype yield 42\pct{} and 11\pct{} (up to 19\pct{}), respectively.
-The online stage restores compliance
-with the individual harmonic limits within one fundamental period,
-\textbf{[executing within XX~$\mu$s per sample on the real-time
-target]}.}
-
-\textcolor{blue}{Comentario: Esto lo revisare al final}
-\upd{Para cuando se revise: la \texttt{\textbackslash sug} del abstract
-usa el tiempo de ejecucion [XX~$\mu$s], aun sin dato (la tolerancia de
-9\pct{} ya se saco); y conviene nombrar la compensacion medida (TDD de 29.5
-a 3.9\pct{}).}
+distortion limits of IEEE~519, together with a real-time refinement that
+keeps the pattern compliant during operation. Conduction and switching loss
+models are derived as functions of the virtual angles, and the integer level
+constraint is replaced by linear inequalities, which turns the off-line
+design into a continuous nonlinear program. The resulting patterns are
+stored in a lookup table indexed by the modulation index and the current
+displacement angle, and are refined online by a sequential quadratic program
+that performs one Gauss--Newton iteration per 200~$\mu$s control period and
+enforces the individual harmonic limits through adaptive weights, also under
+grid background distortion estimated by a harmonic observer. Over the
+operating range, the loss model predicts mean reductions of the total losses
+of 36\pct{} with respect to SV-GDPWM at 4050~Hz and 34\pct{} with respect to
+PWM at 2850~Hz. Measurements on a 10~kW prototype yield 42\pct{} and
+11\pct{} (up to 19\pct{}), respectively, the smaller gain against PWM being
+due mainly to the larger current ripple of the OPP. With fifth and seventh
+harmonics of 8\pct{} in the grid voltage, the real-time stage lowers the
+current total demand distortion (TDD) from 29.5 to 3.9\pct{} within about
+one fundamental period.
+\old{In grid-connected converters operating at low switching frequency,
+carrier-based modulation schemes degrade the quality of the injected
+current. This paper presents a multipolar optimal pulse pattern (OPP)
+formulation \dots\ subject to the total demand distortion (TDD) limit of
+the IEEE~519 standard. [\dots] and measurements on a 10~kW prototype yield
+33\pct{} and 8\pct{} (up to 14\pct{}), respectively.}
 
 \end{abstract}
 
@@ -1380,24 +1363,18 @@ Figs.~\ref{fig:comp_gdpwm} and~\ref{fig:comp_pwm} compare the model with
 measurements on the 10~kW prototype at eight operating points, with the OPP
 refined online by the real-time optimizer (Section~\ref{subsec:setup}).
 The OPP yields the
-lowest measured losses at every point. Against SV-GDPWM, the measured
-reduction, 33.4\pct{} on average and between 29.3 and 37.7\pct{}, agrees
-with the 36.0\pct{} predicted by the model. Against PWM, it is
-8.4\pct{} on average and reaches 14.4\pct{} at $I_d = 15$~A, below the
-33.9\pct{} predicted.
-\upd{Comparado punto a punto con el modelo (Figs.~\ref{fig:comp_gdpwm}(d)
-y~\ref{fig:comp_pwm}(d)): el maximo frente a PWM, 18.8\pct{} en
-$I_d = 15$~A, contra 30.7\pct{} del modelo en ese punto (2.5 contra
-3.7~W); frente a SV-GDPWM, 47.9\pct{} contra 36.2\pct{} en $I_d = 10$~A,
-y la medicion supera al modelo en siete de los ocho puntos.}
-\sug{Reemplazar desde ``Against SV-GDPWM'' por: ``Against SV-GDPWM, the
+lowest measured losses at every point. Against SV-GDPWM, the
 measured reduction is 41.9\pct{} on average, against the 36.0\pct{}
 predicted by the model, and it exceeds the prediction at seven of the
 eight points, reaching 47.9\pct{} at $I_d = 10$~A and $I_q = 0$, where the
 model predicts 36.2\pct{}. Against PWM, it is 11.4\pct{} on average and
 reaches 18.8\pct{} at $I_d = 15$~A, where the model predicts 30.7\pct{};
 in absolute terms, the OPP saves 2.5~W at that point, against 3.7~W
-predicted.''}
+predicted.
+\old{Against SV-GDPWM, the measured reduction, 33.4\pct{} on average and
+between 29.3 and 37.7\pct{}, agrees with the 36.0\pct{} predicted by the
+model. Against PWM, it is 8.4\pct{} on average and reaches 14.4\pct{} at
+$I_d = 15$~A, below the 33.9\pct{} predicted.}
 
 The measured losses exceed the model by an offset due to effects that
 the model does not include, mainly the current ripple and the switching
@@ -1448,10 +1425,8 @@ is left for future work.}
 
 Even so, the improvement is consistent: at the same harmonic compliance,
 the OPP refined in real time reduces the losses at every measured point, by
-up to 14.4\pct{} with respect to PWM and up to 37.7\pct{} with respect to
+up to 18.8\pct{} with respect to PWM and up to 47.9\pct{} with respect to
 SV-GDPWM. Table~\ref{tab:comparacion} summarizes the nominal point.
-\sug{Cifras nuevas: ``\dots\ by up to 18.8\pct{} with respect to PWM and
-up to 47.9\pct{} with respect to SV-GDPWM.''}
 
 \begin{figure*}[!t]
     \centering
