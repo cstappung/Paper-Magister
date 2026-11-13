@@ -1385,44 +1385,21 @@ reduction, 33.4\pct{} on average and between 29.3 and 37.7\pct{}, agrees
 with the 36.0\pct{} predicted by the model. Against PWM, it is
 8.4\pct{} on average and reaches 14.4\pct{} at $I_d = 15$~A, below the
 33.9\pct{} predicted.
+\upd{Comparado punto a punto con el modelo (Figs.~\ref{fig:comp_gdpwm}(d)
+y~\ref{fig:comp_pwm}(d)): el maximo frente a PWM, 18.8\pct{} en
+$I_d = 15$~A, contra 30.7\pct{} del modelo en ese punto (2.5 contra
+3.7~W); frente a SV-GDPWM, 47.9\pct{} contra 36.2\pct{} en $I_d = 10$~A,
+y la medicion supera al modelo en siete de los ocho puntos.}
 \sug{Reemplazar desde ``Against SV-GDPWM'' por: ``Against SV-GDPWM, the
-measured reduction is 41.9\pct{} on average, between 34.2 and
-47.9\pct{}, above the 36.0\pct{} predicted by the model. Against PWM, it
-is 11.4\pct{} on average and reaches 18.8\pct{} at $I_d = 15$~A, below
-the 33.9\pct{} predicted.''}
+measured reduction is 41.9\pct{} on average, against the 36.0\pct{}
+predicted by the model, and it exceeds the prediction at seven of the
+eight points, reaching 47.9\pct{} at $I_d = 10$~A and $I_q = 0$, where the
+model predicts 36.2\pct{}. Against PWM, it is 11.4\pct{} on average and
+reaches 18.8\pct{} at $I_d = 15$~A, where the model predicts 30.7\pct{};
+in absolute terms, the OPP saves 2.5~W at that point, against 3.7~W
+predicted.''}
 
-\textcolor{blue}{comentario: mira esta bien mensionar que es mas o menos que el modelo, pero ponlo de una mejora manera, tal ve compara ese 18.8 con ese exacto punto en simulacion, porque si lo dices con el 33, para que estuviera muy mal el modelo pero no es asi, lo mismo para sv-gdpwm.}
-
-Three effects explain this gap. First, the measured losses exceed the model
-by an offset due to effects that the model does not include: mainly the
-current ripple and the switching energies, which are taken from the
-datasheet instead of double-pulse tests (DPT) on the prototype. For PWM
-this offset is nearly constant, between 4.3 and 6.5~W.
-An offset common to two strategies keeps their absolute difference but
-enlarges the reference, and therefore lowers the relative reduction: with
-the offset of PWM added to both, the model would predict 20\pct{}
-instead of 34\pct{}. Second, this effect is strongest at light load, where
-the offset is comparable to or larger than the modeled losses: at
-$I_q = -10$~A, PWM dissipates 3.9~W in the model and 10.2~W in the
-measurement, and the reduction falls from 40.0 to 4.8\pct{}, with a
-measured difference of only 0.5~W. Third, the model assumes a sinusoidal
-current, whereas the OPP, switching at 950~Hz per device, carries a larger
-current ripple, which adds losses that the model does not capture. The
-off-line problem does not constrain this ripple; only the real-time
-optimizer includes harmonics up to the 97th, so that the ripple does not
-grow over time. Accordingly, the offset of the OPP exceeds that of PWM
-by 1.9~W on average, which reduces the mean measured difference from 3.3 to
-1.4~W. SV-GDPWM shows the largest offset, 11.0~W on average. Like the OPP,
-and unlike PWM, it concentrates its switching events away from the current
-peak, at low currents, where the datasheet switching energies are least
-representative and probably underestimate the actual ones, and its higher
-carrier frequency magnifies this error. Since this offset exceeds that of
-the OPP, the measured reduction with respect to SV-GDPWM remains close to
-the model. Characterizing the switching energies of the module with DPT
-would confirm this explanation, and is left for future work together with
-the inclusion of the current ripple in the loss model.
-\sug{Reemplazar el parrafo ``Three effects explain this gap\dots'' por:
-``The measured losses exceed the model by an offset due to effects that
+The measured losses exceed the model by an offset due to effects that
 the model does not include, mainly the current ripple and the switching
 energies, which are taken from the datasheet instead of double-pulse tests
 (DPT) on the prototype. This offset is 1.5~W on average for PWM, 3.4~W for
@@ -1433,7 +1410,8 @@ switches each device at 950~Hz, equivalent to a carrier of 1900~Hz against
 the 2850~Hz of PWM, and therefore carries a larger ripple. In simulation,
 the RMS ripple of the converter current at the nominal point is 5.66~A for
 the OPP and 3.00~A for PWM, 1.9 times larger, and this ratio remains between
-1.6 and 2.3 over the operating range. The measurements reflect it in the
+1.6 and 2.3 over the operating range. On the prototype, the measured
+ripple above 2~kHz is 4.75~A for the RT-OPP and 3.17~A for PWM. The measurements reflect it in the
 grid current: in Fig.~\ref{fig:fft_comparacion}(b), the components of the
 RT-OPP above $n = 50$ exceed those of PWM. The ripple raises the RMS current and the current at the
 switching instants, and with them both loss terms. The off-line problem
@@ -1454,14 +1432,8 @@ higher carrier frequency magnifies this error. Since this offset exceeds
 that of the OPP, the measured reduction with respect to SV-GDPWM is even
 larger than predicted. Characterizing the switching energies of the module
 with DPT would confirm this explanation, and is left for future work
-together with the inclusion of the current ripple in the loss model.''}
-\upd{Agregada a la \texttt{\textbackslash sug} de arriba la cifra del rizado
-rms de simulacion (5.66 vs 3.00~A, razon 1.6--2.3). Si los 4.75 y 3.17~A
-sobre 2~kHz del laboratorio son de la corriente del conversor, se puede
-agregar despues de ``\dots\ over the operating range'': ``On the prototype,
-the measured ripple is 4.75~A for the RT-OPP and 3.17~A for PWM.''}
-
-\textcolor{blue}{Comentario: aplicar}
+together with the inclusion of the current ripple in the loss model.
+\old{Three effects explain this gap. First, the measured losses exceed the model by an offset [\dots] For PWM this offset is nearly constant, between 4.3 and 6.5~W. [\dots] Second, this effect is strongest at light load [\dots] Third, the model assumes a sinusoidal current, whereas the OPP [\dots] carries a larger current ripple [\dots] SV-GDPWM shows the largest offset, 11.0~W on average. [\dots] the measured reduction with respect to SV-GDPWM remains close to the model. [\dots]}
 \old{\dots\ where the datasheet switching energies are least
 representative; since this offset exceeds that of the OPP, the measured
 reduction with respect to SV-GDPWM remains close to the model. Including
@@ -1517,19 +1489,16 @@ up to 47.9\pct{} with respect to SV-GDPWM.''}
         \rowcolor{Gray}
         Strategy & Model & Meas. & Model & Meas. \\
         \midrule
-        RT-OPP, $d=19$     & 12.7 & 19.6 & --   & --   \\
-        PWM, 2850~Hz    & 17.4 & 21.7 & 26.8 & 9.7  \\
-        SV-GDPWM, 4050~Hz  & 17.6 & 28.8 & 27.7 & 32.2 \\
+        RT-OPP, $d=19$     & 12.7 & 15.6 & --   & --   \\
+        PWM, 2850~Hz    & 17.4 & 17.7 & 26.8 & 11.9 \\
+        SV-GDPWM, 4050~Hz  & 17.6 & 24.8 & 27.7 & 37.4 \\
         \bottomrule
     \end{tabular*}
     \egroup
     \label{tab:comparacion}
 \end{table}
-\sug{Tabla~\ref{tab:comparacion}, columna ``Meas.'' con las figuras
-nuevas: RT-OPP 15.6~W; PWM 17.7~W y 11.9\pct{}; SV-GDPWM 24.8~W y
-37.4\pct{}. Las columnas del modelo no cambian.}
-
-\textcolor{blue}{Comentario: aplicar cambios}
+\old{Tabla, columna Meas.: RT-OPP 19.6~W; PWM 21.7~W y 9.7\pct{};
+SV-GDPWM 28.8~W y 32.2\pct{}.}
 %\begin{figure}[!t]
 %    \centering
 %    \includegraphics[width=\linewidth]{figuras/perdidas_barras_LCL/perdidas_barras_LCL.png}
@@ -1555,12 +1524,10 @@ component up to $n = 50$ is within its IEEE~519 limit; the components above
 $n = 50$, outside the scope of the standard, are not affected. In a separate
 test at 5~kW with a fifth harmonic of 8\pct{} in the grid voltage, the
 compensation reduced the fifth-harmonic current from 3.90 to 1.43~A and the
-measured losses from 17.23 to 16.40~W, a reduction of 4.8\pct{}.
+measured losses from 13.23 to 12.40~W, a reduction of 6.3\pct{}.
 \old{In a separate test at 5~kW with a fifth harmonic of 8\pct{} in the grid
 voltage, enabling the compensation reduced the measured losses by
 5\pct{}.}
-\sug{Reemplazar ``from 17.23 to 16.40~W, a reduction of 4.8\pct{}'' por:
-``from 13.23 to 12.40~W, a reduction of 6.3\pct{}''.}
 \begin{figure*}[!t]
     \centering
     \includegraphics[width=\textwidth]{figuras/ondas_compensacion/ondas_compensacion.png}
@@ -1607,19 +1574,20 @@ restores compliance with the individual IEEE~519 limits within one
 fundamental period, both between table entries and under grid background
 distortion, while it keeps minimizing the losses: at 5~kW, compensating a
 fifth harmonic of 8\pct{} in the grid voltage reduces the measured losses
-by 4.8\pct{}.
-\sug{Cambiar ``by 4.8\pct{}'' por ``by 6.3\pct{}''.}
-\textcolor{blue}{Comentario: aplicar}
+by 6.3\pct{}.
 With $d = 19$ pulses per half-cycle, that is 950~Hz per device, the resulting
 pattern exhibits the lowest total losses over the whole operating range while
 meeting IEEE~519, with mean reductions of 36\pct{} with respect to SV-GDPWM at
 4050~Hz and 34\pct{} with respect to PWM at 2850~Hz according to the loss
 model. The gain comes mainly from switching, and the OPP also conducts less
 over most of the range. Measurements on a 10~kW grid-connected T-Type
-prototype confirm the reduction with respect to SV-GDPWM, 33\pct{} on average,
-whereas with respect to PWM it is smaller, 8\pct{} on average and up to
-14\pct{}, since the measured losses include effects that the model neglects,
-such as the current ripple, and these weigh most at light load. The
+prototype confirm the reduction with respect to SV-GDPWM, 42\pct{} on average,
+whereas with respect to PWM it is smaller, 11\pct{} on average and up to
+19\pct{}, mainly because the OPP, switching at a lower frequency, carries a
+larger current ripple, which the simplified loss model neglects. Including
+the current ripple and switching energies measured on the prototype in the
+loss model, and constraining the ripple in the off-line problem, is left
+for future work. The
 off-line optimizer drives the current distortion to the regulatory limit and
 no further, converting the resulting margin into a loss reduction that a
 carrier-based scheme cannot access, since its harmonic performance is a
@@ -1627,15 +1595,10 @@ by-product of the carrier frequency rather than a specification. The
 real-time stage then lowers the distortion to about one third of the limit
 at almost no cost in losses, which leaves room for grid background
 harmonics.
-\sug{Reemplazar desde ``Measurements on a 10~kW'' hasta ``light load.''
-por: ``Measurements on a 10~kW grid-connected T-Type prototype confirm the
-reduction with respect to SV-GDPWM, 42\pct{} on average, whereas with
-respect to PWM it is smaller, 11\pct{} on average and up to 19\pct{},
-mainly because the OPP, switching at a lower frequency, carries a larger
-current ripple, which the model neglects.''}
-
-
-\textcolor{blue}{Comentario: si aplicalo, pero intenta decir que es como trabajo futuro mejorar esas cosas del riple, y di que es pos las simplificaciones del modelo tambine}
+\old{\dots\ confirm the reduction with respect to SV-GDPWM, 33\pct{} on
+average, whereas with respect to PWM it is smaller, 8\pct{} on average and
+up to 14\pct{}, since the measured losses include effects that the model
+neglects, such as the current ripple, and these weigh most at light load.}
 \old{The optimizer drives the current distortion to the regulatory limit and
 no further, \dots}
 % ----------------------------- Bibliografia -----------------------------
